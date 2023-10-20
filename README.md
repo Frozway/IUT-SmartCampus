@@ -1,4 +1,8 @@
-# SmartCampus
+# SmartCampus | K13
+
+<div align="center">
+  <img src="./Images/logo.png" width="300">
+</div>
 
 
 

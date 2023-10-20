@@ -12,7 +12,7 @@ Ce projet vise à développer une application Web pour le Smart Campus de l'IUT 
 
 Pour des informations détaillées sur le projet, veuillez consulter notre [Wiki](https://forge.iut-larochelle.fr/2023-2024-but-info2-a-sae34/k1/k13/smartcampus/-/wikis/home).
 
-## Stratégie de gestion des Branches et des commits
+## 1. Stratégie de gestion des Branches et des commits
 
 Le développement du projet est organisé en utilisant les branches Git. Voici la structure que nous utilisons :
 
@@ -27,16 +27,16 @@ main
 * `v<numVersion>/<nameFeature>` : Branche pour le développement de nouvelles fonctionnalités.
 
 
-### Cas d'utilisation
+#### Cas d'utilisation
 * **Développement et Intégration d'une Fonctionnalité :** <br>
 Ce cas d'utilisation permet à chaque développeur de travailler sur sa propre fonctionnalité, de la sauvegarder régulièrement dans sa branche respective, puis de l'intégrer dans la branche release-1.0. Cela assure un développement itératif et une intégration progressive des fonctionnalités.
 
 * **Récupération des Fonctionnalités Mises à Jour depuis la Branche dev :** <br>
 Ce cas d'utilisation permet à chaque développeur de récupérer les fonctionnalités mises à jour depuis la branche dev sur sa branche de développement. Cela assure que chacun travaille sur une version à jour de l'application et réduit les conflits lors des fusions.
 
-2. ### Format des Messages de Commit
+## 2. Format des Messages de Commit
 
 Il est important que les messages de commit soient explicites et que des conventions soient respectées par l'équipe : **`<type>(<portée>): <sujet>`**
 
-Pour plus de détails sur nos stratégie au sein du projet, consultez la [page dédiée](Guide_d'https://forge.iut-larochelle.fr/2023-2024-but-info2-a-sae34/k1/k13/smartcampus/-/wikis/Guide%20d'utilisation%20de%20Git) sur notre [Wiki](https://forge.iut-larochelle.fr/2023-2024-but-info2-a-sae34/k1/k13/smartcampus/-/wikis/home). 
+Pour plus de détails sur nos stratégie au sein du projet, consultez la [page_dédiée_de_notre_guide](Guide_d'https://forge.iut-larochelle.fr/2023-2024-but-info2-a-sae34/k1/k13/smartcampus/-/wikis/Guide%20d'utilisation%20de%20Git) sur notre [Wiki](https://forge.iut-larochelle.fr/2023-2024-but-info2-a-sae34/k1/k13/smartcampus/-/wikis/home). 
 

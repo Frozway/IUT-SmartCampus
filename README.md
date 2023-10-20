@@ -34,7 +34,7 @@ Ce cas d'utilisation permet à chaque développeur de travailler sur sa propre f
 * **Récupération des Fonctionnalités Mises à Jour depuis la Branche dev :** <br>
 Ce cas d'utilisation permet à chaque développeur de récupérer les fonctionnalités mises à jour depuis la branche dev sur sa branche de développement. Cela assure que chacun travaille sur une version à jour de l'application et réduit les conflits lors des fusions.
 
-### Format des Messages de Commit
+2. ### Format des Messages de Commit
 
 Il est important que les messages de commit soient explicites et que des conventions soient respectées par l'équipe : **`<type>(<portée>): <sujet>`**
 

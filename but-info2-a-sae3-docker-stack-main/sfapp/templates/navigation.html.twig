@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<link rel="stylesheet" href="{{ asset('css/navigation.css') }}">
+
+    <div class="container-fluid">
+        <nav class="bg-transparent text-white">
+            <ul class="list-unstyled text-center py-3">
+                <li>
+                    <a href="#">
+                        <img src="{{ asset('images/logo.png') }}" alt="Logo de l'entreprise" style="max-width: 50px;">
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+{% endblock %}

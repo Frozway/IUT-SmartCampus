@@ -40,7 +40,7 @@ Il est important que les messages de commit soient explicites et que des convent
 
 Pour plus de détails sur nos stratégies au sein du projet, consultez la [page dédiée de notre guide au sein de notre projet](https://forge.iut-larochelle.fr/2023-2024-but-info2-a-sae34/k1/k13/smartcampus/-/wikis/Guide%20d'utilisation%20de%20Git) sur notre [Wiki](https://forge.iut-larochelle.fr/2023-2024-but-info2-a-sae34/k1/k13/smartcampus/-/wikis/home).
 
-#### Comment faire fonctionner la stack ?
+## 3. Comment faire fonctionner la stack ?
 
 Après avoir cloné le repository et lancé la stack docker, il faut exécuter quelques comandes pour installer les dépendances nécéssaires et différentes en fonction de la machine.
 

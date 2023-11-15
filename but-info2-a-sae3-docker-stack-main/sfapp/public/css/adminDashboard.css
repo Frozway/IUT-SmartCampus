@@ -1,0 +1,23 @@
+body {
+    background-color: #DFDFDF;
+    font-weight: 500;
+}
+
+h2 {
+    background-color: white;
+    padding: 8px;
+    font-size: 22pt;
+}
+
+.listes ul {
+    list-style: none;
+    padding: 0;
+}
+
+.listes li {
+    background-color: #DFDFDF;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border-left: #d63031 8px solid;
+    margin: 4px 0;
+}

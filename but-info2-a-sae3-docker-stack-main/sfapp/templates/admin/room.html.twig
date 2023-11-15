@@ -1,20 +1,38 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AdminController!{% endblock %}
+{% block title %}Salle - {{ room.name }}{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello Room</h1>
+<link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+<link rel="stylesheet" href="{{ asset('css/adminDashboard.css') }}">
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/app/sfapp/src/Controller/AdminController.php'|file_link(0) }}">src/Controller/AdminController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/app/sfapp/templates/admin/index.html.twig'|file_link(0) }}">templates/admin/index.html.twig</a></code></li>
-    </ul>
-</div>
+    <h2>◩ Salle - {{ room.name }} - Étage {{ room.floor }} </h2>
+
+    <div class="flex">
+        <div class="panel">
+            Vue d'ensemble
+            <div class="row">
+                <div class="col-1 alert alert-danger mx-2 mt-3">/!\ D302</div>
+                <div class="col-1 alert alert-warning mx-2 mt-3">/!\ D302</div>
+                <div class="col-1 alert alert-danger mx-2 mt-3">/!\ D302</div>
+                <div class="col-1 alert alert-danger mx-2 mt-3">/!\ D302</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex">
+        <div class="panel">
+            Systèmes d'acquisition - {{ acquisitionSystem.name }}
+            {# Affichage des capteurs associés au système d'acquisition #}
+            <div class="row">
+                <div class="col-1 text-center alert alert-danger mx-2 mt-3">
+                    {% for sensor in acquisitionSystem.sensors %}
+                        {{ sensor.name }}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}

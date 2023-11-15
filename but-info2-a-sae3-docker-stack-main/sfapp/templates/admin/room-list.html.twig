@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Salles - Tableau de bord{% endblock %}
+
+{% block body %}
+
+<link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+<link rel="stylesheet" href="{{ asset('css/adminDashboard.css') }}">
+
+<h2>◩ Tableau de bord</h2>
+
+<!-- Conteneur principal de la page -->
+<div class="container m-0">
+
+    <!-- Ligne pour afficher les listes de salles, capteurs et systèmes d'acquisition -->
+    <div class="row listes">
+
+        <!-- Panneau des Salles -->
+        <div class="col panel">
+            Salles
+            <ul class="mt-3">
+                <!-- Boucle pour afficher chaque salle -->
+                {% for room in rooms %}
+                    <li>{{ room.name }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Panneau des Capteurs -->
+        <div class="col panel">
+            Capteurs
+            <ul class="mt-3">
+                <!-- Boucle pour afficher chaque capteur -->
+                {% for sensor in sensors %}
+                    <li>{{ sensor.name }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Panneau des Systèmes d'acquisition -->
+        <div class="col panel">
+            Systèmes d'acquisition
+            <ul class="mt-3">
+                <!-- Boucle pour afficher chaque système d'acquisition -->
+                {% for acquisitionSystem in acquisitionSystems %}
+                    <li>{{ acquisitionSystem.name }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+    </div>
+    
+</div>
+
+{% endblock %}

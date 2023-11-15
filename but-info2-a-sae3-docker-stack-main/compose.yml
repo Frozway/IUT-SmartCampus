@@ -1,4 +1,4 @@
-name: 'but-info2-a-sae3'
+name: "but-info2-a-sae3"
 
 services:
   nginx:
@@ -58,14 +58,9 @@ services:
 
 networks:
   network:
-    name : ${COMPOSE_PROJECT_NAME}-network
+    name: ${COMPOSE_PROJECT_NAME}-network
     driver: bridge
 
 volumes:
   database-volume:
     driver: local
-
-
-
-
-

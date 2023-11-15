@@ -11,7 +11,7 @@ class DashboardController extends AbstractController
     #[Route('/user-dashboard', name: 'app_user_dashboard')]
     public function userDashboardIndex(): Response
     {
-        return $this->render('dashboard/userIndex.html.twig', [
+        return $this->render('dashboard/user.html.twig', [
             'controller_name' => 'DashboardController',
         ]);
     }
@@ -19,7 +19,7 @@ class DashboardController extends AbstractController
     #[Route('/admin-dashboard', name: 'app_admin_dashboard')]
     public function adminDashboardIndex(): Response
     {
-        return $this->render('dashboard/adminIndex.html.twig', [
+        return $this->render('dashboard/admin.html.twig', [
             'controller_name' => 'DashboardController',
         ]);
     }

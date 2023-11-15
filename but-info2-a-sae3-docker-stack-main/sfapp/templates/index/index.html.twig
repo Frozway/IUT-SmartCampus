@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Acceuil | SmartCampus{% endblock %}
+
+{% block body %}
+<link rel="stylesheet" href="{{ asset('css/index.css') }}">
+
+<div class="page-wrapper">
+    <p><span style="font-weight: 800;">SMART</span><span style="font-weight: 200;">CAMPUS</span></p>
+
+    <div id="login-tecnician">
+        <p>VOUS ETES TECHNICIENS ?</p>
+        <p>Identifiez vous pour administrer les installations</p>
+
+        <input type="text" placeholder="login">
+        <input type="text" placeholder="mot de passe">
+        <input type="submit" value="Se connecter">
+    </div>
+
+    <div id="login-user">
+        <p>VOUS ETES ETUDIANT ?</p>
+        <p>Identifiez vous pour consulter les données en temps réel</p>
+
+        <input type="text" placeholder="N° etudiant">
+        <input type="submit" value="Se connecter">
+    </div>
+</div>
+{% endblock %}

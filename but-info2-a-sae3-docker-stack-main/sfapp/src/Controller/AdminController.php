@@ -24,10 +24,10 @@ class AdminController extends AbstractController
         ]);
     }
 
-    #[Route('/admin-dashboard/assign-aquisition-system', name: 'app_admin_assign_aquisition_system')]
-    public function aquisitionSystemIndex(): Response
+    #[Route('/admin-dashboard/assign-acquisition-system', name: 'app_admin_assign_acquisition_system')]
+    public function acquisitionSystemIndex(): Response
     {
-        return $this->render('admin/indexAquisitionSystem.html.twig', [
+        return $this->render('admin/indexAcquisitionSystem.html.twig', [
             'controller_name' => 'AdminController',
         ]);
     }

@@ -36,6 +36,7 @@ class AdminController extends AbstractController
             'room' => $room,
             'sensors' => $sensors,
             'acquisitionSystem' => $acquisitionSystem,
+            'controller_name' => 'AdminController',
         ]);
     }
 
@@ -92,11 +93,12 @@ class AdminController extends AbstractController
             $entityManager->flush();
 
             // Redirigez l'utilisateur après la soumission du formulaire
-            return $this->redirectToRoute('app_admin_room');
+            return $this->redirectToRoute('app_admin_dashboard');
         }
 
         return $this->render('admin/addAcquisitionSystem.html.twig', [
             'form' => $form->createView(),
+            'controller_name' => 'AddAcquisitionSystem',
         ]);
     }
 }

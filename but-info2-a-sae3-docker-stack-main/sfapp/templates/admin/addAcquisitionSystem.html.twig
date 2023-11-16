@@ -8,7 +8,15 @@
 
     <h1>Ajouter un Système d'acquisition</h1>
 
-    {# Afficher le formulaire #}
-    {{ form(form) }}
+    {{ form_start(form) }}
+    {{ form_label(form.name) }}
+    {{ form_widget(form.name) }} {# permet d'afficher explicitement le label et son widget #}
+
+    {{ form_label(form.room) }}
+    {{ form_widget(form.room) }}
+
+    {{ form_rest(form) }} {# permet d'afficher le reste du formulaire (pourrait suffir à afficher tout le formulaire) #}
+    <button type="submit" class="btn btn-primary">Enregistrer</button>
+    {{ form_end(form) }}
     
 {% endblock %}

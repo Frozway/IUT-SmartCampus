@@ -26,3 +26,24 @@ h2 {
     height: 100vh;
     width: 100vw;
 }
+
+.alerte {
+    color: white;
+    background-color: #ff7675;
+    height: 60px;
+    display: flex;
+    width: fit-content;
+}
+
+.alerte .icon-container {
+    background-color: #d63031;
+    width: 60px;
+    height: 60px;
+}
+
+.alerte .room-name {
+    line-height: 60px;
+    padding: 0 12px;
+    font-size: 16pt;
+    font-weight: 600;
+}

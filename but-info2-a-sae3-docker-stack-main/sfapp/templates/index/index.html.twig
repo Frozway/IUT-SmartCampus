@@ -4,25 +4,29 @@
 
 {% block body %}
 <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+<link rel="stylesheet" href="{{ asset('css/landingPage.css') }}">
 
-<div class="page-wrapper">
-    <p><span style="font-weight: 800;">SMART</span><span style="font-weight: 200;">CAMPUS</span></p>
+<h1><span style="font-weight: 800">SMART</span><span style="font-weight: 200">CAMPUS</span></h1>
 
-    <div id="login-tecnician">
-        <p>VOUS ETES TECHNICIENS ?</p>
-        <p>Identifiez vous pour administrer les installations</p>
+<div class="page-wrapper container d-flex align-items-center">
 
-        <input type="text" placeholder="login">
-        <input type="text" placeholder="mot de passe">
-        <input type="submit" value="Se connecter">
-    </div>
+    <div class="row">
+        <div class="col text-end mx-4">
+            <h2>VOUS ETES TECHNICIEN ?</h2>
+            <p class="mb-5">IDENTIFIEZ VOUS POUR ADMINISTRER LES INSTALLATIONS</p>
 
-    <div id="login-user">
-        <p>VOUS ETES ETUDIANT ?</p>
-        <p>Identifiez vous pour consulter les données en temps réel</p>
+            <input type="text" placeholder="Identifiant">
+            <input type="text" placeholder="Mot de passe">
+            <br>
+            <button>SE CONNECTER</button>
+        </div>
+        <div class="col mx-4">
+            <h2>VOUS ETES ETUDIANT OU ENSEIGNANT ?</h2>
+            <p class="mb-5">IDENTIFIEZ VOUS POUR CONSULTER LES DONNEES EN TEMPS REEL</p>
 
-        <input type="text" placeholder="N° etudiant">
-        <input type="submit" value="Se connecter">
+            <input type="text" placeholder="Identifiant">
+            <br>
+            <button>SE CONNECTER</button></div>
     </div>
 </div>
 {% endblock %}

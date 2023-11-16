@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello Admin{% endblock %}
+
+{% block body %}
+    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/adminDashboard.css') }}">
+
+    <h1>Ajouter un Système d'acquisition</h1>
+
+    {# Afficher le formulaire #}
+    {{ form(form) }}
+    
+{% endblock %}

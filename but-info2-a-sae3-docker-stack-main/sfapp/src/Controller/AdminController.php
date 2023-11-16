@@ -15,7 +15,7 @@ use App\Repository\SensorRepository;
 use App\Repository\AcquisitionSystemRepository;
 use App\Form\RoomType;
 use App\Entity\Room;
-
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class AdminController extends AbstractController
 {
@@ -86,13 +86,10 @@ class AdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Effectuez ici ce que vous souhaitez avec les données du formulaire
-            // Par exemple, persistez en base de données
-
             $entityManager->persist($acquisitionSystem);
             $entityManager->flush();
 
-            // Redirigez l'utilisateur après la soumission du formulaire
+            // Redirection l'utilisateur après la soumission du formulaire
             return $this->redirectToRoute('app_admin_dashboard');
         }
 
@@ -100,5 +97,37 @@ class AdminController extends AbstractController
             'form' => $form->createView(),
             'controller_name' => 'AddAcquisitionSystem',
         ]);
+    }
+
+    #[Route('/admin-dashboard/room/{id}/delete', name: 'app_admin_delete_room')]
+    public function deleteRoom(int $id, ManagerRegistry $doctrine): RedirectResponse
+    {
+        $entityManager = $doctrine->getManager();
+
+        $roomRepository = $entityManager->getRepository('App\Entity\Room');
+
+        // Récupérer la salle par son ID
+        $room = $roomRepository->find($id);
+
+        if (!$room) {
+            // Gérer le cas où la salle n'est pas trouvée
+            throw $this->createNotFoundException('La salle n\'existe pas');
+        }
+
+        // Récupérer le système d'acquisition lié à la salle
+        $acquisitionSystem = $room->getAcquisitionSystem();
+
+        // Retirer la salle du système d'acquisition lié
+        if ($acquisitionSystem) {
+            $acquisitionSystem->setRoom(null);
+            $room->setAcquisitionSystem(null);
+        }
+
+        // Supprimer la salle
+        $entityManager->remove($room);
+        $entityManager->flush();
+
+        // Rediriger vers une autre page après la suppression
+        return $this->redirectToRoute('app_admin_dashboard');
     }
 }

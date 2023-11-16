@@ -58,7 +58,11 @@
                         <ul class="mt-3">
                             <!-- Boucle pour afficher chaque salle -->
                             {% for room in rooms %}
-                                <li>{{ room.name }}</li>
+                                <li>
+                                    <a href="{{ path('app_admin_room', {'id': room.id}) }}">
+                                        {{ room.name }}
+                                    </a>
+                                </li>
                             {% endfor %}
                         </ul>
                     </div>

@@ -4,22 +4,38 @@ namespace App\Controller;
 
 use App\Entity\AcquisitionSystem;
 use App\Form\AcquisitionSystemType;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Repository\RoomRepository;
+use App\Repository\SensorRepository;
+use App\Repository\AcquisitionSystemRepository;
 use App\Form\RoomType;
 use App\Entity\Room;
 
 
 class AdminController extends AbstractController
 {
-    #[Route('/admin-dashboard/room', name: 'app_admin_room')]
-    public function roomIndex(): Response
+    #[Route('/admin-dashboard/room/{id?}', name: 'app_admin_room')]
+    public function roomIndex(?int $id, ManagerRegistry $doctrine): Response
     {
+        $entityManager = $doctrine->getManager();
+
+        $roomRepository = $entityManager->getRepository('App\Entity\Room');
+        $sensorRepository = $entityManager->getRepository('App\Entity\Sensor');
+        $acquisitionSystemRepository = $entityManager->getRepository('App\Entity\AcquisitionSystem');
+
+        $room = $roomRepository->findOneBy(['id' => $id]);
+        $acquisitionSystem = $acquisitionSystemRepository->findOneBy(['room' => $room]);
+        $sensors = $sensorRepository->findBy(['acquisitionSystem' => $acquisitionSystem]);
+
         return $this->render('admin/room.html.twig', [
-            'controller_name' => 'AdminController',
+            'room' => $room,
+            'sensors' => $sensors,
+            'acquisitionSystem' => $acquisitionSystem,
         ]);
     }
 

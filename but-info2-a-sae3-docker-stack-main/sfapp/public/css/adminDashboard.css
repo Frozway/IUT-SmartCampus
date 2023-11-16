@@ -22,11 +22,6 @@ h2 {
     margin: 4px 0;
 }
 
-.page-wrapper {
-    height: 100vh;
-    width: 100vw;
-}
-
 .alerte {
     color: white;
     background-color: #ff7675;

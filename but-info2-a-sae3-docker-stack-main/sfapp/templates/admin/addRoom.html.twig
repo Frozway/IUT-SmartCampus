@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello Admin{% endblock %}
+
+{% block body %}
+
+    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/adminDashboard.css') }}">
+
+        {{ form_start(form) }}
+        {{ form_label(form.name) }}
+        {{ form_widget(form.name) }}
+
+        {{ form_label(form.floor) }}
+        {{ form_widget(form.floor) }}
+
+        {{ form_rest(form) }}
+        <button type="submit">Enregistrer</button>
+        {{ form_end(form) }}
+
+{% endblock %}

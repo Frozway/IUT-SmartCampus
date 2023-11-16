@@ -4,35 +4,75 @@
 
 {% block body %}
 
+
+
 <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
-<link rel="stylesheet" href="{{ asset('css/adminDashboard.css') }}">
+<link rel="stylesheet" href="{{ asset('css/roomData.css') }}">
 
-    <h2>◩ Salle - {{ room.name }} - Étage {{ room.floor }} </h2>
 
-    <div class="flex">
-        <div class="panel">
-            Vue d'ensemble
-            <div class="row">
-                <div class="col-1 alert alert-danger mx-2 mt-3">/!\ D302</div>
-                <div class="col-1 alert alert-warning mx-2 mt-3">/!\ D302</div>
-                <div class="col-1 alert alert-danger mx-2 mt-3">/!\ D302</div>
-                <div class="col-1 alert alert-danger mx-2 mt-3">/!\ D302</div>
-            </div>
-        </div>
+<div class="page-wrapper d-inline-flex">
+
+    <div class="sidebar">
+        <img src="{{ asset('images/logo.png') }}" alt="Logo" />
     </div>
 
-    <div class="flex">
-        <div class="panel">
-            Systèmes d'acquisition - {{ acquisitionSystem.name }}
-            {# Affichage des capteurs associés au système d'acquisition #}
-            <div class="row">
-                <div class="col-1 text-center alert alert-danger mx-2 mt-3">
-                    {% for sensor in acquisitionSystem.sensors %}
-                        {{ sensor.name }}
-                    {% endfor %}
+    <div class="content" style="flex-grow: 1;">
+
+        <h2>◩ Salle - {{ room.name }} - Étage {{ room.floor }} </h2>
+
+            <div class="panel shadow">
+                Vue d'ensemble - {{ acquisitionSystem.name}}
+                <div class="row mt-1">
+
+                    {# Bloc température #}
+                    <div class="temp col mt-2 p-0 border-0 rounded">
+                    
+                        <div class="icon-container rounded-start">
+                            <img src="{{ asset('images/icon_temperature.png') }}" alt="Logo Temp" class="img-fluid">
+                        </div>
+
+                        <div class="value">
+                            <span>23°C</span>
+                            <span>Température</span>
+                        </div>
+
+                    </div>
+
+                    {# Bloc humidité #}
+                    <div class="humidity col mt-2 p-0 border-0 rounded">
+
+                        <div class="icon-container rounded-start">
+                            <img src="{{ asset('images/icon_humidity.png') }}" alt="Logo Temp" class="img-fluid">
+                        </div>
+                        
+                        <div class="value">
+                            <span>86%</span>
+                            <span>Humidité</span>
+                        </div>
+                        
+                    </div>
+
+                    {# Bloc CO2 #}
+                    <div class="co2 col mt-2 p-0 border-0 rounded">
+
+                        <div class="icon-container rounded-start">
+                            <img src="{{ asset('images/icon_carbon.png') }}" alt="Logo Temp" class="img-fluid p-2">
+                        </div>
+                        
+                        <div class="value">
+                            <span>700ppm</span>
+                            <span>CO2</span>
+                        </div>
+
+                    </div>
                 </div>
             </div>
-        </div>
+
+        {# Bouton Supprimer la salle #}
+        <button type="button" class="btn btn-danger btn-lg mt-3 mx-3" style="width: 330px; height: 60px;">Supprimer la salle</button>
+            
     </div>
+
+
 
 {% endblock %}

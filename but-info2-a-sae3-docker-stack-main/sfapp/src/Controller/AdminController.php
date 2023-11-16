@@ -12,8 +12,8 @@ use App\Repository\AcquisitionSystemRepository;
 
 class AdminController extends AbstractController
 {
-    #[Route('/admin-dashboard/room/{name?}', name: 'app_admin_room')]
-    public function roomIndex(?string $name, ManagerRegistry $doctrine): Response
+    #[Route('/admin-dashboard/room/{id?}', name: 'app_admin_room')]
+    public function roomIndex(?int $id, ManagerRegistry $doctrine): Response
     {
         $entityManager = $doctrine->getManager();
 
@@ -21,7 +21,7 @@ class AdminController extends AbstractController
         $sensorRepository = $entityManager->getRepository('App\Entity\Sensor');
         $acquisitionSystemRepository = $entityManager->getRepository('App\Entity\AcquisitionSystem');
 
-        $room = $roomRepository->findOneBy(['name' => $name]);
+        $room = $roomRepository->findOneBy(['id' => $id]);
         $acquisitionSystem = $acquisitionSystemRepository->findOneBy(['room' => $room]);
         $sensors = $sensorRepository->findBy(['acquisitionSystem' => $acquisitionSystem]);
 

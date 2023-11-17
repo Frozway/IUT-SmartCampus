@@ -24,16 +24,13 @@ class DashboardController extends AbstractController
         $entityManager = $doctrine->getManager();
 
         $roomRepository = $entityManager->getRepository('App\Entity\Room');
-        $sensorRepository = $entityManager->getRepository('App\Entity\Sensor');
         $acquisitionSystemRepository = $entityManager->getRepository('App\Entity\AcquisitionSystem');
 
         $rooms = $roomRepository->findAll();
-        $sensors = $sensorRepository->findAll();
         $acquisitionSystems = $acquisitionSystemRepository->findAll();
 
         return $this->render('dashboard/admin.html.twig', [
             'rooms' => $rooms,
-            'sensors' => $sensors,
             'acquisitionSystems' => $acquisitionSystems,
             'controller_name' => 'DashboardController',
         ]);

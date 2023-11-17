@@ -61,7 +61,32 @@ class AdminController extends AbstractController
 
         return $this->render('admin/addRoom.html.twig', [
             'form' => $form->createView(),
-            'controller_name' => 'AddRoom',
+        ]);
+    }
+
+    #[Route('/admin-dashboard/edit-room/{id?}', name: 'app_admin_edit_room')]
+    public function editRoom(Request $request, EntityManagerInterface $entityManager, ?int $id) : Response {
+        if (is_null($id)) {
+            return $this->redirectToRoute('app_admin_dashboard');
+        }
+
+        $room = $entityManager->find(Room::class, $id);
+
+        if (is_null($room)) {
+            return $this->redirectToRoute('app_admin_dashboard');
+        }
+
+        $form = $this->createForm(RoomType::class, $room);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_admin_dashboard');
+        }
+
+        return $this->render('admin/editRoom.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 

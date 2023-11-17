@@ -22,7 +22,8 @@ class AcquisitionSystemType extends AbstractType
                 'label' => 'Salle',
                 'class' => Room::class,
                 'choice_label' => 'name',
-                'placeholder' => 'Sélectionnez une salle', // Optionnel : affiche un placeholder
+                'placeholder' => 'Sélectionnez une salle',
+                'required' => false, // Rend le champ optionnel
             ]);
     }
 

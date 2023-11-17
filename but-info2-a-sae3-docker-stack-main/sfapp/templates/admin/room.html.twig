@@ -19,8 +19,12 @@
         <div class="panel shadow">
             Vue d'ensemble - {{ acquisitionSystem.name | default('Aucun système d\'acquisition associé') }}
 
-            {# Afficher le contenu uniquement s'il y a un système d'acquisition associé #}
-            {% if acquisitionSystem is not null %}
+                {# Afficher le contenu uniquement s'il y a un système d'acquisition associé #}
+                {% if acquisitionSystem is not null %}
+
+                <button onclick="confirmUnassign({{ room.id }})" class="btn btn-danger mx-5">désattribuer le S.A.</button>
+                
+                    <div class="row mt-1">
 
             <div class="row mt-1">
                 {# Bloc température #}
@@ -62,8 +66,8 @@
         </div>
 
         {# Bouton Supprimer la salle #}
-        <button type="button" class="btn btn-danger btn-lg mt-3 mx-2" style="width: 330px; height: 60px;" data-toggle="modal" data-target="#confirmDeleteModal">Supprimer la salle</button>
 
+        <button type="button" class="btn btn-danger mt-3" data-toggle="modal" data-target="#confirmDeleteModal">Supprimer la salle</button>
         <!-- Modal confirmation -->
         <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -88,6 +92,12 @@
         <script>
             function deleteRoom(roomId) {
                 window.location.href = '{{ path('app_admin_delete_room', {'id': room.id}) }}';
+            }
+
+            function confirmUnassign(roomId) {
+                if (confirm('Êtes-vous sûr de vouloir désattribuer ce S.A. ?')) {
+                    window.location.href = '{{ path('app_admin_unassign_as', {'id': room.id}) }}';
+                }
             }
         </script>
     </div>

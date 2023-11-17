@@ -21,14 +21,6 @@ class AcquisitionSystem
     #[ORM\OneToOne(inversedBy: 'acquisitionSystem', cascade: ['persist', 'remove'])]
     private ?Room $room = null;
 
-    #[ORM\OneToMany(mappedBy: 'acquisitionSystem', targetEntity: Sensor::class)]
-    private Collection $sensors;
-
-    public function __construct()
-    {
-        $this->sensors = new ArrayCollection();
-    }
-
     public function getId(): ?int
     {
         return $this->id;
@@ -54,36 +46,6 @@ class AcquisitionSystem
     public function setRoom(?Room $room): static
     {
         $this->room = $room;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Sensor>
-     */
-    public function getSensors(): Collection
-    {
-        return $this->sensors;
-    }
-
-    public function addSensor(Sensor $sensor): static
-    {
-        if (!$this->sensors->contains($sensor)) {
-            $this->sensors->add($sensor);
-            $sensor->setAcquisitionSystem($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSensor(Sensor $sensor): static
-    {
-        if ($this->sensors->removeElement($sensor)) {
-            // set the owning side to null (unless already changed)
-            if ($sensor->getAcquisitionSystem() === $this) {
-                $sensor->setAcquisitionSystem(null);
-            }
-        }
 
         return $this;
     }

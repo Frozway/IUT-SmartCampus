@@ -41,7 +41,6 @@ class PurgerDatabaseCommand extends Command
 
         $io->title('Purging the database');
 
-        $this->entityManager->createQueryBuilder()->delete(Sensor::class)->getQuery()->execute();
         $this->entityManager->createQueryBuilder()->delete(AcquisitionSystem::class)->getQuery()->execute();
         $this->entityManager->createQueryBuilder()->delete(User::class)->getQuery()->execute();
         $this->entityManager->createQueryBuilder()->delete(Room::class)->getQuery()->execute();

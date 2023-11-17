@@ -130,4 +130,31 @@ class AdminController extends AbstractController
         // Rediriger vers une autre page après la suppression
         return $this->redirectToRoute('app_admin_dashboard');
     }
+
+    #[Route('/admin-dashboard/room/{id}/unassign-as', name: 'app_admin_unassign_as')]
+    public function unassignAS(int $id, ManagerRegistry $doctrine): RedirectResponse
+    {
+        $entityManager = $doctrine->getManager();
+        $roomRepository = $entityManager->getRepository('App\Entity\Room');
+
+        $room = $roomRepository->find($id);
+
+        // Erreur si la salle n'existe pas
+        if (!$room) {
+            throw $this->createNotFoundException('La salle n\'existe pas');
+        }
+
+        // desatribuation du S.A.
+        $acquisitionSystem = $room->getAcquisitionSystem();
+
+        if ($acquisitionSystem) {
+            $acquisitionSystem->setRoom(null);
+            $room->setAcquisitionSystem(null);
+        }
+
+        $entityManager->flush();
+
+        // Redirection une fois la suppression terminee
+        return $this->redirectToRoute('app_admin_room', ['id'=> $id]);
+    }
 }

@@ -20,6 +20,12 @@ h2 {
     border-radius: 8px;
     border-left: #d63031 8px solid;
     margin: 4px 0;
+    transition: .15s;
+}
+
+.listes li:hover {
+    background-color: #f0f0f0;
+    transition: .15s;
 }
 
 .alerte {

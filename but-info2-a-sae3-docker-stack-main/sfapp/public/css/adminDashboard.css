@@ -42,3 +42,11 @@ h2 {
     font-size: 16pt;
     font-weight: 600;
 }
+
+.acquisition-system button {
+    opacity: 0;
+}
+
+.acquisition-system:hover button {
+    opacity: 1;
+}

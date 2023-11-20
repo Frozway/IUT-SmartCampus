@@ -170,4 +170,31 @@ class AdminController extends AbstractController
         // Redirection une fois la suppression terminee
         return $this->redirectToRoute('app_admin_room', ['id'=> $id]);
     }
+
+    #[Route('/admin-dashboard/acquisition-system/{id}/delete', name: 'app_admin_delete_acquisition_system')]
+    public function deleteAcquisitionSystem(int $id, ManagerRegistry $doctrine): RedirectResponse
+    {
+        $entityManager = $doctrine->getManager();
+        $acquisitionSystemRepository = $entityManager->getRepository('App\Entity\AcquisitionSystem');
+
+        // Récupérer le système d'acquisition par son ID
+        $acquisitionSystem = $acquisitionSystemRepository->find($id);
+
+        if (!$acquisitionSystem) {
+            // Gérer le cas où le système d'acquisition n'est pas trouvé
+            throw $this->createNotFoundException('Le système d\'acquisition n\'existe pas');
+        }
+
+        // Définir la relation avec la salle sur null
+        $acquisitionSystem->setRoom(null);
+
+
+        // Supprimer le système d'acquisition
+        $entityManager->remove($acquisitionSystem);
+        $entityManager->flush();
+
+        // Rediriger vers une autre page après la suppression
+        return $this->redirectToRoute('app_admin_dashboard');
+    }
+
 }

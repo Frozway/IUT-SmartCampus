@@ -17,6 +17,7 @@ use App\Form\RoomType;
 use App\Entity\Room;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
+
 class AdminController extends AbstractController
 {
     #[Route('/admin-dashboard/room/{id?}', name: 'app_admin_room')]
@@ -117,6 +118,7 @@ class AdminController extends AbstractController
 
         return $this->render('admin/editRoom.html.twig', [
             'form' => $form->createView(),
+            'room' => $id,
         ]);
     }
 

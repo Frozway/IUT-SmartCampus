@@ -6,7 +6,6 @@
 
 <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
 <link rel="stylesheet" href="{{ asset('css/roomData.css') }}">
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 
 <div class="page-wrapper d-inline-flex">
     <div class="sidebar">
@@ -17,7 +16,7 @@
         <h2>◩ Salle - {{ room.name }} - Étage {{ room.floor }} </h2>
 
         {# Bouton Retour #}
-        <a href="{{ path('app_admin_dashboard') }}" class="btn btn-secondary panel">Retour</a>
+        <a href="{{ path('app_admin_dashboard') }}" class="btn btn-secondary back">Retour</a>
 
         <div class="panel shadow">
             Vue d'ensemble - {{ acquisitionSystem.name | default('Aucun système d\'acquisition associé') }}
@@ -103,8 +102,9 @@
 
         </div>
 
-        {# Bouton Supprimer la salle #}
+        <a href="{{ path('app_admin_edit_room', {'id': room.id}) }}"><button type="button" class="btn btn-secondary btn-lg mt-3 mx-2" style="width: 330px; height: 60px;">Modifier la salle</button></a>
 
+        {# Bouton Supprimer la salle #}
         <button type="button" class="btn btn-danger btn-lg mt-3 mx-2" style="width: 330px; height: 60px;" data-toggle="modal" data-target="#confirmDeleteModal">Supprimer la salle</button>
 
         <!-- Modal confirmation -->

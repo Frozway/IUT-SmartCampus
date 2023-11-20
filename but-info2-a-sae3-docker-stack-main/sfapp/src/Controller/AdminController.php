@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\AcquisitionSystem;
 use App\Form\AcquisitionSystemType;
+use App\Form\AcquisitionSystemSelectionType;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,28 +20,57 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 class AdminController extends AbstractController
 {
     #[Route('/admin-dashboard/room/{id?}', name: 'app_admin_room')]
-    public function roomIndex(?int $id, ManagerRegistry $doctrine): Response
+    public function roomIndex(?int $id, ManagerRegistry $doctrine, Request $request): Response
     {
         $entityManager = $doctrine->getManager();
 
         $roomRepository = $entityManager->getRepository('App\Entity\Room');
-        $acquisitionSystemRepository = $entityManager->getRepository('App\Entity\AcquisitionSystem');
 
-        $room = $roomRepository->findOneBy(['id' => $id]);
-        $acquisitionSystem = $acquisitionSystemRepository->findOneBy(['room' => $room]);
+        // Récupérer la salle par son ID
+        $room = $roomRepository->find($id);
+
+        // Vérifier si la salle existe
+        if (!$room) {
+            throw $this->createNotFoundException('La salle n\'existe pas');
+        }
+
+        // Récupérer le système d'acquisition associé à la salle
+        $acquisitionSystem = $room->getAcquisitionSystem();
+
+        // Récupérer la liste des systèmes d'acquisition non assignés
+        $unassignedAcquisitionSystems = $entityManager
+            ->getRepository('App\Entity\AcquisitionSystem')
+            ->findBy(['room' => null]);
+
+        // Créer le formulaire de sélection du système d'acquisition avec la liste des systèmes non assignés
+        $form = $this->createForm(AcquisitionSystemSelectionType::class, null, [
+            'unassigned_acquisition_systems' => $unassignedAcquisitionSystems,
+        ]);
+
+        // Gérer la soumission du formulaire
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Récupérer le système d'acquisition sélectionné
+            $selectedAcquisitionSystem = $form->getData()['acquisitionSystem'];
+
+            // Assigner le système d'acquisition à la salle
+            $room->setAcquisitionSystem($selectedAcquisitionSystem);
+
+            // Enregistrer les modifications dans la base de données
+            $entityManager->persist($room);
+            $entityManager->flush();
+
+            // Redirection avec un message de succès
+            $this->addFlash('success', 'Le système d\'acquisition a été attribué à la salle avec succès.');
+            return $this->redirectToRoute('app_admin_room', ['id' => $id]);
+        }
 
         return $this->render('admin/room.html.twig', [
             'room' => $room,
             'acquisitionSystem' => $acquisitionSystem,
             'controller_name' => 'AdminController',
-        ]);
-    }
-
-    #[Route('/admin-dashboard/assign-acquisition-system', name: 'app_admin_assign_acquisition_system')]
-    public function assignAcquisitionSystemIndex(): Response
-    {
-        return $this->render('admin/assignAcquisitionSystem.html.twig', [
-            'controller_name' => 'AdminController',
+            'form' => $form->createView(),
         ]);
     }
 

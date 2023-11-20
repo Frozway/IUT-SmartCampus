@@ -24,16 +24,32 @@ class Room
     #[ORM\OneToOne(mappedBy: 'room', cascade: ['persist', 'remove'])]
     private ?AcquisitionSystem $acquisitionSystem = null;
 
+    /**
+     * Obtient l'identifiant de la salle.
+     *
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * Obtient le nom de la salle.
+     *
+     * @return string|null
+     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
+    /**
+     * Définit le nom de la salle.
+     *
+     * @param string $name
+     * @return $this
+     */
     public function setName(string $name): static
     {
         $this->name = $name;
@@ -41,11 +57,22 @@ class Room
         return $this;
     }
 
+    /**
+     * Obtient l'étage de la salle.
+     *
+     * @return int|null
+     */
     public function getFloor(): ?int
     {
         return $this->floor;
     }
 
+    /**
+     * Définit l'étage de la salle.
+     *
+     * @param int $floor
+     * @return $this
+     */
     public function setFloor(int $floor): static
     {
         $this->floor = $floor;
@@ -53,19 +80,30 @@ class Room
         return $this;
     }
 
+    /**
+     * Obtient le système d'acquisition associé à la salle.
+     *
+     * @return AcquisitionSystem|null
+     */
     public function getAcquisitionSystem(): ?AcquisitionSystem
     {
         return $this->acquisitionSystem;
     }
 
+    /**
+     * Définit le système d'acquisition associé à la salle.
+     *
+     * @param AcquisitionSystem|null $acquisitionSystem
+     * @return $this
+     */
     public function setAcquisitionSystem(?AcquisitionSystem $acquisitionSystem): static
     {
-        // unset the owning side of the relation if necessary
+        // Désactive le côté propriétaire de la relation si nécessaire
         if ($acquisitionSystem === null && $this->acquisitionSystem !== null) {
             $this->acquisitionSystem->setRoom(null);
         }
 
-        // set the owning side of the relation if necessary
+        // Active le côté propriétaire de la relation si nécessaire
         if ($acquisitionSystem !== null && $acquisitionSystem->getRoom() !== $this) {
             $acquisitionSystem->setRoom($this);
         }

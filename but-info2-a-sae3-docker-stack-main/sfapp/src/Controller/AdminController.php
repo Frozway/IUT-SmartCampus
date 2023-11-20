@@ -20,6 +20,16 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class AdminController extends AbstractController
 {
+    /**
+     * @Route('/admin-dashboard/room/{id?}', name: 'app_admin_room')
+     *
+     * Affiche le détail d'une salle, permet d'attribuer/désattribuer un système d'acquisition.
+     *
+     * @param int|null $id L'identifiant de la salle
+     * @param ManagerRegistry $doctrine Le registre de gestionnaire d'entités
+     * @param Request $request La requête HTTP
+     * @return Response
+     */
     #[Route('/admin-dashboard/room/{id?}', name: 'app_admin_room')]
     public function roomIndex(?int $id, ManagerRegistry $doctrine, Request $request): Response
     {
@@ -27,15 +37,12 @@ class AdminController extends AbstractController
 
         $roomRepository = $entityManager->getRepository('App\Entity\Room');
 
-        // Récupérer la salle par son ID
         $room = $roomRepository->find($id);
 
-        // Vérifier si la salle existe
         if (!$room) {
             throw $this->createNotFoundException('La salle n\'existe pas');
         }
 
-        // Récupérer le système d'acquisition associé à la salle
         $acquisitionSystem = $room->getAcquisitionSystem();
 
         // Récupérer la liste des systèmes d'acquisition non assignés
@@ -48,21 +55,17 @@ class AdminController extends AbstractController
             'unassigned_acquisition_systems' => $unassignedAcquisitionSystems,
         ]);
 
-        // Gérer la soumission du formulaire
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             // Récupérer le système d'acquisition sélectionné
             $selectedAcquisitionSystem = $form->getData()['acquisitionSystem'];
 
-            // Assigner le système d'acquisition à la salle
             $room->setAcquisitionSystem($selectedAcquisitionSystem);
 
-            // Enregistrer les modifications dans la base de données
             $entityManager->persist($room);
             $entityManager->flush();
 
-            // Redirection avec un message de succès
             $this->addFlash('success', 'Le système d\'acquisition a été attribué à la salle avec succès.');
             return $this->redirectToRoute('app_admin_room', ['id' => $id]);
         }
@@ -74,7 +77,15 @@ class AdminController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-
+    /**
+     * @Route('/admin-dashboard/add-room', name: 'app_admin_add_room')
+     *
+     * Affiche le formulaire d'ajout d'une salle et l'ajoute à la base de données.
+     *
+     * @param Request $request La requête HTTP
+     * @param EntityManagerInterface $entityManager L'entité de gestion
+     * @return Response
+     */
     #[Route('/admin-dashboard/add-room', name: 'app_admin_add_room')]
     public function addRoom(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -94,7 +105,16 @@ class AdminController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-
+    /**
+     * @Route('/admin-dashboard/edit-room/{id?}', name: 'app_admin_edit_room')
+     *
+     * Affiche et traite le formulaire d'édition d'une salle.
+     *
+     * @param Request $request La requête HTTP
+     * @param EntityManagerInterface $entityManager L'entité de gestion
+     * @param int|null $id L'identifiant de la salle à éditer
+     * @return Response
+     */
     #[Route('/admin-dashboard/edit-room/{id?}', name: 'app_admin_edit_room')]
     public function editRoom(Request $request, EntityManagerInterface $entityManager, ?int $id) : Response {
         if (is_null($id)) {
@@ -121,7 +141,15 @@ class AdminController extends AbstractController
             'room' => $id,
         ]);
     }
-
+    /**
+     * @Route('/admin-dashboard/add-acquisition-system', name: 'app_admin_add_acquisition_system')
+     *
+     * Affiche et traite le formulaire d'ajout d'un système d'acquisition.
+     *
+     * @param Request $request La requête HTTP
+     * @param EntityManagerInterface $entityManager L'entité de gestion
+     * @return Response
+     */
     #[Route('/admin-dashboard/add-acquisition-system', name: 'app_admin_add_acquisition_system')]
     public function addAcquisitionSystemIndex(Request $request, EntityManagerInterface $entityManager): Response
     {        
@@ -134,7 +162,6 @@ class AdminController extends AbstractController
             $entityManager->persist($acquisitionSystem);
             $entityManager->flush();
 
-            // Redirection de l'utilisateur après la soumission du formulaire
             return $this->redirectToRoute('app_admin_dashboard');
         }
 
@@ -143,7 +170,15 @@ class AdminController extends AbstractController
             'controller_name' => 'AddAcquisitionSystem',
         ]);
     }
-
+    /**
+     * @Route('/admin-dashboard/room/{id}/delete', name: 'app_admin_delete_room')
+     *
+     * Supprime une salle, dissociant le système d'acquisition associé.
+     *
+     * @param int $id L'identifiant de la salle à supprimer
+     * @param ManagerRegistry $doctrine Le registre de gestionnaire d'entités
+     * @return RedirectResponse
+     */
     #[Route('/admin-dashboard/room/{id}/delete', name: 'app_admin_delete_room')]
     public function deleteRoom(int $id, ManagerRegistry $doctrine): RedirectResponse
     {
@@ -175,7 +210,15 @@ class AdminController extends AbstractController
         // Rediriger vers une autre page après la suppression
         return $this->redirectToRoute('app_admin_dashboard');
     }
-
+    /**
+     * @Route('/admin-dashboard/room/{id}/unassign-as', name: 'app_admin_unassign_as')
+     *
+     * Désattribue le système d'acquisition d'une salle.
+     *
+     * @param int $id L'identifiant de la salle
+     * @param ManagerRegistry $doctrine Le registre de gestionnaire d'entités
+     * @return RedirectResponse
+     */
     #[Route('/admin-dashboard/room/{id}/unassign-as', name: 'app_admin_unassign_as')]
     public function unassignAS(int $id, ManagerRegistry $doctrine): RedirectResponse
     {
@@ -202,7 +245,15 @@ class AdminController extends AbstractController
         // Redirection une fois la suppression terminee
         return $this->redirectToRoute('app_admin_room', ['id'=> $id]);
     }
-
+    /**
+     * @Route('/admin-dashboard/acquisition-system/{id}/delete', name: 'app_admin_delete_acquisition_system')
+     *
+     * Supprime un système d'acquisition, dissociant toute salle associée.
+     *
+     * @param int $id L'identifiant du système d'acquisition à supprimer
+     * @param ManagerRegistry $doctrine Le registre de gestionnaire d'entités
+     * @return RedirectResponse
+     */
     #[Route('/admin-dashboard/acquisition-system/{id}/delete', name: 'app_admin_delete_acquisition_system')]
     public function deleteAcquisitionSystem(int $id, ManagerRegistry $doctrine): RedirectResponse
     {

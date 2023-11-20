@@ -185,6 +185,10 @@ class AdminController extends AbstractController
             throw $this->createNotFoundException('Le système d\'acquisition n\'existe pas');
         }
 
+        // Définir la relation avec la salle sur null
+        $acquisitionSystem->setRoom(null);
+
+
         // Supprimer le système d'acquisition
         $entityManager->remove($acquisitionSystem);
         $entityManager->flush();

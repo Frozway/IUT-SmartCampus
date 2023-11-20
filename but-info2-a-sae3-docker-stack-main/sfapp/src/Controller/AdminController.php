@@ -132,7 +132,7 @@ class AdminController extends AbstractController
             $entityManager->persist($acquisitionSystem);
             $entityManager->flush();
 
-            // Redirection l'utilisateur après la soumission du formulaire
+            // Redirection de l'utilisateur après la soumission du formulaire
             return $this->redirectToRoute('app_admin_dashboard');
         }
 

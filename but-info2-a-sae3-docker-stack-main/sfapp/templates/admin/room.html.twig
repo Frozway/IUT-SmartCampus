@@ -43,17 +43,11 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                                <button type="button" class="btn btn-danger" onclick="unAssign({{ room.id }})">Désattribuer</button>
+                                <button type="button" class="btn btn-danger" onclick="window.location.href='{{ path('app_admin_unassign_as', {'id': room.id}) }}'">Désattribuer</button>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <script>
-                    function unAssign(roomId) {
-                        window.location.href = '{{ path('app_admin_unassign_as', {'id': room.id}) }}';
-                    }
-                </script>
 
                 <div class="row mt-1">
 
@@ -128,18 +122,11 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                        <button type="button" class="btn btn-danger" onclick="deleteRoom({{ room.id }})">Supprimer</button>
+                        <button type="button" class="btn btn-danger" onclick="window.location.href = '{{ path('app_admin_delete_room', {'id': room.id}) }}';">Supprimer</button>
                     </div>
                 </div>
             </div>
         </div>
-
-
-        <script>
-            function deleteRoom(roomId) {
-                window.location.href = '{{ path('app_admin_delete_room', {'id': room.id}) }}';
-            }
-        </script>
     </div>
 </div>
 

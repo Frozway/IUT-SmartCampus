@@ -56,7 +56,7 @@
                         <img src="{{ asset('images/icon_temperature.png') }}" alt="Logo Temp" class="img-fluid">
                     </div>
                     <div class="value">
-                        <span>23°C</span>
+                        <span>{{ acquisitionSystem.temperature }}°C</span>
                         <span>Température</span>
                     </div>
                 </div>
@@ -67,7 +67,7 @@
                         <img src="{{ asset('images/icon_humidity.png') }}" alt="Logo Temp" class="img-fluid">
                     </div>
                     <div class="value">
-                        <span>86%</span>
+                        <span>{{ acquisitionSystem.humidity }}%</span>
                         <span>Humidité</span>
                     </div>
                 </div>
@@ -78,7 +78,7 @@
                         <img src="{{ asset('images/icon_carbon.png') }}" alt="Logo Temp" class="img-fluid p-2">
                     </div>
                     <div class="value">
-                        <span>700ppm</span>
+                        <span>{{ acquisitionSystem.co2 }}ppm</span>
                         <span>CO2</span>
                     </div>
                 </div>

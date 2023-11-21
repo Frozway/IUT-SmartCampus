@@ -34,6 +34,8 @@ h2 {
     height: 60px;
     display: flex;
     width: fit-content;
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 .alerte .icon-container {

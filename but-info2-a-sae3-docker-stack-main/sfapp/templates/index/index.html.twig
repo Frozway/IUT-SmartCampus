@@ -8,6 +8,11 @@
 
 <h1><span style="font-weight: 800">SMART</span><span style="font-weight: 200">CAMPUS</span></h1>
 
+{% if error %}
+    <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+{% endif %}
+
+
 <div class="page-wrapper d-flex align-items-center justify-content-center">
     <div class="mx-4 col" style="text-align: right; max-width: 500px">
         <h2>VOUS ETES TECHNICIEN ?</h2>
@@ -24,6 +29,5 @@
         <input type="text" placeholder="Identifiant">
         <button>SE CONNECTER</button></div>
     </div>
-    
 </div>
 {% endblock %}

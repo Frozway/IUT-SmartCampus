@@ -22,6 +22,11 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class AdminController extends AbstractController
 {
+    private function checkIsAdmin(): bool
+    {
+        return $this->getUser() && in_array("ROLE_ADMIN", $this->getUser()->getRoles());
+    }
+
     /**
      * @Route('/admin-dashboard/room/{id?}', name: 'app_admin_room')
      *
@@ -35,6 +40,10 @@ class AdminController extends AbstractController
     #[Route('/admin-dashboard/room/{id?}', name: 'app_admin_room')]
     public function roomIndex(?int $id, ManagerRegistry $doctrine, Request $request): Response
     {
+        if (!$this->checkIsAdmin())
+        {
+            return $this->redirectToRoute('app_index');
+        }
         $entityManager = $doctrine->getManager();
 
         $roomRepository = $entityManager->getRepository('App\Entity\Room');
@@ -92,6 +101,10 @@ class AdminController extends AbstractController
     #[Route('/admin-dashboard/add-room', name: 'app_admin_add_room')]
     public function addRoom(Request $request, EntityManagerInterface $entityManager): Response
     {
+        if (!$this->checkIsAdmin())
+        {
+            return $this->redirectToRoute('app_index');
+        }
         $room = new Room();
 
         $form = $this->createForm(RoomType::class, $room);
@@ -121,6 +134,11 @@ class AdminController extends AbstractController
      */
     #[Route('/admin-dashboard/edit-room/{id?}', name: 'app_admin_edit_room')]
     public function editRoom(Request $request, EntityManagerInterface $entityManager, ?int $id) : Response {
+        if (!$this->checkIsAdmin())
+        {
+            return $this->redirectToRoute('app_index');
+        }
+
         if (is_null($id)) {
             return $this->redirectToRoute('app_admin_dashboard');
         }
@@ -157,7 +175,11 @@ class AdminController extends AbstractController
      */
     #[Route('/admin-dashboard/add-acquisition-system/{error}', name: 'app_admin_add_acquisition_system')]
     public function addAcquisitionSystemIndex(Request $request, EntityManagerInterface $entityManager, $error): Response
-    {        
+    {
+        if (!$this->checkIsAdmin())
+        {
+            return $this->redirectToRoute('app_index');
+        }
         $acquisitionSystem = new AcquisitionSystem();
 
         // Récupérer la liste des salles qui n'ont pas de système d'acquisition
@@ -202,7 +224,11 @@ class AdminController extends AbstractController
      */
     #[Route('/admin-dashboard/error', name: 'app_unique_constraint_error')]
     public function uniqueConstraintErrorIndex(Request $request, EntityManagerInterface $entityManager): Response
-    {        
+    {
+        if (!$this->checkIsAdmin())
+        {
+            return $this->redirectToRoute('app_index');
+        }
 
         return $this->render('admin/uniqueConstraintError.html.twig', [
             'controller_name' => 'uniqueConstraintError',
@@ -222,6 +248,10 @@ class AdminController extends AbstractController
     #[Route('/admin-dashboard/room/{id}/delete', name: 'app_admin_delete_room')]
     public function deleteRoom(int $id, ManagerRegistry $doctrine): RedirectResponse
     {
+        if (!$this->checkIsAdmin())
+        {
+            return $this->redirectToRoute('app_index');
+        }
         $entityManager = $doctrine->getManager();
 
         $roomRepository = $entityManager->getRepository('App\Entity\Room');
@@ -263,6 +293,10 @@ class AdminController extends AbstractController
     #[Route('/admin-dashboard/room/{id}/unassign-as', name: 'app_admin_unassign_as')]
     public function unassignAS(int $id, ManagerRegistry $doctrine): RedirectResponse
     {
+        if (!$this->checkIsAdmin())
+        {
+            return $this->redirectToRoute('app_index');
+        }
         $entityManager = $doctrine->getManager();
         $roomRepository = $entityManager->getRepository('App\Entity\Room');
 
@@ -299,6 +333,10 @@ class AdminController extends AbstractController
     #[Route('/admin-dashboard/acquisition-system/{id}/delete', name: 'app_admin_delete_acquisition_system')]
     public function deleteAcquisitionSystem(int $id, ManagerRegistry $doctrine): RedirectResponse
     {
+        if (!$this->checkIsAdmin())
+        {
+            return $this->redirectToRoute('app_index');
+        }
         $entityManager = $doctrine->getManager();
         $acquisitionSystemRepository = $entityManager->getRepository('App\Entity\AcquisitionSystem');
 

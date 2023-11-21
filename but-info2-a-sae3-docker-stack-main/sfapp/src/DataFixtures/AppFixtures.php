@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Room;
 use App\Entity\AcquisitionSystem;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -35,6 +36,12 @@ class AppFixtures extends Fixture
             $system->setCo2(mt_rand(300, 800));
             $manager->persist($system);
         }
+
+        $admin = new User();
+        $admin->setUsername('admin');
+        $admin->setPassword('admin');
+        $admin->setRoles(['ROLE_ADMIN']);
+        $manager->persist($admin);
 
         $manager->flush();
     }

@@ -16,7 +16,7 @@
         <h2>Salle - {{ room.name }} - Étage {{ room.floor }} </h2>
 
         {# Bouton Retour #}
-        <a href="{{ path('app_admin_dashboard') }}" class="btn btn-secondary back">Retour</a>
+        <a href="{{ path('app_admin_dashboard') }}" class="btn btn-custom-secondary back">Retour</a>
 
         <div class="panel shadow">
             Vue d'ensemble - {{ acquisitionSystem.name | default('Aucun système d\'acquisition associé') }}
@@ -25,7 +25,7 @@
                 {% if acquisitionSystem is not null %}
 
                 {# Bouton Désattribuer le système d'acquisition #}
-                <button type="button" class="btn btn-danger btn-md mx-3" data-toggle="modal" data-target="#confirmUnassignModal">Désattribuer le S.A.</button>
+                <button type="button" class="btn btn-custom-danger btn-md mx-3" data-toggle="modal" data-target="#confirmUnassignModal">Désattribuer le S.A.</button>
 
                 <!-- Modal confirmation -->
                 <div class="modal fade" id="confirmUnassignModal" tabindex="-1" role="dialog" aria-labelledby="confirmUnassignModalLabel" aria-hidden="true">
@@ -41,8 +41,8 @@
                                 Êtes-vous sûr de vouloir désattribuer le système d'acquisition de cette salle ?
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                                <button type="button" class="btn btn-danger" onclick="window.location.href='{{ path('app_admin_unassign_as', {'id': room.id}) }}'">Désattribuer</button>
+                                <button type="button" class="btn btn-custom-secondary" data-dismiss="modal">Annuler</button>
+                                <button type="button" class="btn btn-custom-danger" onclick="window.location.href='{{ path('app_admin_unassign_as', {'id': room.id}) }}'">Désattribuer</button>
                             </div>
                         </div>
                     </div>
@@ -120,7 +120,7 @@
                     {# Affichez le formulaire de sélection du système d'acquisition #}
                     <form method="post" action="{{ path('app_admin_room', {'id': room.id}) }}">
                         {{ form_widget(form.acquisitionSystem, {'attr': {'class': 'form-control'}}) }}
-                        <button type="submit" class="btn btn-primary mt-2">Attribuer</button>
+                        <button type="submit" class="btn custom-btn-primary mt-2">Attribuer</button>
                     </form>
                 </div>
             </div>
@@ -129,10 +129,10 @@
 
         </div>
 
-        <a href="{{ path('app_admin_edit_room', {'id': room.id}) }}"><button type="button" class="btn btn-secondary btn-lg mt-3 mx-2" style="width: 330px; height: 60px;">Modifier la salle</button></a>
+        <a href="{{ path('app_admin_edit_room', {'id': room.id}) }}"><button type="button" class="btn btn-custom-secondary btn-lg mt-3 mx-2" style="width: 330px; height: 60px;">Modifier la salle</button></a>
 
         {# Bouton Supprimer la salle #}
-        <button type="button" class="btn btn-danger btn-lg mt-3 mx-2" style="width: 330px; height: 60px;" data-toggle="modal" data-target="#confirmDeleteModal">Supprimer la salle</button>
+        <button type="button" class="btn btn-custom-danger btn-lg mt-3 mx-2" style="width: 330px; height: 60px;" data-toggle="modal" data-target="#confirmDeleteModal">Supprimer la salle</button>
 
         <!-- Modal confirmation -->
         <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
@@ -148,8 +148,8 @@
                         Êtes-vous sûr de vouloir supprimer cette salle ?
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                        <button type="button" class="btn btn-danger" onclick="window.location.href = '{{ path('app_admin_delete_room', {'id': room.id}) }}';">Supprimer</button>
+                        <button type="button" class="btn btn-custom-secondary" data-dismiss="modal">Annuler</button>
+                        <button type="button" class="btn btn-custom-danger" onclick="window.location.href = '{{ path('app_admin_delete_room', {'id': room.id}) }}';">Supprimer</button>
                     </div>
                 </div>
             </div>

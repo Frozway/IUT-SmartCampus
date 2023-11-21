@@ -23,37 +23,91 @@
   width: 100vw;
 }
 
+/* buttons */
+
 .back {
   padding: 8px 16px;
   margin: 8px;
 }
 
-.btn-success {
+.btn-custom-success {
   background-color: #00b894;
   border-color: #00b894;
+  color: #fff;
 }
 
-.btn-success:hover {
+.btn-custom-success:hover {
   background-color: #55efc4;
   border-color: #55efc4;
+  color: #fff;
 }
 
-.btn-secondary {
+/* .btn-custom-success:active {
+  background-color: #55efc4;
+  border-color: #55efc4;
+  color: #fff;
+} */
+
+.btn-custom-secondary {
   background-color: #00b894;
   border-color: #00b894;
+  color: #fff;
 }
 
-.btn-secondary:hover {
+/* .btn-custom-secondary:active {
   background-color: #55efc4;
   border-color: #55efc4;
+  color: #fff;
+} */
+
+.btn-custom-secondary:hover {
+  background-color: #55efc4;
+  border-color: #55efc4;
+  color: #fff;
 }
 
-.btn-danger {
+.btn-custom-danger {
   background-color: #d63031;
   border-color: #d63031;
+  color: #fff;
 }
 
-.btn-danger:hover {
+.btn-custom-danger:hover {
   background-color: #ff7675;
   border-color: #ff7675;
+  color: #fff;
 }
+
+/* .btn-custom-danger:active {
+  background-color: #ff7675;
+  border-color: #ff7675;
+  color: #fff;
+} */
+
+/* end buttons */
+
+/* form */
+
+.custom-btn {
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-size: 18px;
+  text-decoration: none;
+}
+
+.custom-btn-primary {
+  background-color: #0984e3;
+  color: #fff;
+}
+
+.custom-btn-primary:hover {
+  background-color: #74b9ff;
+  color: #fff;
+}
+
+.rounded-panel {
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+/* end form */

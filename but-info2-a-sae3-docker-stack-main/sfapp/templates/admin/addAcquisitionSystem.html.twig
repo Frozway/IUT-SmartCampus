@@ -7,37 +7,6 @@
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <link rel="stylesheet" href="{{ asset('css/adminDashboard.css') }}">
 
-    <style>
-        .custom-btn {
-            border-radius: 10px;
-            padding: 10px 20px;
-            font-size: 18px;
-            text-decoration: none;
-        }
-
-        .custom-btn-primary {
-            background-color: #007bff;
-            color: #fff;
-        }
-
-        .custom-btn-primary:hover {
-            background-color: #0056b3;
-        }
-
-        .custom-btn-danger {
-            background-color: #dc3545;
-            color: #fff;
-        }
-
-        .custom-btn-danger:hover {
-            background-color: #c82333;
-        }
-
-        .rounded-panel {
-            border-radius: 15px;
-            overflow: hidden;
-        }
-    </style>
 
     <div class="page-wrapper d-inline-flex">
         <div class="sidebar">
@@ -69,7 +38,7 @@
                         {{ form_rest(form) }}
 
                         <button type="submit" class="btn custom-btn custom-btn-primary btn-block mt-3">Enregistrer</button>
-                        <a href="{{ path('app_admin_dashboard') }}" class="btn custom-btn custom-btn-danger btn-block mt-2">Annuler</a>
+                        <a href="{{ path('app_admin_dashboard') }}" class="btn custom-btn btn-custom-danger btn-block mt-2">Annuler</a>
 
                         {{ form_end(form) }}
                     </div>

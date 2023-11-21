@@ -54,7 +54,7 @@
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <div class="fs-5">Salles</div>
                             <div>
-                                <a href="{{ path('app_admin_add_room') }}" class="btn btn-success">Ajouter</a>
+                                <a href="{{ path('app_admin_add_room') }}" class="btn btn-custom-success">Ajouter</a>
                             </div>
                         </div>
 
@@ -83,7 +83,7 @@
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <div class="fs-5">Systemes d'aquisition</div>
                             <div>
-                                <a href="{{ path('app_admin_add_acquisition_system', {'error': '0'}) }}" class="btn btn-success">Ajouter</a>
+                                <a href="{{ path('app_admin_add_acquisition_system', {'error': '0'}) }}" class="btn btn-custom-success">Ajouter</a>
                             </div>
                         </div>
 
@@ -101,7 +101,7 @@
                                         </div>
                                     {% endif %}
 
-                                    <button type="button" class="btn btn-danger btn-sm float-right" style="width: auto;" data-toggle="modal" data-target="#confirmDeleteModal">
+                                    <button type="button" class="btn btn-custom-danger btn-sm float-right" style="width: auto;" data-toggle="modal" data-target="#confirmDeleteModal">
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
 
@@ -119,8 +119,8 @@
                                                     Êtes-vous sûr de vouloir supprimer ce système d'acquisitaion ?
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                                                    <button type="button" class="btn btn-danger" onclick="deleteAS()">Supprimer</button>
+                                                    <button type="button" class="btn btn-custom-secondary" data-dismiss="modal">Annuler</button>
+                                                    <button type="button" class="btn btn-custom-danger" onclick="deleteAS()">Supprimer</button>
                                                 </div>
                                             </div>
                                         </div>

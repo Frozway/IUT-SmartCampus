@@ -22,3 +22,38 @@
   height: 100vh;
   width: 100vw;
 }
+
+.back {
+  padding: 8px 16px;
+  margin: 8px;
+}
+
+.btn-success {
+  background-color: #00b894;
+  border-color: #00b894;
+}
+
+.btn-success:hover {
+  background-color: #55efc4;
+  border-color: #55efc4;
+}
+
+.btn-secondary {
+  background-color: #00b894;
+  border-color: #00b894;
+}
+
+.btn-secondary:hover {
+  background-color: #55efc4;
+  border-color: #55efc4;
+}
+
+.btn-danger {
+  background-color: #d63031;
+  border-color: #d63031;
+}
+
+.btn-danger:hover {
+  background-color: #ff7675;
+  border-color: #ff7675;
+}

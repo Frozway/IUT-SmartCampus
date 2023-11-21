@@ -10,6 +10,12 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class DashboardController extends AbstractController
 {
+    /**
+     * Affiche le tableau de bord de l'utilisateur.
+     *
+     * @Route('/user-dashboard', name='app_user_dashboard')
+     * @return Response
+     */
     #[Route('/user-dashboard', name: 'app_user_dashboard')]
     public function userDashboardIndex(): Response
     {
@@ -18,6 +24,13 @@ class DashboardController extends AbstractController
         ]);
     }
 
+    /**
+     * Affiche le tableau de bord de l'administrateur.
+     *
+     * @Route('/admin-dashboard', name='app_admin_dashboard')
+     * @param ManagerRegistry $doctrine
+     * @return Response
+     */
     #[Route('/admin-dashboard', name: 'app_admin_dashboard')]
     public function adminDashboardIndex(ManagerRegistry $doctrine): Response
     {

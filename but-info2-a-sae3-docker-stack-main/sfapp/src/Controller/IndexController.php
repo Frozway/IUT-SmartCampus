@@ -8,6 +8,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class IndexController extends AbstractController
 {
+    /**
+     * Affiche la page d'accueil de connexion.
+     *
+     * @Route('/', name='app_index')
+     * @return Response
+     */
     #[Route('/', name: 'app_index')]
     public function index(): Response
     {

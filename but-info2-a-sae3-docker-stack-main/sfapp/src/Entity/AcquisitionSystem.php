@@ -6,8 +6,10 @@ use App\Repository\AcquisitionSystemRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: AcquisitionSystemRepository::class)]
+#[UniqueEntity(fields: "name", message: "Un système d'acquisition avec ce nom existe déjà.")]
 class AcquisitionSystem
 {
     #[ORM\Id]
@@ -15,7 +17,7 @@ class AcquisitionSystem
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 10)]
+    #[ORM\Column(length: 10, unique : true)]
     private ?string $name = null;
 
     #[ORM\OneToOne(inversedBy: 'acquisitionSystem', cascade: ['persist', 'remove'])]

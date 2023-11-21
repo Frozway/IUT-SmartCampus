@@ -19,9 +19,9 @@
                     <div class="col-md-6 panel shadow">
                         <h1 class="text-center mb-4">Ajouter un Système d'acquisition</h1>
 
-                        {% if display_error == true %}
-                            <div class="alert alert-danger">Cette salle est déjà liée à un système d'aquisition</div>
-                        {% endif %}
+                        {% for error in errors %}
+                            <div class="alert alert-danger">{{ error.message }}</div>
+                        {% endfor %}
 
                         {{ form_start(form, {'attr': {'class': 'rounded-panel'}}) }}
 

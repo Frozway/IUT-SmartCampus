@@ -21,40 +21,41 @@
         <div class="panel shadow">
             Vue d'ensemble - {{ acquisitionSystem.name | default('Aucun système d\'acquisition associé') }}
 
-                {# Afficher le contenu uniquement s'il y a un système d'acquisition associé #}
-                {% if acquisitionSystem is not null %}
+            {# Afficher le contenu uniquement s'il y a un système d'acquisition associé #}
+            {% if acquisitionSystem is not null %}
 
-                {# Bouton Désattribuer le système d'acquisition #}
-                <button type="button" class="btn btn-custom-danger btn-md mx-3" data-toggle="modal" data-target="#confirmUnassignModal"><i class="fa-solid fa-link-slash"></i> Désattribuer le S.A.</button>
+            {# Bouton Désattribuer le système d'acquisition #}
+            <button type="button" class="btn btn-custom-danger btn-md mx-3" data-toggle="modal" data-target="#confirmUnassignModal"><i class="fa-solid fa-link-slash"></i> Désattribuer le S.A.</button>
 
-                <!-- Modal confirmation -->
-                <div class="modal fade" id="confirmUnassignModal" tabindex="-1" role="dialog" aria-labelledby="confirmUnassignModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="confirmUnassignModalLabel">Confirmation de désattribution</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                Êtes-vous sûr de vouloir désattribuer le système d'acquisition de cette salle ?
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-custom-secondary" data-dismiss="modal">Annuler</button>
-                                <button type="button" class="btn btn-custom-danger" onclick="window.location.href='{{ path('app_admin_unassign_as', {'id': room.id}) }}'"><i class="fa-solid fa-link-slash"></i> Désattribuer</button>
-                            </div>
+            <!-- Modal confirmation -->
+            <div class="modal fade" id="confirmUnassignModal" tabindex="-1" role="dialog" aria-labelledby="confirmUnassignModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="confirmUnassignModalLabel">Confirmation de désattribution</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Êtes-vous sûr de vouloir désattribuer le système d'acquisition de cette salle ?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-custom-secondary" data-dismiss="modal">Annuler</button>
+                            <button type="button" class="btn btn-custom-danger" onclick="window.location.href='{{ path('app_admin_unassign_as', {'id': room.id}) }}'"><i class="fa-solid fa-link-slash"></i> Désattribuer</button>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="row mt-1 d-flex justify-content-start">
+            <div class="row mt-1 d-flex justify-content-start">
 
                 {# Bloc température #}
                 <div class="temp mt-2 p-0 border-0 rounded">
                     <div class="icon-container rounded-left">
                         <img src="{{ asset('images/icon_temperature.png') }}" alt="Logo Temp" class="img-fluid p-2">
                     </div>
+                    
                     <div class="temp-value justify-content-center d-flex align-items-center text-center">
 
                         {% if acquisitionSystem.temperature is null %}

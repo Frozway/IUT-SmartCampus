@@ -18,6 +18,7 @@ use App\Repository\AcquisitionSystemRepository;
 use App\Form\RoomType;
 use App\Entity\Room;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 
 class AdminController extends AbstractController
@@ -99,7 +100,7 @@ class AdminController extends AbstractController
      * @return Response
      */
     #[Route('/admin-dashboard/add-room', name: 'app_admin_add_room')]
-    public function addRoom(Request $request, EntityManagerInterface $entityManager): Response
+    public function addRoom(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator): Response
     {
         if (!$this->checkIsAdmin())
         {
@@ -110,6 +111,7 @@ class AdminController extends AbstractController
         $form = $this->createForm(RoomType::class, $room);
 
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()){
             $entityManager->persist($room);
             $entityManager->flush();
@@ -117,8 +119,12 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('app_admin_dashboard');
         }
 
+        $errors = $validator->validate($room);
+
         return $this->render('admin/addRoom.html.twig', [
             'form' => $form->createView(),
+            'controller_name' => 'AddRoom',
+            'errors' => $errors,
         ]);
     }
 
@@ -133,7 +139,7 @@ class AdminController extends AbstractController
      * @return Response
      */
     #[Route('/admin-dashboard/edit-room/{id?}', name: 'app_admin_edit_room')]
-    public function editRoom(Request $request, EntityManagerInterface $entityManager, ?int $id) : Response {
+    public function editRoom(Request $request, EntityManagerInterface $entityManager, ?int $id, ValidatorInterface $validator) : Response {
         if (!$this->checkIsAdmin())
         {
             return $this->redirectToRoute('app_index');
@@ -152,15 +158,20 @@ class AdminController extends AbstractController
         $form = $this->createForm(RoomType::class, $room);
 
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
             return $this->redirectToRoute('app_admin_dashboard');
         }
 
+        $errors = $validator->validate($room);
+
         return $this->render('admin/editRoom.html.twig', [
             'form' => $form->createView(),
             'room' => $id,
+            'controller_name' => 'EditRoom',
+            'errors' => $errors,
         ]);
     }
 
@@ -174,7 +185,7 @@ class AdminController extends AbstractController
      * @return Response
      */
     #[Route('/admin-dashboard/add-acquisition-system/{error}', name: 'app_admin_add_acquisition_system')]
-    public function addAcquisitionSystemIndex(Request $request, EntityManagerInterface $entityManager, $error): Response
+    public function addAcquisitionSystemIndex(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator): Response
     {
         if (!$this->checkIsAdmin())
         {
@@ -194,22 +205,18 @@ class AdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            try {
-                $entityManager->persist($acquisitionSystem);
-                $entityManager->flush();
-            } catch (UniqueConstraintViolationException $e) {
-                return $this->redirectToRoute('app_admin_add_acquisition_system', [
-                    'error' => '1',
-                ]);
-            }
+            $entityManager->persist($acquisitionSystem);
+            $entityManager->flush();
 
             return $this->redirectToRoute('app_admin_dashboard');
         }
 
+        $errors = $validator->validate($acquisitionSystem);
+
         return $this->render('admin/addAcquisitionSystem.html.twig', [
             'form' => $form->createView(),
             'controller_name' => 'AddAcquisitionSystem',
-            'display_error' => $error,
+            'errors' => $errors,
         ]);
     }
 

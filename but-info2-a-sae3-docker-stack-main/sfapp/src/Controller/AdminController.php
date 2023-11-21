@@ -79,6 +79,7 @@ class AdminController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
     /**
      * @Route('/admin-dashboard/add-room', name: 'app_admin_add_room')
      *
@@ -107,6 +108,7 @@ class AdminController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
     /**
      * @Route('/admin-dashboard/edit-room/{id?}', name: 'app_admin_edit_room')
      *
@@ -143,6 +145,7 @@ class AdminController extends AbstractController
             'room' => $id,
         ]);
     }
+
     /**
      * @Route('/admin-dashboard/add-acquisition-system', name: 'app_admin_add_acquisition_system')
      *
@@ -156,7 +159,15 @@ class AdminController extends AbstractController
     public function addAcquisitionSystemIndex(Request $request, EntityManagerInterface $entityManager, $error): Response
     {        
         $acquisitionSystem = new AcquisitionSystem();
-        $form = $this->createForm(AcquisitionSystemType::class, $acquisitionSystem);
+
+        // Récupérer la liste des salles qui n'ont pas de système d'acquisition
+        $unassociatedRooms = $entityManager
+            ->getRepository('App\Entity\Room')
+            ->findRoomsWithoutAcquisitionSystem();
+
+        $form = $this->createForm(AcquisitionSystemType::class, $acquisitionSystem, [
+            'unassociated_rooms' => $unassociatedRooms,
+        ]);
 
         $form->handleRequest($request);
 
@@ -176,9 +187,10 @@ class AdminController extends AbstractController
         return $this->render('admin/addAcquisitionSystem.html.twig', [
             'form' => $form->createView(),
             'controller_name' => 'AddAcquisitionSystem',
-            'display_error' => $error
+            'display_error' => $error,
         ]);
     }
+
     /**
      * @Route('/admin-dashboard/add-acquisition-system', name: 'app_admin_add_acquisition_system')
      *
@@ -197,6 +209,7 @@ class AdminController extends AbstractController
         ]);
         
     }
+
     /**
      * @Route('/admin-dashboard/room/{id}/delete', name: 'app_admin_delete_room')
      *
@@ -237,6 +250,7 @@ class AdminController extends AbstractController
         // Rediriger vers une autre page après la suppression
         return $this->redirectToRoute('app_admin_dashboard');
     }
+
     /**
      * @Route('/admin-dashboard/room/{id}/unassign-as', name: 'app_admin_unassign_as')
      *
@@ -272,6 +286,7 @@ class AdminController extends AbstractController
         // Redirection une fois la suppression terminee
         return $this->redirectToRoute('app_admin_room', ['id'=> $id]);
     }
+    
     /**
      * @Route('/admin-dashboard/acquisition-system/{id}/delete', name: 'app_admin_delete_acquisition_system')
      *

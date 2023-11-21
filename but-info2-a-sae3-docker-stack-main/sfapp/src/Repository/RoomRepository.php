@@ -21,6 +21,16 @@ class RoomRepository extends ServiceEntityRepository
         parent::__construct($registry, Room::class);
     }
 
+    public function findRoomsWithoutAcquisitionSystem()
+    {
+        return $this->createQueryBuilder('r')
+            ->leftJoin('r.acquisitionSystem', 'as_alias')
+            ->where('as_alias.id IS NULL')
+            ->getQuery()
+            ->getResult();
+    }
+
+
 //    /**
 //     * @return Room[] Returns an array of Room objects
 //     */

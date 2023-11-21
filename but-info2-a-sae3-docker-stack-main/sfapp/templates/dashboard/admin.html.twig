@@ -21,7 +21,7 @@
 
         <div class="content" style="flex-grow: 1;">
 
-        <h2>◩ Tableau de bord</h2>
+        <h2><i class="fa-solid fa-house"></i> Tableau de bord</h2>
 
         {# Alertes #}
         <div class="flex">
@@ -83,7 +83,7 @@
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <div class="fs-5">Systemes d'aquisition</div>
                             <div>
-                                <a href="{{ path('app_admin_add_acquisition_system') }}" class="btn btn-success">Ajouter</a>
+                                <a href="{{ path('app_admin_add_acquisition_system', {'error': '0'}) }}" class="btn btn-success">Ajouter</a>
                             </div>
                         </div>
 

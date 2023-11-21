@@ -6,8 +6,10 @@ use App\Entity\AcquisitionSystem;
 use App\Form\AcquisitionSystemType;
 use App\Form\AcquisitionSystemSelectionType;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -150,8 +152,8 @@ class AdminController extends AbstractController
      * @param EntityManagerInterface $entityManager L'entité de gestion
      * @return Response
      */
-    #[Route('/admin-dashboard/add-acquisition-system', name: 'app_admin_add_acquisition_system')]
-    public function addAcquisitionSystemIndex(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/admin-dashboard/add-acquisition-system/{error}', name: 'app_admin_add_acquisition_system')]
+    public function addAcquisitionSystemIndex(Request $request, EntityManagerInterface $entityManager, $error): Response
     {        
         $acquisitionSystem = new AcquisitionSystem();
         $form = $this->createForm(AcquisitionSystemType::class, $acquisitionSystem);
@@ -159,8 +161,14 @@ class AdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($acquisitionSystem);
-            $entityManager->flush();
+            try {
+                $entityManager->persist($acquisitionSystem);
+                $entityManager->flush();
+            } catch (UniqueConstraintViolationException $e) {
+                return $this->redirectToRoute('app_admin_add_acquisition_system', [
+                    'error' => '1',
+                ]);
+            }
 
             return $this->redirectToRoute('app_admin_dashboard');
         }
@@ -168,7 +176,26 @@ class AdminController extends AbstractController
         return $this->render('admin/addAcquisitionSystem.html.twig', [
             'form' => $form->createView(),
             'controller_name' => 'AddAcquisitionSystem',
+            'display_error' => $error
         ]);
+    }
+    /**
+     * @Route('/admin-dashboard/add-acquisition-system', name: 'app_admin_add_acquisition_system')
+     *
+     * Affiche et traite le formulaire d'ajout d'un système d'acquisition.
+     *
+     * @param Request $request La requête HTTP
+     * @param EntityManagerInterface $entityManager L'entité de gestion
+     * @return Response
+     */
+    #[Route('/admin-dashboard/error', name: 'app_unique_constraint_error')]
+    public function uniqueConstraintErrorIndex(Request $request, EntityManagerInterface $entityManager): Response
+    {        
+
+        return $this->render('admin/uniqueConstraintError.html.twig', [
+            'controller_name' => 'uniqueConstraintError',
+        ]);
+        
     }
     /**
      * @Route('/admin-dashboard/room/{id}/delete', name: 'app_admin_delete_room')

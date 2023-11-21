@@ -54,7 +54,7 @@
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <div class="fs-5">Salles</div>
                             <div>
-                                <a href="{{ path('app_admin_add_room') }}" class="btn btn-custom-success">Ajouter</a>
+                                <a href="{{ path('app_admin_add_room') }}" class="btn btn-custom-success"><i class="fa-solid fa-plus"></i> Ajouter</a>
                             </div>
                         </div>
 
@@ -83,7 +83,7 @@
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <div class="fs-5">Systemes d'aquisition</div>
                             <div>
-                                <a href="{{ path('app_admin_add_acquisition_system', {'error': '0'}) }}" class="btn btn-custom-success">Ajouter</a>
+                                <a href="{{ path('app_admin_add_acquisition_system', {'error': '0'}) }}" class="btn btn-custom-success"><i class="fa-solid fa-plus"></i> Ajouter</a>
                             </div>
                         </div>
 
@@ -120,7 +120,7 @@
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-custom-secondary" data-dismiss="modal">Annuler</button>
-                                                    <button type="button" class="btn btn-custom-danger" onclick="window.location.href = '{{ path('app_admin_delete_acquisition_system', {'id': acquisitionSystem.id}) }}'">Supprimer</button>
+                                                    <button type="button" class="btn btn-custom-danger" onclick="window.location.href = '{{ path('app_admin_delete_acquisition_system', {'id': acquisitionSystem.id}) }}'"><i class="fa-solid fa-trash-can"></i> Supprimer</button>
                                                 </div>
                                             </div>
                                         </div>

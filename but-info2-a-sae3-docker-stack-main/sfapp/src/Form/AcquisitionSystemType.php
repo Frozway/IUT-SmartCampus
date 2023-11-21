@@ -37,7 +37,8 @@ class AcquisitionSystemType extends AbstractType
                 'class' => Room::class,
                 'choice_label' => 'name',
                 'placeholder' => 'Sélectionnez une salle',
-                'required' => false, // Rend le champ optionnel
+                'required' => false,
+                'choices' => $options['unassociated_rooms'],
             ]);
     }
 
@@ -50,6 +51,7 @@ class AcquisitionSystemType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => AcquisitionSystem::class,
+            'unassociated_rooms' => [], // Ajoutez cette ligne pour définir la valeur par défaut
         ]);
     }
 }

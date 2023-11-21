@@ -55,9 +55,18 @@
                     <div class="icon-container rounded-start">
                         <img src="{{ asset('images/icon_temperature.png') }}" alt="Logo Temp" class="img-fluid">
                     </div>
-                    <div class="value">
-                        <span>{{ acquisitionSystem.temperature }}°C</span>
-                        <span>Température</span>
+                    <div class="value d-flex justify-content-center">
+
+                        {% if acquisitionSystem.temperature is null %}
+
+                        <span>Température non disponible</span>
+
+                        {% else %}
+
+                        <span>{{ acquisitionSystem.temperature }}° Température</span>
+
+                        {% endif %}
+
                     </div>
                 </div>
 
@@ -66,9 +75,18 @@
                     <div class="icon-container rounded-start">
                         <img src="{{ asset('images/icon_humidity.png') }}" alt="Logo Temp" class="img-fluid">
                     </div>
-                    <div class="value">
-                        <span>{{ acquisitionSystem.humidity }}%</span>
-                        <span>Humidité</span>
+                    <div class="value d-flex justify-content-center">
+
+                        {% if acquisitionSystem.humidity is null %}
+
+                        <span>Taux d'humidité non disponible</span>
+
+                        {% else %}
+
+                        <span>{{ acquisitionSystem.humidity }}% Humidité</span>
+
+                        {% endif %}
+
                     </div>
                 </div>
 
@@ -77,9 +95,17 @@
                     <div class="icon-container rounded-start">
                         <img src="{{ asset('images/icon_carbon.png') }}" alt="Logo Temp" class="img-fluid p-2">
                     </div>
-                    <div class="value">
-                        <span>{{ acquisitionSystem.co2 }}ppm</span>
-                        <span>CO2</span>
+                    <div class="value d-flex justify-content-center">
+
+                        {% if acquisitionSystem.co2 is null %}
+                        
+                        <span>Taux de CO2 non disponible</span>
+
+                        {% else %}
+
+                        <span>{{ acquisitionSystem.co2 }} % CO2</span>
+
+                        {% endif %}
                     </div>
                 </div>
             </div>

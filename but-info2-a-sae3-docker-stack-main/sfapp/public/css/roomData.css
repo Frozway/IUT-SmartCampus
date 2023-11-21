@@ -19,12 +19,9 @@ h2 {
     height: 100px;
 }
 
-.value {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
-    padding: 10px;
+.temp .temp-value {
+    width: 200px;
+    padding: 12px;
     font-size: 16pt;
     font-weight: 600;
 }
@@ -39,6 +36,13 @@ h2 {
     height: 100px;
 }
 
+.humidity .humidity-value {
+    width: 200px;
+    padding: 12px;
+    font-size: 16pt;
+    font-weight: 600;
+}
+
 .co2 {
     background-color: #55EFC4;
 }
@@ -49,7 +53,14 @@ h2 {
     height: 100px;
 }
 
-/* pour temp humidyt et cO2 fait a meme chose */
+.co2 .co2-value {
+    width: 200px;
+    padding: 12px;
+    font-size: 16pt;
+    font-weight: 600;
+}
+
+/* pour temp humidy et cO2 fait la meme chose */
 .temp, .humidity, .co2
 {
     color: white;

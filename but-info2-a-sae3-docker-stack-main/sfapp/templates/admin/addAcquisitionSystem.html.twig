@@ -47,8 +47,12 @@
         <div class="content" style="flex-grow: 1;">
             <div class="container mt-5">
                 <div class="row justify-content-center">
-                    <div class="col-md-6 panel shadow rounded-panel">
+                    <div class="col-md-6 panel shadow">
                         <h1 class="text-center mb-4">Ajouter un Système d'acquisition</h1>
+
+                        {% if display_error == true %}
+                            <div class="alert alert-danger">Cette salle est déjà liée à un système d'aquisition</div>
+                        {% endif %}
 
                         {{ form_start(form, {'attr': {'class': 'rounded-panel'}}) }}
 

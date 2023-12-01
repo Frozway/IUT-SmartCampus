@@ -86,7 +86,7 @@
 
 
                             {% for room in rooms %}
-                                {% if room.name == searchR or searchR == null or searchR is empty%}
+                                {% if room.name|slice(0,searchR|length) == searchR or searchR == null or searchR is empty%}
                                     {% if room.floor == floor or floor == null or floor is empty%}
                                         {% if (assigned == 1 and room.getAcquisitionSystem() != null) or assigned == 0%}
                                             {% if (room.getAcquisitionSystem() is not empty and room.getAcquisitionSystem().getName() == searchAS) or searchAS == null or searchAS is empty%}

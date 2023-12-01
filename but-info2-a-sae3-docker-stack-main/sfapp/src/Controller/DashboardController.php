@@ -71,16 +71,26 @@ class DashboardController extends AbstractController
             $searchAS=$form->get('SearchAS');
             $searchAS=$searchAS->getData();
             $searchAS=strtoupper($searchAS);
+            return $this->render('dashboard/admin.html.twig', [
+                'rooms' => $rooms,
+                'acquisitionSystems' => $acquisitionSystems,
+                'controller_name' => 'DashboardController',
+                'floor'=>$floor,
+                'assigned'=>$assigned,
+                'searchR'=>$searchR,
+                'searchAS'=>$searchAS,
+                'form'=>$form,
+            ]);
         }
 
         return $this->render('dashboard/admin.html.twig', [
             'rooms' => $rooms,
             'acquisitionSystems' => $acquisitionSystems,
             'controller_name' => 'DashboardController',
-            'floor'=>$floor,
-            'assigned'=>$assigned,
-            'searchR'=>$searchR,
-            'searchAS'=>$searchAS,
+            'floor'=>null,
+            'assigned'=>null,
+            'searchR'=>null,
+            'searchAS'=>null,
             'form'=>$form,
         ]);
     }

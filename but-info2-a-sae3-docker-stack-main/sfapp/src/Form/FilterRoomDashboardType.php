@@ -2,7 +2,6 @@
 
 namespace App\Form;
 
-use App\Entity\Room;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -37,12 +36,14 @@ class FilterRoomDashboardType extends AbstractType
                 [
                     'label' => 'Nom du système d\'aquisition',
                     'required'=>false,
+                    'autocomplete' => true,
 
                 ])
             ->add('SearchRoom', Searchtype::class,
                 [
                     'label' => 'Nom de la salle',
                     'required'=>false,
+                    'autocomplete' => true,
 
                 ])
             ->add('Valid', Submittype::class,
@@ -57,9 +58,8 @@ class FilterRoomDashboardType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults
-        ([
-            'data_class' => Room::class,
+        $resolver->setDefaults([
+            // Configure your form options here
         ]);
     }
 }

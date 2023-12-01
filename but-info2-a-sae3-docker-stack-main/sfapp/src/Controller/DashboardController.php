@@ -54,36 +54,7 @@ class DashboardController extends AbstractController
         $rooms = $roomRepository->findAll();
         $acquisitionSystems = $acquisitionSystemRepository->findAll();
 
-        $form= $this->createFormBuilder()->getForm();
-//        $form = $this->createForm(FilterRoomDashboardType::class, $rooms);
-        $form->add('Floor', IntegerType::class,
-            [
-                'label' => 'Etage',
-                'required'=>false,
-            ])
-            ->add('isAssigned', CheckboxType::class,
-                [
-                    'label' => 'Système d\'aquisition attribué',
-                    'required'=>false,
-
-                ])
-            ->add('SearchAS', SearchType::class,
-                [
-                    'label' => 'Nom du système d\'aquisition',
-                    'required'=>false,
-
-                ])
-            ->add('SearchRoom', Searchtype::class,
-                [
-                    'label' => 'Nom de la salle',
-                    'required'=>false,
-
-                ])
-            ->add('Valid', Submittype::class,
-                [
-                    'label' => 'Valider',
-                ])
-        ;
+        $form = $this->createForm(FilterRoomDashboardType::class, $rooms);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid())
         {
@@ -95,31 +66,22 @@ class DashboardController extends AbstractController
 
             $searchR=$form->get('SearchRoom');
             $searchR=$searchR->getData();
+            $searchR=strtoupper($searchR);
 
             $searchAS=$form->get('SearchAS');
             $searchAS=$searchAS->getData();
-
-
-            return $this->render('dashboard/admin.html.twig', [
-                'rooms' => $rooms,
-                'acquisitionSystems' => $acquisitionSystems,
-                'controller_name' => 'DashboardController',
-                'floor'=>$floor,
-                'assigned'=>$assigned,
-                'searchR'=>$searchR,
-                'searchAS'=>$searchAS,
-                'form'=>$form,
-            ]);
+            $searchAS=strtoupper($searchAS);
         }
 
         return $this->render('dashboard/admin.html.twig', [
             'rooms' => $rooms,
             'acquisitionSystems' => $acquisitionSystems,
             'controller_name' => 'DashboardController',
+            'floor'=>$floor,
+            'assigned'=>$assigned,
+            'searchR'=>$searchR,
+            'searchAS'=>$searchAS,
             'form'=>$form,
-            'floor'=>'NONE',
-            'assigned'=>'NONE',
-            'searchR'=>'NONE',
         ]);
     }
 }

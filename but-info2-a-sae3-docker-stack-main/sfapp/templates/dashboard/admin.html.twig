@@ -86,10 +86,10 @@
 
 
                             {% for room in rooms %}
-                                {% if room.name == searchR or searchR == "NONE" or searchR is empty%}
-                                    {% if room.floor == floor or room.floor == "NONE" or room.floor is empty%}
-                                        {% if assigned == TRUE and room.getAcquisitionSystem() != null%}
-                                            {% if room.getAcquisitionSystem().name == searchAS or room.getAcquisitionSystem() == null or searchAS is empty%}
+                                {% if room.name == searchR or searchR == null or searchR is empty%}
+                                    {% if room.floor == floor or floor == null or floor is empty%}
+                                        {% if (assigned == 1 and room.getAcquisitionSystem() != null) or assigned == 0%}
+                                            {% if (room.getAcquisitionSystem() is not empty and room.getAcquisitionSystem().getName() == searchAS) or searchAS == null or searchAS is empty%}
                                                 <a href="{{ path('app_admin_room', {'id': room.id}) }}" class="text-decoration-none">
                                                     <li class="d-flex justify-content-between">
                                                         <span  style="color:black;">

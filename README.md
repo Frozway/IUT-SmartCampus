@@ -51,5 +51,7 @@ Après avoir cloné le repository et lancé la stack docker, il faut exécuter q
 3. Installer les dépendances : `composer install`
 
 4. Effectuer les migrations pour obtenir la base de donnée : `php bin/console doctrine:migrations:migrate`
+Répondre **yes**
 
 5. Charger les fixtures (remplissage de la base de donnée) : `php bin/console doctrine:fixtures:load`
+Répondre **yes**

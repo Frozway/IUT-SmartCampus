@@ -20,7 +20,6 @@ class DashboardController extends AbstractController
     public function userDashboardIndex(): Response
     {
         return $this->render('dashboard/user.html.twig', [
-            'controller_name' => 'DashboardController',
         ]);
     }
 
@@ -50,7 +49,6 @@ class DashboardController extends AbstractController
         return $this->render('dashboard/admin.html.twig', [
             'rooms' => $rooms,
             'acquisitionSystems' => $acquisitionSystems,
-            'controller_name' => 'DashboardController',
         ]);
     }
 }

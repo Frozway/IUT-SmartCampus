@@ -85,7 +85,6 @@ class AdminController extends AbstractController
         return $this->render('admin/room.html.twig', [
             'room' => $room,
             'acquisitionSystem' => $acquisitionSystem,
-            'controller_name' => 'AdminController',
             'form' => $form->createView(),
         ]);
     }
@@ -123,7 +122,6 @@ class AdminController extends AbstractController
 
         return $this->render('admin/addRoom.html.twig', [
             'form' => $form->createView(),
-            'controller_name' => 'AddRoom',
             'errors' => $errors,
         ]);
     }
@@ -170,7 +168,6 @@ class AdminController extends AbstractController
         return $this->render('admin/editRoom.html.twig', [
             'form' => $form->createView(),
             'room' => $id,
-            'controller_name' => 'EditRoom',
             'errors' => $errors,
         ]);
     }
@@ -215,7 +212,6 @@ class AdminController extends AbstractController
 
         return $this->render('admin/addAcquisitionSystem.html.twig', [
             'form' => $form->createView(),
-            'controller_name' => 'AddAcquisitionSystem',
             'errors' => $errors,
         ]);
     }
@@ -238,7 +234,6 @@ class AdminController extends AbstractController
         }
 
         return $this->render('admin/uniqueConstraintError.html.twig', [
-            'controller_name' => 'uniqueConstraintError',
         ]);
         
     }

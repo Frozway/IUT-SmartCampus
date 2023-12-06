@@ -74,7 +74,6 @@ class DashboardController extends AbstractController
             return $this->render('dashboard/admin.html.twig', [
                 'rooms' => $rooms,
                 'acquisitionSystems' => $acquisitionSystems,
-                'controller_name' => 'DashboardController',
                 'floor'=>$floor,
                 'assigned'=>$assigned,
                 'searchR'=>$searchR,
@@ -86,7 +85,6 @@ class DashboardController extends AbstractController
         return $this->render('dashboard/admin.html.twig', [
             'rooms' => $rooms,
             'acquisitionSystems' => $acquisitionSystems,
-            'controller_name' => 'DashboardController',
             'floor'=>null,
             'assigned'=>null,
             'searchR'=>null,

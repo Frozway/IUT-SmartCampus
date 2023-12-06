@@ -44,8 +44,12 @@ Pour plus de détails sur nos stratégies au sein du projet, consultez la [page 
 
 Après avoir cloné le repository et lancé la stack docker, il faut exécuter quelques comandes pour installer les dépendances nécéssaires et différentes en fonction de la machine.
 
-1. Se connecter au container : `docker exec -it but-info2-a-sae3-docker-stack-main bash`
+1. Se connecter au container : `docker exec -it but-info2-a-sae3-docker-stack-sfapp bash`
 
 2. Rentrer dans le dossier du projet : `cd sfapp/`
 
 3. Installer les dépendances : `composer install`
+
+4. Effectuer les migrations pour obtenir la base de donnée : `php bin/console doctrine:migrations:migrate`
+
+5. Charger les fixtures (remplissage de la base de donnée) : `php bin/console doctrine:fixtures:load`

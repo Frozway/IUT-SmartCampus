@@ -322,6 +322,39 @@ class AdminController extends AbstractController
         // Redirection une fois la suppression terminee
         return $this->redirectToRoute('app_admin_room', ['id'=> $id]);
     }
+
+    /**
+     * @Route('/admin-dashboard/acquisition-system/{id}', name: 'app_admin_edit_acquisition_system')
+     *
+     * Details d'un système d'acquisition
+     *
+     * @param int $id L'identifiant du système d'acquisition
+     * @param ManagerRegistry $doctrine Le registre de gestionnaire d'entités
+     * @return RedirectResponse
+     */
+    #[Route('/admin-dashboard/acquisition-system/{id}', name: 'app_admin_edit_acquisition_system')]
+    public function editAcquisitionSystem(int $id, ManagerRegistry $doctrine): Response
+    {
+        if (!$this->checkIsAdmin())
+        {
+            return $this->redirectToRoute('app_index');
+        }
+
+        $entityManager = $doctrine->getManager();
+        $acquisitionSystemRepository = $entityManager->getRepository('App\Entity\AcquisitionSystem');
+
+        // Récupérer le système d'acquisition par son ID
+        $acquisitionSystem = $acquisitionSystemRepository->find($id);
+
+        if (!$acquisitionSystem) {
+            // Gérer le cas où le système d'acquisition n'est pas trouvé
+            throw $this->createNotFoundException('Le système d\'acquisition n\'existe pas');
+        }
+
+        return $this->render('admin/acquisitionSystem.html.twig', [
+            'acquisitionSystem' => $acquisitionSystem,
+        ]);
+    }
     
     /**
      * @Route('/admin-dashboard/acquisition-system/{id}/delete', name: 'app_admin_delete_acquisition_system')

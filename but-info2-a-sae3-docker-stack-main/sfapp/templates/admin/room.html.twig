@@ -24,107 +24,144 @@
             {# Afficher le contenu uniquement s'il y a un système d'acquisition associé #}
             {% if acquisitionSystem is not null %}
 
-            {# Bouton Désattribuer le système d'acquisition #}
-            <button type="button" class="btn btn-custom-danger btn-md mx-3" data-toggle="modal" data-target="#confirmUnassignModal"><i class="fa-solid fa-link-slash"></i> Désattribuer le S.A.</button>
+                {% if acquisitionSystem.isInstalled %}
 
-            <!-- Modal confirmation -->
-            <div class="modal fade" id="confirmUnassignModal" tabindex="-1" role="dialog" aria-labelledby="confirmUnassignModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="confirmUnassignModalLabel">Confirmation de désattribution</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                    {# Bouton Désattribuer le système d'acquisition #}
+                    <button type="button" class="btn btn-custom-danger btn-md mx-3" data-toggle="modal" data-target="#confirmUnassignModal"><i class="fa-solid fa-link-slash"></i> Désattribuer le S.A.</button>
+
+                    <!-- Modal confirmation -->
+                    <div class="modal fade" id="confirmUnassignModal" tabindex="-1" role="dialog" aria-labelledby="confirmUnassignModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="confirmUnassignModalLabel">Confirmation de désattribution</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    Êtes-vous sûr de vouloir désattribuer le système d'acquisition de cette salle ?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-custom-secondary" data-dismiss="modal">Annuler</button>
+                                    <button type="button" class="btn btn-custom-danger" onclick="window.location.href='{{ path('app_admin_unassign_as', {'id': room.id}) }}'"><i class="fa-solid fa-link-slash"></i> Désattribuer</button>
+                                </div>
+                            </div>
                         </div>
-                        <div class="modal-body">
-                            Êtes-vous sûr de vouloir désattribuer le système d'acquisition de cette salle ?
+                    </div>
+
+                    <div class="row mt-1 d-flex justify-content-start">
+
+                        {# Bloc température #}
+                        <div class="temp mt-2 p-0 border-0 rounded">
+                            <div class="icon-container rounded-left">
+                                <img src="{{ asset('images/icon_temperature.png') }}" alt="Logo Temp" class="img-fluid p-2">
+                            </div>
+                            
+                            <div class="temp-value justify-content-center d-flex align-items-center text-center">
+
+                                {% if acquisitionSystem.temperature is null %}
+
+                                <span>Température non disponible </span>
+
+                                {% else %}
+
+                                <span>{{ acquisitionSystem.temperature }}°C Température</span>
+
+                                {% endif %}
+
+                            </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-custom-secondary" data-dismiss="modal">Annuler</button>
-                            <button type="button" class="btn btn-custom-danger" onclick="window.location.href='{{ path('app_admin_unassign_as', {'id': room.id}) }}'"><i class="fa-solid fa-link-slash"></i> Désattribuer</button>
+
+                        {# Bloc humidité #}
+                        <div class="humidity mt-2 p-0 border-0 rounded">
+                            <div class="icon-container rounded-left">
+                                <img src="{{ asset('images/icon_humidity.png') }}" alt="Logo Temp" class="img-fluid p-2">
+                            </div>
+                            
+                            <div class="humidity-value justify-content-center d-flex align-items-center text-center">
+
+                                {% if acquisitionSystem.humidity is null %}
+                                
+                                <span>Taux d'humidité non disponible</span>
+
+                                {% else %}
+
+                                <span>{{ acquisitionSystem.humidity }}% Humidité</span>
+
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        {# Bloc CO2 #}
+                        <div class="co2 mt-2 p-0 border-0 rounded">
+                            <div class="icon-container rounded-left">
+                                <img src="{{ asset('images/icon_carbon.png') }}" alt="Logo Temp" class="img-fluid p-2">
+                            </div>
+                            
+                            <div class="co2-value justify-content-center d-flex align-items-center text-center">
+
+                                {% if acquisitionSystem.co2 is null %}
+                                
+                                <span>Taux de CO2 non disponible</span>
+
+                                {% else %}
+
+                                <span>{{ acquisitionSystem.co2 }} ppm CO2</span>
+
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="row mt-1 d-flex justify-content-start">
+                    {# Bouton Afficher les données #}
 
-                {# Bloc température #}
-                <div class="temp mt-2 p-0 border-0 rounded">
-                    <div class="icon-container rounded-left">
-                        <img src="{{ asset('images/icon_temperature.png') }}" alt="Logo Temp" class="img-fluid p-2">
+                {% else %}
+
+                    {# Bouton Désattribuer le système d'acquisition #}
+                    <button type="button" class="btn btn-custom-danger btn-md mx-3" data-toggle="modal" data-target="#confirmUnassignModal"><i class="fa-solid fa-link-slash"></i> Désattribuer le S.A.</button>
+
+                    <!-- Modal confirmation -->
+                    <div class="modal fade" id="confirmUnassignModal" tabindex="-1" role="dialog" aria-labelledby="confirmUnassignModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="confirmUnassignModalLabel">Confirmation de désattribution</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    Êtes-vous sûr de vouloir désattribuer le système d'acquisition de cette salle ?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-custom-secondary" data-dismiss="modal">Annuler</button>
+                                    <button type="button" class="btn btn-custom-danger" onclick="window.location.href='{{ path('app_admin_unassign_as', {'id': room.id}) }}'"><i class="fa-solid fa-link-slash"></i> Désattribuer</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    
-                    <div class="temp-value justify-content-center d-flex align-items-center text-center">
 
-                        {% if acquisitionSystem.temperature is null %}
-
-                        <span>Température non disponible </span>
-
-                        {% else %}
-
-                        <span>{{ acquisitionSystem.temperature }}°C Température</span>
-
-                        {% endif %}
-
+                    {# Afficher un message si le système est assigné mais pas installé #}
+                    <div class="alert alert-warning mt-3" role="alert">
+                        Le système d'acquisition est assigné, mais il n'est pas encore installé par le technicien.
                     </div>
-                </div>
 
-                {# Bloc humidité #}
-                <div class="humidity mt-2 p-0 border-0 rounded">
-                    <div class="icon-container rounded-left">
-                        <img src="{{ asset('images/icon_humidity.png') }}" alt="Logo Temp" class="img-fluid p-2">
-                    </div>
-                    
-                    <div class="humidity-value justify-content-center d-flex align-items-center text-center">
-
-                        {% if acquisitionSystem.humidity is null %}
-                        
-                        <span>Taux d'humidité non disponible</span>
-
-                        {% else %}
-
-                        <span>{{ acquisitionSystem.humidity }}% Humidité</span>
-
-                        {% endif %}
-                    </div>
-                </div>
-
-                {# Bloc CO2 #}
-                <div class="co2 mt-2 p-0 border-0 rounded">
-                    <div class="icon-container rounded-left">
-                        <img src="{{ asset('images/icon_carbon.png') }}" alt="Logo Temp" class="img-fluid p-2">
-                    </div>
-                    
-                    <div class="co2-value justify-content-center d-flex align-items-center text-center">
-
-                        {% if acquisitionSystem.co2 is null %}
-                        
-                        <span>Taux de CO2 non disponible</span>
-
-                        {% else %}
-
-                        <span>{{ acquisitionSystem.co2 }} ppm CO2</span>
-
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
+                {% endif %}
 
             {% else %}
 
-            {# Affichez le formulaire de sélection du système d'acquisition #}
-            <div class="row mt-3">
-                <div class="col">
-                    <h4>Attribuer un système d'acquisition</h4>
-                    {# Affichez le formulaire de sélection du système d'acquisition #}
-                    {{ form_start(form) }}
-                        {{ form_widget(form.acquisitionSystem, {'attr': {'class': 'form-control'}}) }}
-                        <button type="submit" class="btn custom-btn-primary mt-2"><i class="fa-solid fa-link"></i> Attribuer</button>
-                    {{ form_end(form) }}
+                {# Affichez le formulaire de sélection du système d'acquisition #}
+                <div class="row mt-3">
+                    <div class="col">
+                        <h4>Attribuer un système d'acquisition</h4>
+                        {# Affichez le formulaire de sélection du système d'acquisition #}
+                        {{ form_start(form) }}
+                            {{ form_widget(form.acquisitionSystem, {'attr': {'class': 'form-control'}}) }}
+                            <button type="submit" class="btn custom-btn-primary mt-2"><i class="fa-solid fa-link"></i> Attribuer</button>
+                        {{ form_end(form) }}
+                    </div>
                 </div>
-            </div>
 
             {% endif %}
 

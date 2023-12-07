@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\AcquisitionSystemRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -17,7 +15,7 @@ class AcquisitionSystem
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 10, unique : true)]
+    #[ORM\Column(length: 10, unique: true)]
     private ?string $name = null;
 
     #[ORM\OneToOne(inversedBy: 'acquisitionSystem', cascade: ['persist', 'remove'])]
@@ -31,6 +29,9 @@ class AcquisitionSystem
 
     #[ORM\Column(nullable: true)]
     private ?int $temperature = null;
+
+    #[ORM\Column]
+    private ?bool $isInstalled = null;
 
     /**
      * Obtient l'identifiant du système d'acquisition.
@@ -120,6 +121,18 @@ class AcquisitionSystem
     public function setTemperature(?int $temperature): static
     {
         $this->temperature = $temperature;
+
+        return $this;
+    }
+
+    public function isIsInstalled(): ?bool
+    {
+        return $this->isInstalled;
+    }
+
+    public function setIsInstalled(bool $isInstalled): static
+    {
+        $this->isInstalled = $isInstalled;
 
         return $this;
     }

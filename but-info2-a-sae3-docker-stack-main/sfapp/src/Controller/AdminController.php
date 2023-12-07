@@ -3,24 +3,19 @@
 namespace App\Controller;
 
 use App\Entity\AcquisitionSystem;
-use App\Form\AcquisitionSystemType;
+use App\Entity\Room;
 use App\Form\AcquisitionSystemSelectionType;
-use Doctrine\Persistence\ManagerRegistry;
-use Exception;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Form\AcquisitionSystemType;
+use App\Form\RoomType;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Repository\RoomRepository;
-use App\Repository\AcquisitionSystemRepository;
-use App\Form\RoomType;
-use App\Entity\Room;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-
 
 class AdminController extends AbstractController
 {
@@ -40,8 +35,9 @@ class AdminController extends AbstractController
     {
         $entityManager = $doctrine->getManager();
 
-        $roomRepository = $entityManager->getRepository('App\Entity\Room');
+        $acquisitionSystemRepository = $entityManager->getRepository('App\Entity\AcquisitionSystem');
 
+        $roomRepository = $entityManager->getRepository('App\Entity\Room');
         $room = $roomRepository->find($id);
 
         if (!$room) {
@@ -50,10 +46,9 @@ class AdminController extends AbstractController
 
         $acquisitionSystem = $room->getAcquisitionSystem();
 
-        // Récupérer la liste des systèmes d'acquisition non assignés
-        $unassignedAcquisitionSystems = $entityManager
-            ->getRepository('App\Entity\AcquisitionSystem')
-            ->findBy(['room' => null]);
+        // Récupérer la liste des systèmes d'acquisition non assignés et non installés
+        $unassignedAcquisitionSystems = $acquisitionSystemRepository
+            ->findBy(['room' => null, 'isInstalled' => false]);
 
         // Créer le formulaire de sélection du système d'acquisition avec la liste des systèmes non assignés
         $form = $this->createForm(AcquisitionSystemSelectionType::class, null, [
@@ -101,7 +96,7 @@ class AdminController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($room);
             $entityManager->flush();
 
@@ -128,7 +123,8 @@ class AdminController extends AbstractController
      */
     #[Route('/admin-dashboard/edit-room/{id?}', name: 'app_admin_edit_room')]
     #[IsGranted("ROLE_ADMIN")]
-    public function editRoom(Request $request, EntityManagerInterface $entityManager, ?int $id, ValidatorInterface $validator) : Response {
+    public function editRoom(Request $request, EntityManagerInterface $entityManager, ?int $id, ValidatorInterface $validator): Response
+    {
         if (is_null($id)) {
             return $this->redirectToRoute('app_admin_dashboard');
         }
@@ -214,7 +210,7 @@ class AdminController extends AbstractController
     {
         return $this->render('admin/uniqueConstraintError.html.twig', [
         ]);
-        
+
     }
 
     /**
@@ -293,9 +289,9 @@ class AdminController extends AbstractController
         $entityManager->flush();
 
         // Redirection une fois la suppression terminee
-        return $this->redirectToRoute('app_admin_room', ['id'=> $id]);
+        return $this->redirectToRoute('app_admin_room', ['id' => $id]);
     }
-    
+
     /**
      * @Route('/admin-dashboard/acquisition-system/{id}/delete', name: 'app_admin_delete_acquisition_system')
      *
@@ -322,7 +318,6 @@ class AdminController extends AbstractController
 
         // Définir la relation avec la salle sur null
         $acquisitionSystem->setRoom(null);
-
 
         // Supprimer le système d'acquisition
         $entityManager->remove($acquisitionSystem);

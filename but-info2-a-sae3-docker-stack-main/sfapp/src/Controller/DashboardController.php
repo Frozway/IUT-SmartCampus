@@ -13,6 +13,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
 class DashboardController extends AbstractController
@@ -39,13 +40,9 @@ class DashboardController extends AbstractController
      * @return Response
      */
     #[Route('/admin-dashboard', name: 'app_admin_dashboard')]
+    #[IsGranted("ROLE_ADMIN")]
     public function adminDashboardIndex(ManagerRegistry $doctrine,Request $request): Response
     {
-        if (!$this->getUser() || !in_array("ROLE_ADMIN", $this->getUser()->getRoles()))
-        {
-            return $this->redirectToRoute('app_index');
-        }
-
         $entityManager = $doctrine->getManager();
 
         $roomRepository = $entityManager->getRepository('App\Entity\Room');

@@ -33,6 +33,7 @@ security:
                 invalidate_session: true
             lazy: true
             provider: users
+            entry_point: App\Security\AuthenticationEntryPoint
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall

@@ -18,16 +18,12 @@ use App\Repository\AcquisitionSystemRepository;
 use App\Form\RoomType;
 use App\Entity\Room;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 
 class AdminController extends AbstractController
 {
-    private function checkIsAdmin(): bool
-    {
-        return $this->getUser() && in_array("ROLE_ADMIN", $this->getUser()->getRoles());
-    }
-
     /**
      * @Route('/admin-dashboard/room/{id?}', name: 'app_admin_room')
      *
@@ -39,12 +35,9 @@ class AdminController extends AbstractController
      * @return Response
      */
     #[Route('/admin-dashboard/room/{id?}', name: 'app_admin_room')]
+    #[IsGranted("ROLE_ADMIN")]
     public function roomIndex(?int $id, ManagerRegistry $doctrine, Request $request): Response
     {
-        if (!$this->checkIsAdmin())
-        {
-            return $this->redirectToRoute('app_index');
-        }
         $entityManager = $doctrine->getManager();
 
         $roomRepository = $entityManager->getRepository('App\Entity\Room');
@@ -99,12 +92,9 @@ class AdminController extends AbstractController
      * @return Response
      */
     #[Route('/admin-dashboard/add-room', name: 'app_admin_add_room')]
+    #[IsGranted("ROLE_ADMIN")]
     public function addRoom(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator): Response
     {
-        if (!$this->checkIsAdmin())
-        {
-            return $this->redirectToRoute('app_index');
-        }
         $room = new Room();
 
         $form = $this->createForm(RoomType::class, $room);
@@ -137,12 +127,8 @@ class AdminController extends AbstractController
      * @return Response
      */
     #[Route('/admin-dashboard/edit-room/{id?}', name: 'app_admin_edit_room')]
+    #[IsGranted("ROLE_ADMIN")]
     public function editRoom(Request $request, EntityManagerInterface $entityManager, ?int $id, ValidatorInterface $validator) : Response {
-        if (!$this->checkIsAdmin())
-        {
-            return $this->redirectToRoute('app_index');
-        }
-
         if (is_null($id)) {
             return $this->redirectToRoute('app_admin_dashboard');
         }
@@ -182,12 +168,9 @@ class AdminController extends AbstractController
      * @return Response
      */
     #[Route('/admin-dashboard/add-acquisition-system/{error}', name: 'app_admin_add_acquisition_system')]
+    #[IsGranted("ROLE_ADMIN")]
     public function addAcquisitionSystemIndex(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator): Response
     {
-        if (!$this->checkIsAdmin())
-        {
-            return $this->redirectToRoute('app_index');
-        }
         $acquisitionSystem = new AcquisitionSystem();
 
         // Récupérer la liste des salles qui n'ont pas de système d'acquisition
@@ -226,13 +209,9 @@ class AdminController extends AbstractController
      * @return Response
      */
     #[Route('/admin-dashboard/error', name: 'app_unique_constraint_error')]
+    #[IsGranted("ROLE_ADMIN")]
     public function uniqueConstraintErrorIndex(Request $request, EntityManagerInterface $entityManager): Response
     {
-        if (!$this->checkIsAdmin())
-        {
-            return $this->redirectToRoute('app_index');
-        }
-
         return $this->render('admin/uniqueConstraintError.html.twig', [
         ]);
         
@@ -248,12 +227,9 @@ class AdminController extends AbstractController
      * @return RedirectResponse
      */
     #[Route('/admin-dashboard/room/{id}/delete', name: 'app_admin_delete_room')]
+    #[IsGranted("ROLE_ADMIN")]
     public function deleteRoom(int $id, ManagerRegistry $doctrine): RedirectResponse
     {
-        if (!$this->checkIsAdmin())
-        {
-            return $this->redirectToRoute('app_index');
-        }
         $entityManager = $doctrine->getManager();
 
         $roomRepository = $entityManager->getRepository('App\Entity\Room');
@@ -293,12 +269,9 @@ class AdminController extends AbstractController
      * @return RedirectResponse
      */
     #[Route('/admin-dashboard/room/{id}/unassign-as', name: 'app_admin_unassign_as')]
+    #[IsGranted("ROLE_ADMIN")]
     public function unassignAS(int $id, ManagerRegistry $doctrine): RedirectResponse
     {
-        if (!$this->checkIsAdmin())
-        {
-            return $this->redirectToRoute('app_index');
-        }
         $entityManager = $doctrine->getManager();
         $roomRepository = $entityManager->getRepository('App\Entity\Room');
 
@@ -333,12 +306,9 @@ class AdminController extends AbstractController
      * @return RedirectResponse
      */
     #[Route('/admin-dashboard/acquisition-system/{id}/delete', name: 'app_admin_delete_acquisition_system')]
+    #[IsGranted("ROLE_ADMIN")]
     public function deleteAcquisitionSystem(int $id, ManagerRegistry $doctrine): RedirectResponse
     {
-        if (!$this->checkIsAdmin())
-        {
-            return $this->redirectToRoute('app_index');
-        }
         $entityManager = $doctrine->getManager();
         $acquisitionSystemRepository = $entityManager->getRepository('App\Entity\AcquisitionSystem');
 

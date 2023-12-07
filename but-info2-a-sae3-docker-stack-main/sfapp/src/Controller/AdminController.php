@@ -333,7 +333,7 @@ class AdminController extends AbstractController
      * @return RedirectResponse
      */
     #[Route('/admin-dashboard/acquisition-system/{id}', name: 'app_admin_edit_acquisition_system')]
-    public function editAcquisitionSystem(int $id, ManagerRegistry $doctrine): Response
+    public function editAcquisitionSystem(Request $request, int $id, ManagerRegistry $doctrine): Response
     {
         if (!$this->checkIsAdmin())
         {
@@ -346,6 +346,31 @@ class AdminController extends AbstractController
         // Récupérer le système d'acquisition par son ID
         $acquisitionSystem = $acquisitionSystemRepository->find($id);
 
+        // Récupérer la liste des salles qui n'ont pas de système d'acquisition
+        $unassociatedRooms = $entityManager
+            ->getRepository('App\Entity\Room')
+            ->findRoomsWithoutAcquisitionSystem();
+
+        $assignedRoom = $acquisitionSystem->getRoom();
+
+        if ($assignedRoom) {
+            $form = $this->createForm(AcquisitionSystemType::class, $acquisitionSystem, [
+                'unassociated_rooms' => array_merge($unassociatedRooms, array($assignedRoom)),
+            ]);
+        } else {
+            $form = $this->createForm(AcquisitionSystemType::class, $acquisitionSystem, [
+                'unassociated_rooms' => $unassociatedRooms,
+            ]);
+        }
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_admin_dashboard');
+        }
+
         if (!$acquisitionSystem) {
             // Gérer le cas où le système d'acquisition n'est pas trouvé
             throw $this->createNotFoundException('Le système d\'acquisition n\'existe pas');
@@ -353,6 +378,7 @@ class AdminController extends AbstractController
 
         return $this->render('admin/acquisitionSystem.html.twig', [
             'acquisitionSystem' => $acquisitionSystem,
+            'form' => $form->createView(),
         ]);
     }
     

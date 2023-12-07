@@ -19,23 +19,24 @@
         <a href="{{ path('app_admin_dashboard') }}" class="btn btn-custom-secondary back"><i class="fa-solid fa-left-long"></i> Retour</a>
 
         <div class="panel shadow">
-            <label for="as-name" class="form-label">Identifiant</label>
-            <div class="row d-flex px-2" style="width: 512px;">
-                <div class="flex-grow-1 mr-2">
-                    <input type="text" name="as-name" class="form-control" value="{{ acquisitionSystem.name }}">
-                </div>
-                <button class="btn btn-primary btn-custom-success mx-0"><i class="fa-solid fa-check"></i> VALIDER</button>
-            </div>
 
-            <div class="row" style="width: 512px;">
-                <div class="flex-grow-1 px-2">
-                    <label for="as-room" class="form-label mt-3">Salle</label>
-                    <select name="as-room" id="" class="form-control">
-                        <option value="D001">D001</option>
-                        <option value="D002">D002</option>
-                    </select>
+            {{ form_start(form) }}
+                           
+                <div class="form-group">
+                    {{ form_label(form.name, 'Identifiant') }}
+                    {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
                 </div>
-            </div>
+
+                <div class="form-group">
+                    {{ form_label(form.room, 'Salle associée') }}
+                    {{ form_widget(form.room, {'attr': {'class': 'form-control', 'value': acquisitionSystem.room.name | default(null) }}) }}
+                </div>
+
+            {{ form_rest(form) }}
+
+            <button type="submit" class="btn btn-custom-success"><i class="fa-solid fa-check"></i> VALIDER</button>
+
+            {{ form_end(form) }}
         </div>
     </div>
 </div>

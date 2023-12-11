@@ -9,7 +9,7 @@
 <h1><span style="font-weight: 800">SMART</span><span style="font-weight: 200">CAMPUS</span></h1>
 
 {% if error %}
-    <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    <div class="alert alert-danger fixed-bottom my-0">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
 {% endif %}
 
 

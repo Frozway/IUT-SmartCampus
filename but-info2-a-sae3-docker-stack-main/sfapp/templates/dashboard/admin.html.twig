@@ -10,7 +10,16 @@
     <div class="page-wrapper d-inline-flex">
 
         <div class="sidebar">
-            <img src="{{ asset('images/logo.png') }}" alt="Logo" />
+            <div class="flex flex-column">
+                <div>
+                    <img src="{{ asset('images/logo.png') }}" alt="Logo"/>
+                </div>
+                <div class="flex-fill"></div>
+                <div class="logout-button">
+                    <!-- Make the logout button transparent and white text -->
+                    <a href="{{ path('app_logout') }}" class="btn btn-outline-light"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+                </div>
+            </div>
         </div>
 
         <div class="content" style="flex-grow: 1;">

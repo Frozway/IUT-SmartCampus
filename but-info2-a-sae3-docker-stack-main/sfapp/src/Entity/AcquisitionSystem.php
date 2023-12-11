@@ -34,6 +34,16 @@ class AcquisitionSystem
     private ?bool $isInstalled = null;
 
     /**
+     * AcquisitionSystem constructor.
+     * Initialise la propriété isInstalled à false.
+     */
+    public function __construct()
+    {
+        // Initialiser isInstalled avec la valeur 0 (false) lors de la création de l'instance
+        $this->isInstalled = false;
+    }
+
+    /**
      * Obtient l'identifiant du système d'acquisition.
      *
      * @return int|null

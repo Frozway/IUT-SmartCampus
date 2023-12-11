@@ -11,13 +11,10 @@
 
         <div class="sidebar">
             <div>
-                <div>
-                    <img src="{{ asset('images/logo.png') }}" alt="Logo"/>
-                </div>
-                <div class="logout-button fixed-bottom">
-                    <!-- Make the logout button transparent and white text -->
-                    <a href="{{ path('app_logout') }}" class="btn mx-1" style="color: white"><i class="fa-solid fa-right-from-bracket"></i></a>
-                </div>
+                <img src="{{ asset('images/logo.png') }}" alt="Logo"/>
+            </div>
+            <div class="align-self-baseline d-flex justify-content-center w-100">
+                <a href="{{ path('app_logout') }}" class="btn" style="color: white"><i class="fa-solid fa-right-from-bracket fa-xl"></i></a>
             </div>
         </div>
 

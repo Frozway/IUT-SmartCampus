@@ -97,7 +97,7 @@ class DashboardController extends AbstractController
      * @return Response
      */
     #[Route('/tech-dashboard', name: 'app_tech_dashboard')]
-    // #[IsGranted("ROLE_TECHNICIAN")]
+    #[IsGranted("ROLE_TECHNICIAN")]
     public function techDashboardIndex(ManagerRegistry $doctrine, Request $request): Response
     {
         $entityManager = $doctrine->getManager();

@@ -20,8 +20,12 @@ class IndexController extends AbstractController
     #[Route('/', name: 'app_index')]
     public function index(AuthenticationUtils $authenticationUtils): Response
     {
-        if ($this->getUser()) {
+        if ($this->getUser() && in_array("ROLE_ADMIN", $this->getUser()->getRoles())) {
             return $this->redirectToRoute('app_admin_dashboard')->send();
+        }
+
+        else if ($this->getUser() && in_array("ROLE_TECHNICIAN", $this->getUser()->getRoles())) {
+            return $this->redirectToRoute('app_tech_dashboard')->send();
         }
 
         $error = $authenticationUtils->getLastAuthenticationError();

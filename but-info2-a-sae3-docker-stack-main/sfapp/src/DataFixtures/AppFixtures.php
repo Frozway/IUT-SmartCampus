@@ -44,8 +44,6 @@ class AppFixtures extends Fixture
         $admin->setRoles(['ROLE_ADMIN']);
         $manager->persist($admin);
 
-        $manager->flush();
-
         $technician = new User();
         $technician->setUsername('tech');
         $technician->setPassword('tech');

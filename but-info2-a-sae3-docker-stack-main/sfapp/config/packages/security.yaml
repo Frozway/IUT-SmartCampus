@@ -25,7 +25,7 @@ security:
                 post_only: true
                 remember_me: false
                 require_previous_session: false
-                default_target_path: app_admin_dashboard
+                default_target_path: app_index
                 always_use_default_target_path: true
             logout:
                 path: /logout

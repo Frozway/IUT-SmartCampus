@@ -34,6 +34,7 @@ class AppFixtures extends Fixture
             $system->setTemperature(mt_rand(18, 25));
             $system->setHumidity(mt_rand(30, 70));
             $system->setCo2(mt_rand(300, 800));
+            $system->setIsInstalled(rand(0, 1));
             $manager->persist($system);
         }
 
@@ -42,6 +43,14 @@ class AppFixtures extends Fixture
         $admin->setPassword('admin');
         $admin->setRoles(['ROLE_ADMIN']);
         $manager->persist($admin);
+
+        $manager->flush();
+
+        $technician = new User();
+        $technician->setUsername('tech');
+        $technician->setPassword('tech');
+        $technician->setRoles(['ROLE_TECHNICIAN']);
+        $manager->persist($technician);
 
         $manager->flush();
     }

@@ -89,4 +89,30 @@ class DashboardController extends AbstractController
             'form'=>$form,
         ]);
     }
+
+    /**
+     * Affiche le tableau de bord du technicien.
+     *
+     * @Route('/tech-dashboard', name='app_tech_dashboard')
+     * @return Response
+     */
+    #[Route('/tech-dashboard', name: 'app_tech_dashboard')]
+    // #[IsGranted("ROLE_TECHNICIAN")]
+    public function techDashboardIndex(ManagerRegistry $doctrine, Request $request): Response
+    {
+        $entityManager = $doctrine->getManager();
+
+        $roomRepository = $entityManager->getRepository('App\Entity\Room');
+        $acquisitionSystemRepository = $entityManager->getRepository('App\Entity\AcquisitionSystem');
+
+        $rooms = $roomRepository->findAll();
+        $acquisitionSystems = $acquisitionSystemRepository->findAll();
+
+        return $this->render('dashboard/tech.html.twig', [
+            'rooms' => $rooms,
+            'acquisitionSystems' => $acquisitionSystems,
+        ]);
+
+    }
+
 }

@@ -58,3 +58,7 @@ h2 {
 .acquisition-system:hover button {
     opacity: 1;
 }
+
+a:hover {
+    text-decoration: none;
+}

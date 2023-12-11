@@ -20,6 +20,10 @@
 
         <div class="panel shadow">
 
+            {% for e in form_errors %}
+                <div class="alert alert-danger">{{ e.message }}</div>
+            {% endfor %}
+
             {{ form_start(form) }}
                            
                 <div class="form-group">

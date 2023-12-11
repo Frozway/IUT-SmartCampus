@@ -353,15 +353,13 @@ class AdminController extends AbstractController
 
         $assignedRoom = $acquisitionSystem->getRoom();
 
-        if ($assignedRoom) {
-            $form = $this->createForm(AcquisitionSystemType::class, $acquisitionSystem, [
-                'unassociated_rooms' => array_merge($unassociatedRooms, array($assignedRoom)),
-            ]);
-        } else {
-            $form = $this->createForm(AcquisitionSystemType::class, $acquisitionSystem, [
-                'unassociated_rooms' => $unassociatedRooms,
-            ]);
+        if($assignedRoom) {
+            $unassociatedRooms = array_merge($unassociatedRooms, array($assignedRoom));
         }
+
+        $form = $this->createForm(AcquisitionSystemType::class, $acquisitionSystem, [
+            'unassociated_rooms' => $unassociatedRooms
+        ]);
 
         $form->handleRequest($request);
 
@@ -379,6 +377,7 @@ class AdminController extends AbstractController
         return $this->render('admin/acquisitionSystem.html.twig', [
             'acquisitionSystem' => $acquisitionSystem,
             'form' => $form->createView(),
+            'form_errors' => $form->getErrors(true),
         ]);
     }
     

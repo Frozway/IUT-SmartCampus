@@ -46,9 +46,9 @@ class AdminController extends AbstractController
 
         $acquisitionSystem = $room->getAcquisitionSystem();
 
-        // Récupérer la liste des systèmes d'acquisition non assignés et non installés
+        // Récupérer la liste des systèmes d'acquisition non assignés
         $unassignedAcquisitionSystems = $acquisitionSystemRepository
-            ->findBy(['room' => null, 'isInstalled' => false]);
+            ->findBy(['room' => null]);
 
         // Créer le formulaire de sélection du système d'acquisition avec la liste des systèmes non assignés
         $form = $this->createForm(AcquisitionSystemSelectionType::class, null, [

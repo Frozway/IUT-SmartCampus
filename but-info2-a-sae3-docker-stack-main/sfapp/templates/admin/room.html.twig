@@ -18,10 +18,17 @@
         {# Bouton Retour #}
         <a href="{{ path('app_admin_dashboard') }}" class="btn btn-custom-secondary back"><i class="fa-solid fa-left-long"></i> Retour</a>
 
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success flash-message shadow" style="width: fit-content; padding: 8px 16px; margin: 8px;">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+
         <div class="panel shadow">
             Vue d'ensemble - {{ acquisitionSystem.name | default('Aucun système d\'acquisition associé') }}
 
-            {# Afficher le contenu uniquement s'il y a un système d'acquisition associé #}
+            {# Afficher le contenu uniquement s'il y a un système d'acquisition associé et installé#}
             {% if acquisitionSystem is not null %}
 
                 {% if acquisitionSystem.isInstalled %}
@@ -194,6 +201,24 @@
         </div>
     </div>
 </div>
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Cibler les messages Flash avec la classe flash-message
+            $('.flash-message').each(function() {
+                var message = $(this);
+
+                // Masquer le message après 5 secondes (5000 millisecondes)
+                setTimeout(function() {
+                    message.fadeOut();
+                }, 5000);
+            });
+        });
+    </script>
+{% endblock %}
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>

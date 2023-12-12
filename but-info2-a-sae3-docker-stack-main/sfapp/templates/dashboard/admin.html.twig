@@ -65,21 +65,34 @@
 
                         <ul class="mt-3">
                             {{ form_start(form) }}
-                            {{ form_label(form.SearchRoom) }}
-                            {{ form_widget(form.SearchRoom) }}
-                            <button type="button" class="btn btn-custom-success" data-bs-toggle="modal" data-bs-target="#FilterModal">+</button>
+                            <div class="d-flex">
+                                <form>
+                                {{ form_widget(form.SearchRoom, {'attr': {'class': 'form-control', 'placeholder': 'Rechercher...'}}) }}
+                                <button type="button" class="btn btn-custom-success ml-1" data-bs-toggle="modal" data-bs-target="#FilterModal"><i class="fa-solid fa-filter"></i></button>
+                            </div>
                             <div class="ModalDiv">
                                 <div class="modal fade ChangeRoomModal" id="FilterModal" tabindex="-1" aria-labelledby="FilterModal" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered">
                                         <div class="modal-content">
                                             <div class="modal-body">
-                                                {{ form_label(form.Floor) }}
-                                                {{ form_widget(form.Floor) }}
-                                                {{ form_label(form.isAssigned) }}
-                                                {{ form_widget(form.isAssigned) }}
-                                                {{ form_label(form.SearchAS) }}
-                                                {{ form_widget(form.SearchAS) }}
-                                                {{ form_label(form.Valid) }}
+                                                <h2>Filtres</h2>
+                                                
+                                                <div class="my-4">
+                                                <label for="floor" class="form-label">Test</label>
+                                                {{ form_widget(form.Floor, {'attr': {'class': 'form-control'}}) }}
+                                                </div>  
+                                                
+                                                <div class="form-check my-4">
+                                                {{ form_widget(form.isAssigned, {'attr': {'class': 'form-check-input'}}) }}
+                                                <input type="checkbox" name="is-assigned" value={{ field_value(form.isAssigned) }} class="form-check-input">
+                                                <label for="is-assigned" class="form-check-label">Système d'acquisition attribué</label>
+                                                </div>
+
+                                                <div class="my-4">
+                                                <label for="search" class="form-label">Rechercher</label>
+                                                {{ form_widget(form.SearchAS, {'attr': {'class': 'form-control'}}) }}
+                                                </div>
+
                                                 {{ form_widget(form.Valid, {'attr' : { 'class' : 'btn btn-custom-success'  }}) }}
                                             </div>
                                         </div>

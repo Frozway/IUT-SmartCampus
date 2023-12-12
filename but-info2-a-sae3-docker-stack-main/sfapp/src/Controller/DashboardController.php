@@ -51,42 +51,74 @@ class DashboardController extends AbstractController
         $rooms = $roomRepository->findAll();
         $acquisitionSystems = $acquisitionSystemRepository->findAll();
 
+        $alerts = array();
+
+        foreach ($acquisitionSystems as $as) {
+            if ($as->isIsInstalled()) {
+                if ($as->getCo2() > 1500) {
+                    $alerts[] = array(
+                        'type' => 'co2',
+                        'value' => $as->getCo2() . ' ppm',
+                        'room' => $as->getRoom()->getName()
+                    );
+                }
+
+                if ($as->getTemperature() > 21 || $as->getTemperature() < 17) {
+                    $alerts[] = array(
+                        'type' => 'temperature',
+                        'value' => $as->getTemperature() . '°C',
+                        'room' => $as->getRoom()->getName()
+                    );
+                }
+
+                if ($as->getHumidity() > 70 && $as->getTemperature() > 20) {
+                    $alerts[] = array(
+                        'type' => 'humidity',
+                        'value' => $as->getHumidity() . '%',
+                        'room' => $as->getRoom()->getName()
+                    );
+                }
+            }
+        }
+
         $form = $this->createForm(FilterRoomDashboardType::class, $rooms);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid())
         {
-            $floor=$form->get('Floor');
-            $floor=$floor->getData();
+            $floor = $form->get('Floor');
+            $floor = $floor->getData();
 
-            $assigned=$form->get('isAssigned');
-            $assigned=$assigned->getData();
+            $assigned = $form->get('isAssigned');
+            $assigned = $assigned->getData();
 
-            $searchR=$form->get('SearchRoom');
-            $searchR=$searchR->getData();
-            $searchR=strtoupper($searchR);
+            $searchR = $form->get('SearchRoom');
+            $searchR = $searchR->getData();
+            $searchR = strtoupper($searchR);
 
-            $searchAS=$form->get('SearchAS');
-            $searchAS=$searchAS->getData();
-            $searchAS=strtoupper($searchAS);
+            $searchAS = $form->get('SearchAS');
+            $searchAS = $searchAS->getData();
+            $searchAS = strtoupper($searchAS);
+
             return $this->render('dashboard/admin.html.twig', [
                 'rooms' => $rooms,
                 'acquisitionSystems' => $acquisitionSystems,
-                'floor'=>$floor,
-                'assigned'=>$assigned,
-                'searchR'=>$searchR,
-                'searchAS'=>$searchAS,
-                'form'=>$form,
+                'floor' => $floor,
+                'assigned' => $assigned,
+                'searchR' => $searchR,
+                'searchAS' => $searchAS,
+                'form' => $form            
             ]);
         }
 
         return $this->render('dashboard/admin.html.twig', [
             'rooms' => $rooms,
             'acquisitionSystems' => $acquisitionSystems,
-            'floor'=>null,
-            'assigned'=>null,
-            'searchR'=>null,
-            'searchAS'=>null,
-            'form'=>$form,
+            'floor' => null,
+            'assigned' => null,
+            'searchR' => null,
+            'searchAS' => null,
+            'form' => $form,
+            'alerts' => $alerts
         ]);
     }
 

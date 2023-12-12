@@ -31,7 +31,6 @@ h2 {
 .alerte {
     color: white;
     background-color: #ff7675;
-    height: 60px;
     display: flex;
     width: fit-content;
     border-radius: 8px;
@@ -40,16 +39,19 @@ h2 {
 
 .alerte .icon-container {
     background-color: #d63031;
-    width: 60px;
-    height: 60px;
+    width: 64px;
 }
 
 .alerte .room-name {
-    line-height: 60px;
-    padding: 0 12px;
+    padding: 8px 12px;
     font-size: 16pt;
     font-weight: 600;
-}   
+}
+
+.alerte p {
+    margin: 0;
+    line-height: 25px;
+}
 
 a:hover {
     text-decoration: none;

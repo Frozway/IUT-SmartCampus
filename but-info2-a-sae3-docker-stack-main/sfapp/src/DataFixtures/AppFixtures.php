@@ -31,9 +31,9 @@ class AppFixtures extends Fixture
             $system = new AcquisitionSystem();
             $system->setName('SA-' . substr($room->getName(), -3));
             $system->setRoom($room);
-            $system->setTemperature(mt_rand(18, 25));
-            $system->setHumidity(mt_rand(30, 70));
-            $system->setCo2(mt_rand(300, 800));
+            $system->setTemperature(mt_rand(15, 25));
+            $system->setHumidity(mt_rand(30, 80));
+            $system->setCo2(mt_rand(300, 1700));
             $system->setIsInstalled(rand(0, 1));
             $manager->persist($system);
         }

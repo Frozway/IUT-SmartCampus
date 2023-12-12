@@ -27,29 +27,34 @@
             <div class="panel shadow">
                 <span class="fs-5">Alertes</span>
                 <div class="row px-2 mt-2">
+                    {% for alert in alerts %}
                     <div class="alerte mt-2 mx-1 p-0 border-0">
-                        {# TODO: Icon #}
+                        <div class="icon-container p-2 d-inline-flex">
+                            {% if alert.type == 'co2' %}
+                                <img src="{{ asset('images/icon_carbon.png') }}" alt="" class="img-fluid">
+                            {% endif %}
+
+                            {% if alert.type == 'temperature' %}
+                                <img src="{{ asset('images/icon_temperature.png') }}" alt="" class="img-fluid">
+                            {% endif %}
+
+                            {% if alert.type == 'humidity' %}
+                                <img src="{{ asset('images/icon_humidity.png') }}" alt="" class="img-fluid">
+                            {% endif %}
+                        </div>
+                        <div class="room-name">
+                            <p style="font-size: 12pt; font-weight: 500;">{{ alert.room }}</p>
+                            <p style="font-weight: 800;">{{ alert.value }}</p>    
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                    {# <div class="alerte mt-2 mx-1 p-0 border-0">
                         <div class="icon-container p-2">
                             <img src="{{ asset('images/icon_carbon.png') }}" alt="" class="img-fluid">
                         </div>
                         <div class="room-name">D302</div>
-                    </div>
-
-                    <div class="alerte mt-2 mx-1 p-0 border-0">
-                        {# TODO: Icon #}
-                        <div class="icon-container p-2">
-                            <img src="{{ asset('images/icon_temperature.png') }}" alt="" class="img-fluid">
-                        </div>
-                        <div class="room-name">D302</div>
-                    </div>
-
-                    <div class="alerte mt-2 mx-1 p-0 border-0">
-                        {# TODO: Icon #}
-                        <div class="icon-container p-2">
-                            <img src="{{ asset('images/icon_humidity.png') }}" alt="" class="img-fluid">
-                        </div>
-                        <div class="room-name">D302</div>
-                    </div>
+                    </div> #}
                 </div>
             </div>
 

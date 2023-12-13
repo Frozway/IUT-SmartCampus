@@ -100,7 +100,7 @@
 
                     <div class="col panel shadow">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div class="fs-5">Installer un système d'aquisition</div>
+                            <div class="fs-5">Opérations à effectuer</div>
                         </div>
                         <ul class="mt-3">
                             <!-- Boucle pour afficher chaque système d'acquisition non installé -->
@@ -108,11 +108,30 @@
                                 {% if not acquisitionSystem.isInstalled %}
                                     <li class="acquisition-system d-flex justify-content-between align-items-center">
                                         <span>{{ acquisitionSystem.name }}</span>
-                                        <a href="{{ path('app_tech_install_acquisition_system', {'id': acquisitionSystem.id}) }}"
-                                            class="btn btn-custom-success"><i
-                                            class="fa-solid fa-plus"></i> Installer</a>
+                                        <button type="button" class="btn btn-custom-success" data-toggle="modal" data-target="#confirmInstallModal-{{acquisitionSystem.id}}"><i class="fa-solid fa-plus"></i> Installer</button>
                                     </li>
                                 {% endif %}
+
+                                <!-- Modal confirmation -->
+                                <div class="modal fade" id="confirmInstallModal-{{acquisitionSystem.id}}" tabindex="-1" role="dialog" aria-labelledby="confirmInstallModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="confirmInstallModalLabel">Confirmation d'installation</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Êtes-vous sûr de vouloir installer le système d'aquisition ?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-custom-danger" data-dismiss="modal">Annuler</button>
+                                                <button type="button" class="btn btn-custom-success" onclick="window.location.href = '{{ path('app_tech_install_acquisition_system', {'id': acquisitionSystem.id}) }}'"><i class="fa-solid fa-plus"></i> Installer</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             {% endfor %}
                         </ul>
                     </div>

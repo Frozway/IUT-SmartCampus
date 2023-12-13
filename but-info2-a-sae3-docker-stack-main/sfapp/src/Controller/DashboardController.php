@@ -114,7 +114,8 @@ class DashboardController extends AbstractController
                 'assigned' => $assigned,
                 'searchR' => $searchR,
                 'searchAS' => $searchAS,
-                'form' => $form            
+                'form' => $form,
+                'alerts' => $alerts   
             ]);
         }
 

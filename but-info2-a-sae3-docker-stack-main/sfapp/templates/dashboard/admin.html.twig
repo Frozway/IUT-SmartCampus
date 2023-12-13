@@ -76,8 +76,9 @@
                             {{ form_start(form) }}
                             <div class="d-flex">
                                 <form>
-                                {{ form_widget(form.SearchRoom, {'attr': {'class': 'form-control', 'placeholder': 'Rechercher...'}}) }}
-                                <button type="button" class="btn btn-custom-success ml-1" data-bs-toggle="modal" data-bs-target="#FilterModal"><i class="fa-solid fa-filter"></i></button>
+                                    {{ form_widget(form.SearchRoom, {'attr': {'class': 'form-control', 'placeholder': 'Rechercher...'}}) }}
+                                    <button type="button" class="btn btn-custom-success ml-1" data-bs-toggle="modal" data-bs-target="#FilterModal"><i class="fa-solid fa-filter"></i></button>
+                                </form>
                             </div>
                             <div class="ModalDiv">
                                 <div class="modal fade ChangeRoomModal" id="FilterModal" tabindex="-1" aria-labelledby="FilterModal" aria-hidden="true">
@@ -87,19 +88,19 @@
                                                 <h2>Filtres</h2>
                                                 
                                                 <div class="my-4">
-                                                <label for="floor" class="form-label">Test</label>
-                                                {{ form_widget(form.Floor, {'attr': {'class': 'form-control'}}) }}
+                                                    <label for="floor" class="form-label">Test</label>
+                                                    {{ form_widget(form.Floor, {'attr': {'class': 'form-control'}}) }}
                                                 </div>  
                                                 
                                                 <div class="form-check my-4">
-                                                {{ form_widget(form.isAssigned, {'attr': {'class': 'form-check-input'}}) }}
-                                                <input type="checkbox" name="is-assigned" value={{ field_value(form.isAssigned) }} class="form-check-input">
-                                                <label for="is-assigned" class="form-check-label">Système d'acquisition attribué</label>
+                                                    {{ form_widget(form.isAssigned, {'attr': {'class': 'form-check-input'}}) }}
+                                                    <input type="checkbox" name="is-assigned" value={{ field_value(form.isAssigned) }} class="form-check-input">
+                                                    <label for="is-assigned" class="form-check-label">Système d'acquisition attribué</label>
                                                 </div>
 
                                                 <div class="my-4">
-                                                <label for="search" class="form-label">Rechercher</label>
-                                                {{ form_widget(form.SearchAS, {'attr': {'class': 'form-control'}}) }}
+                                                    <label for="search" class="form-label">Rechercher</label>
+                                                    {{ form_widget(form.SearchAS, {'attr': {'class': 'form-control'}}) }}
                                                 </div>
 
                                                 {{ form_widget(form.Valid, {'attr' : { 'class' : 'btn btn-custom-success'  }}) }}
@@ -109,9 +110,8 @@
                                 </div>
                             </div>
                             {{ form_end(form) }}
+
                             <!-- Boucle pour afficher chaque salle -->
-
-
                             {% for room in rooms %}
                                 {% if room.name|slice(0,searchR|length) == searchR or searchR == null or searchR is empty%}
                                     {% if room.floor == floor or floor == null or floor is empty%}

@@ -1,143 +1,128 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Admin Dashboard{% endblock %}
+{% block title %}Tech Dashboard{% endblock %}
 
 {% block body %}
-<link rel="stylesheet" href="{{ asset('css/styles.css') }}">
-<link rel="stylesheet" href="{{ asset('css/techDashboard.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/techDashboard.css') }}">
 
-<div class="page-wrapper d-inline-flex">
+    <div class="page-wrapper d-inline-flex">
 
-    <div class="sidebar">
-        <img src="{{ asset('images/logo.png') }}" alt="Logo" />
-    </div>
+        <div class="sidebar">
+            <img src="{{ asset('images/logo.png') }}" alt="Logo" />
+        </div>
 
-    <div class="content" style="flex-grow: 1;">
+        <div class="content" style="flex-grow: 1;">
 
-        <h2><i class="fa-solid fa-house"></i> Tableau de bord</h2>
+            <h2><i class="fa-solid fa-house"></i> Tableau de bord</h2>
 
-        {# Alertes #}
-        <div class="flex">
+            {# Alertes #}
+            <div class="flex">
 
-            <div class="panel shadow">
-                <span class="fs-5">Alertes</span>
-                <div class="row px-2 mt-2">
-                    <div class="alerte mt-2 mx-1 p-0 border-0">
-                        {# TODO: Icon #}
-                        <div class="icon-container p-2">
-                            <img src="{{ asset('images/icon_carbon.png') }}" alt
-                                class="img-fluid">
+                <div class="panel shadow">
+                    <span class="fs-5">Alertes</span>
+                    <div class="row px-2 mt-2">
+                        <div class="alerte mt-2 mx-1 p-0 border-0">
+                            {# TODO: Icon #}
+                            <div class="icon-container p-2">
+                                <img src="{{ asset('images/icon_carbon.png') }}" alt
+                                    class="img-fluid">
+                            </div>
+                            <div class="room-name">D302</div>
                         </div>
-                        <div class="room-name">D302</div>
-                    </div>
 
-                    <div class="alerte mt-2 mx-1 p-0 border-0">
-                        {# TODO: Icon #}
-                        <div class="icon-container p-2">
-                            <img
-                                src="{{ asset('images/icon_temperature.png') }}"
-                                alt class="img-fluid">
+                        <div class="alerte mt-2 mx-1 p-0 border-0">
+                            {# TODO: Icon #}
+                            <div class="icon-container p-2">
+                                <img
+                                    src="{{ asset('images/icon_temperature.png') }}"
+                                    alt class="img-fluid">
+                            </div>
+                            <div class="room-name">D302</div>
                         </div>
-                        <div class="room-name">D302</div>
-                    </div>
 
-                    <div class="alerte mt-2 mx-1 p-0 border-0">
-                        {# TODO: Icon #}
-                        <div class="icon-container p-2">
-                            <img src="{{ asset('images/icon_humidity.png') }}"
-                                alt class="img-fluid">
+                        <div class="alerte mt-2 mx-1 p-0 border-0">
+                            {# TODO: Icon #}
+                            <div class="icon-container p-2">
+                                <img src="{{ asset('images/icon_humidity.png') }}"
+                                    alt class="img-fluid">
+                            </div>
+                            <div class="room-name">D302</div>
                         </div>
-                        <div class="room-name">D302</div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        {# Systèmes D'acquisitions #}
-        <div class="container m-0">
-            <div class="row listes">
-                <div class="col panel shadow">
-                    <div
-                        class="d-flex justify-content-between align-items-center mb-3">
-                        <div class="fs-5">Systemes d'aquisition</div>
-                        <div>
-                            <a
-                                href="{{ path('app_admin_add_acquisition_system', {'error': '0'}) }}"
-                                class="btn btn-custom-success"><i
-                                    class="fa-solid fa-plus"></i> Ajouter</a>
-                        </div>
+            {# Afficher les messages Flash pendant 5 secondes #}
+            {% for messageType, flashMessages in app.session.flashbag.all() %}
+                {% for flashMessage in flashMessages %}
+                    <div class="alert alert-{{ messageType }} flash-message shadow" style="width: fit-content; padding: 8px 16px; margin: 8px;">
+                        {{ flashMessage }}
                     </div>
+                {% endfor %}
+            {% endfor %}
 
-                    <ul class="mt-3">
-                        <!-- Boucle pour afficher chaque système d'acquisition -->
-                        {% for acquisitionSystem in acquisitionSystems %}
-                            {% if acquisitionSystem.isInstalled %}
-                                <li class="acquisition-system d-flex justify-content-between align-items-center">
-                                    <span>{{ acquisitionSystem.name }}</span>
+            {# Systèmes D'acquisitions #}
+            <div class="container m-0">
+                <div class="row listes">
+                    <div class="col panel shadow">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div class="fs-5">Systemes d'aquisition installés</div>
+                        </div>
 
-                                    {% if acquisitionSystem.getRoom() is null %}
-                                        <!-- Afficher "Non associé" si tel est le cas -->
-                                        <div class="alert alert-warning m-0 px-2 p-1">
-                                            <i class="fa-solid fa-triangle-exclamation"></i>
-                                            (Non associé)
-                                        </div>
+                        {% if acquisitionSystems|filter(a => a.isInstalled)|length == 0 %}
+                            <!-- Affiche un message si aucun système d'acquisition n'est installé -->
+                            <p>Aucun système d'acquisition installé.</p>
+                        {% else %}
+                            <ul class="mt-3">
+                                <!-- Boucle pour afficher chaque système d'acquisition -->
+                                {% for acquisitionSystem in acquisitionSystems %}
+                                    {% if acquisitionSystem.isInstalled %}
+                                        <li class="acquisition-system d-flex justify-content-between align-items-center">
+                                            <span>{{ acquisitionSystem.name }}</span>
+
+                                            {% if acquisitionSystem.getRoom() is null %}
+                                                <!-- Afficher "Non associé" si tel est le cas -->
+                                                <div class="alert alert-warning m-0 px-2 p-1">
+                                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                                    (Non associé)
+                                                </div>
+                                            {% else %}
+                                                <!-- Afficher la salle associée -->
+                                                <span>{{ acquisitionSystem.getRoom().name }}</span>
+                                            {% endif %}
+                                        </li>
                                     {% endif %}
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
 
-                                    <button type="button"
-                                        class="btn btn-custom-danger btn-sm float-right"
-                                        style="width: auto;" data-toggle="modal"
-                                        data-target="#confirmDeleteModal-{{ acquisitionSystem.id }}">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-
-                                    <!-- Modal confirmation -->
-                                    <div class="modal fade"
-                                        id="confirmDeleteModal-{{ acquisitionSystem.id }}"
-                                        tabindex="-1" role="dialog"
-                                        aria-labelledby="confirmDeleteModalLabel"
-                                        aria-hidden="true">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title"
-                                                        id="confirmDeleteModalLabel">Confirmation
-                                                        de suppression</h5>
-                                                    <button type="button"
-                                                        class="close"
-                                                        data-dismiss="modal"
-                                                        aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    Êtes-vous sûr de vouloir
-                                                    supprimer ce système d'acquisition
-                                                    ?
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button"
-                                                        class="btn btn-custom-secondary"
-                                                        data-dismiss="modal">Annuler</button>
-                                                    <button type="button"
-                                                        class="btn btn-custom-danger"
-                                                        onclick="window.location.href = '{{ path('app_admin_delete_acquisition_system', {'id': acquisitionSystem.id}) }}'"><i
-                                                            class="fa-solid fa-trash-can"></i>
-                                                        Supprimer</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                            {% endif %}
-                        {% endfor %}
-                    </ul>
+                    <div class="col panel shadow">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div class="fs-5">Installer un système d'aquisition</div>
+                        </div>
+                        <ul class="mt-3">
+                            <!-- Boucle pour afficher chaque système d'acquisition non installé -->
+                            {% for acquisitionSystem in acquisitionSystems %}
+                                {% if not acquisitionSystem.isInstalled %}
+                                    <li class="acquisition-system d-flex justify-content-between align-items-center">
+                                        <span>{{ acquisitionSystem.name }}</span>
+                                        <a href="{{ path('app_tech_install_acquisition_system', {'id': acquisitionSystem.id}) }}"
+                                            class="btn btn-custom-success"><i
+                                            class="fa-solid fa-plus"></i> Installer</a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ asset('js/flashMessageHandler.js') }}"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
 {% endblock %}

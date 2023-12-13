@@ -4,70 +4,80 @@
 
 {% block body %}
 
-<link rel="stylesheet" href="{{ asset('css/styles.css') }}">
-<link rel="stylesheet" href="{{ asset('css/roomData.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/roomData.css') }}">
 
-<div class="page-wrapper d-inline-flex">
-    <div class="sidebar">
-        <img src="{{ asset('images/logo.png') }}" alt="Logo" />
-    </div>
-
-    <div class="content" style="flex-grow: 1;">
-        <h2>Aquisition system | {{ acquisitionSystem.name }}</h2>
-
-        {# Bouton Retour #}
-        <a href="{{ path('app_admin_dashboard') }}" class="btn btn-custom-secondary back"><i class="fa-solid fa-left-long"></i> Retour</a>
-
-        <div class="panel shadow">
-
-            {% for e in form_errors %}
-                <div class="alert alert-danger">{{ e.message }}</div>
-            {% endfor %}
-
-            {{ form_start(form) }}
-                           
-                <div class="form-group">
-                    {{ form_label(form.name, 'Identifiant') }}
-                    {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
-                </div>
-
-                <div class="form-group">
-                    {{ form_label(form.room, 'Salle associée') }}
-                    {{ form_widget(form.room, {'attr': {'class': 'form-control', 'value': acquisitionSystem.room.name | default(null) }}) }}
-                </div>
-
-            {{ form_rest(form) }}
-
-            <button type="submit" class="btn btn-custom-success"><i class="fa-solid fa-check"></i> VALIDER</button>
-
-            {{ form_end(form) }}
+    <div class="page-wrapper d-inline-flex">
+        <div class="sidebar">
+            <img src="{{ asset('images/logo.png') }}" alt="Logo" />
         </div>
 
-        <button type="button" class="btn btn-danger mx-2" data-toggle="modal" data-target="#confirmDeleteModal"><i class="fa-solid fa-trash-can"></i> Supprimer</button>
-         <!-- Modal confirmation -->
-        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmation de suppression</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+        <div class="content" style="flex-grow: 1;">
+            <h2>Aquisition system | {{ acquisitionSystem.name }}</h2>
+
+            {# Bouton Retour #}
+            <a href="{{ path('app_admin_dashboard') }}" class="btn btn-custom-secondary back"><i class="fa-solid fa-left-long"></i> Retour</a>
+
+            {# Afficher les messages Flash pendant 5 secondes #}
+            {% for messageType, flashMessages in app.session.flashbag.all() %}
+                {% for flashMessage in flashMessages %}
+                    <div class="alert alert-{{ messageType }} flash-message shadow" style="width: fit-content; padding: 8px 16px; margin: 8px;">
+                        {{ flashMessage }}
                     </div>
-                    <div class="modal-body">
-                        Êtes-vous sûr de vouloir supprimer ce système d'acquisition ?
+                {% endfor %}
+            {% endfor %}
+
+            <div class="panel shadow">
+
+                {% for e in form_errors %}
+                    <div class="alert alert-danger">{{ e.message }}</div>
+                {% endfor %}
+
+                {{ form_start(form) }}
+
+                    <div class="form-group">
+                        {{ form_label(form.name, 'Identifiant') }}
+                        {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-custom-secondary" data-dismiss="modal">Annuler</button>
-                        <button type="button" class="btn btn-custom-danger" onclick="window.location.href = '{{ path('app_admin_delete_acquisition_system', {id: acquisitionSystem.id}) }}';"><i class="fa-solid fa-trash-can"></i> Supprimer</button>
+
+                    <div class="form-group">
+                        {{ form_label(form.room, 'Salle associée') }}
+                        {{ form_widget(form.room, {'attr': {'class': 'form-control', 'value': acquisitionSystem.room.name | default(null) }}) }}
+                    </div>
+
+                {{ form_rest(form) }}
+
+                <button type="submit" class="btn btn-custom-success"><i class="fa-solid fa-check"></i> VALIDER</button>
+
+                {{ form_end(form) }}
+            </div>
+
+            <button type="button" class="btn btn-danger mx-2" data-toggle="modal" data-target="#confirmDeleteModal"><i class="fa-solid fa-trash-can"></i> Supprimer</button>
+             <!-- Modal confirmation -->
+            <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmation de suppression</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Êtes-vous sûr de vouloir supprimer ce système d'acquisition ?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-custom-secondary" data-dismiss="modal">Annuler</button>
+                            <button type="button" class="btn btn-custom-danger" onclick="window.location.href = '{{ path('app_admin_delete_acquisition_system', {id: acquisitionSystem.id}) }}';"><i class="fa-solid fa-trash-can"></i> Supprimer</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ asset('js/flashMessageHandler.js') }}"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
 {% endblock %}

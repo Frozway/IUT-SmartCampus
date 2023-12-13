@@ -46,9 +46,9 @@ class AdminController extends AbstractController
 
         $acquisitionSystem = $room->getAcquisitionSystem();
 
-        // Récupérer la liste des systèmes d'acquisition non assignés et non installés
+        // Récupérer la liste des systèmes d'acquisition non assignés
         $unassignedAcquisitionSystems = $acquisitionSystemRepository
-            ->findBy(['room' => null, 'isInstalled' => false]);
+            ->findBy(['room' => null]);
 
         // Créer le formulaire de sélection du système d'acquisition avec la liste des systèmes non assignés
         $form = $this->createForm(AcquisitionSystemSelectionType::class, null, [
@@ -100,6 +100,8 @@ class AdminController extends AbstractController
             $entityManager->persist($room);
             $entityManager->flush();
 
+            $this->addFlash('success', 'La salle a été ajoutée avec succès.');
+
             return $this->redirectToRoute('app_admin_dashboard');
         }
 
@@ -142,7 +144,9 @@ class AdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_admin_dashboard');
+            $this->addFlash('success', 'La salle a été modifiée avec succès.');
+
+            return $this->redirectToRoute('app_admin_room', ['id' => $id]);
         }
 
         $errors = $validator->validate($room);
@@ -184,6 +188,8 @@ class AdminController extends AbstractController
             $entityManager->persist($acquisitionSystem);
             $entityManager->flush();
 
+            $this->addFlash('success', 'Le système d\'acquisition a été ajouté avec succès.');
+
             return $this->redirectToRoute('app_admin_dashboard');
         }
 
@@ -193,24 +199,6 @@ class AdminController extends AbstractController
             'form' => $form->createView(),
             'errors' => $errors,
         ]);
-    }
-
-    /**
-     * @Route('/admin-dashboard/add-acquisition-system', name: 'app_admin_add_acquisition_system')
-     *
-     * Affiche et traite le formulaire d'ajout d'un système d'acquisition.
-     *
-     * @param Request $request La requête HTTP
-     * @param EntityManagerInterface $entityManager L'entité de gestion
-     * @return Response
-     */
-    #[Route('/admin-dashboard/error', name: 'app_unique_constraint_error')]
-    #[IsGranted("ROLE_ADMIN")]
-    public function uniqueConstraintErrorIndex(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        return $this->render('admin/uniqueConstraintError.html.twig', [
-        ]);
-
     }
 
     /**
@@ -251,6 +239,9 @@ class AdminController extends AbstractController
         $entityManager->remove($room);
         $entityManager->flush();
 
+        // Ajouter un message flash pour confirmer la suppression
+        $this->addFlash('success', 'La salle a été supprimée avec succès.');
+
         // Rediriger vers une autre page après la suppression
         return $this->redirectToRoute('app_admin_dashboard');
     }
@@ -287,6 +278,8 @@ class AdminController extends AbstractController
         }
 
         $entityManager->flush();
+
+        $this->addFlash('success', 'Le système d\'acquisition a été désattribué avec succès.');
 
         // Redirection une fois la suppression terminee
         return $this->redirectToRoute('app_admin_room', ['id' => $id]);
@@ -331,7 +324,9 @@ class AdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_admin_dashboard');
+            $this->addFlash('success', 'Le système d\'acquisition a été modifié avec succès.');
+
+            return $this->redirectToRoute('app_admin_edit_acquisition_system', ['id' => $id]);
         }
 
         if (!$acquisitionSystem) {
@@ -376,6 +371,9 @@ class AdminController extends AbstractController
         // Supprimer le système d'acquisition
         $entityManager->remove($acquisitionSystem);
         $entityManager->flush();
+
+        // Ajouter un message flash pour confirmer la suppression
+        $this->addFlash('success', 'Le système d\'acquisition a été supprimé avec succès.');
 
         // Rediriger vers une autre page après la suppression
         return $this->redirectToRoute('app_admin_dashboard');

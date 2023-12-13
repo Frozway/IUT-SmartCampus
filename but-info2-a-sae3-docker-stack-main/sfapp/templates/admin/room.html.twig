@@ -4,198 +4,208 @@
 
 {% block body %}
 
-<link rel="stylesheet" href="{{ asset('css/styles.css') }}">
-<link rel="stylesheet" href="{{ asset('css/roomData.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/roomData.css') }}">
 
-<div class="page-wrapper d-inline-flex">
-    <div class="sidebar">
-        <img src="{{ asset('images/logo.png') }}" alt="Logo" />
-    </div>
+    <div class="page-wrapper d-inline-flex">
+        <div class="sidebar">
+            <img src="{{ asset('images/logo.png') }}" alt="Logo" />
+        </div>
 
-    <div class="content" style="flex-grow: 1;">
-        <h2>Salle - {{ room.name }} - Étage {{ room.floor }} </h2>
+        <div class="content" style="flex-grow: 1;">
+            <h2>Salle - {{ room.name }} - Étage {{ room.floor }} </h2>
 
-        {# Bouton Retour #}
-        <a href="{{ path('app_admin_dashboard') }}" class="btn btn-custom-secondary back"><i class="fa-solid fa-left-long"></i> Retour</a>
+            {# Bouton Retour #}
+            <a href="{{ path('app_admin_dashboard') }}" class="btn btn-custom-secondary back"><i class="fa-solid fa-left-long"></i> Retour</a>
 
-        <div class="panel shadow">
-            Vue d'ensemble - {{ acquisitionSystem.name | default('Aucun système d\'acquisition associé') }}
-
-            {# Afficher le contenu uniquement s'il y a un système d'acquisition associé #}
-            {% if acquisitionSystem is not null %}
-
-                {% if acquisitionSystem.isInstalled %}
-
-                    {# Bouton Désattribuer le système d'acquisition #}
-                    <button type="button" class="btn btn-custom-danger btn-md mx-3" data-toggle="modal" data-target="#confirmUnassignModal"><i class="fa-solid fa-link-slash"></i> Désattribuer le S.A.</button>
-
-                    <!-- Modal confirmation -->
-                    <div class="modal fade" id="confirmUnassignModal" tabindex="-1" role="dialog" aria-labelledby="confirmUnassignModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="confirmUnassignModalLabel">Confirmation de désattribution</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    Êtes-vous sûr de vouloir désattribuer le système d'acquisition de cette salle ?
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-custom-secondary" data-dismiss="modal">Annuler</button>
-                                    <button type="button" class="btn btn-custom-danger" onclick="window.location.href='{{ path('app_admin_unassign_as', {'id': room.id}) }}'"><i class="fa-solid fa-link-slash"></i> Désattribuer</button>
-                                </div>
-                            </div>
-                        </div>
+            {# Afficher les messages Flash pendant 5 secondes #}
+            {% for messageType, flashMessages in app.session.flashbag.all() %}
+                {% for flashMessage in flashMessages %}
+                    <div class="alert alert-{{ messageType }} flash-message shadow" style="width: fit-content; padding: 8px 16px; margin: 8px;">
+                        {{ flashMessage }}
                     </div>
+                {% endfor %}
+            {% endfor %}
 
-                    <div class="row mt-1 d-flex justify-content-start">
+            <div class="panel shadow">
+                Vue d'ensemble - {{ acquisitionSystem.name | default('Aucun système d\'acquisition associé') }}
 
-                        {# Bloc température #}
-                        <div class="temp mt-2 p-0 border-0 rounded">
-                            <div class="icon-container rounded-left">
-                                <img src="{{ asset('images/icon_temperature.png') }}" alt="Logo Temp" class="img-fluid p-2">
-                            </div>
-                            
-                            <div class="temp-value justify-content-center d-flex align-items-center text-center">
+                {# Afficher le contenu uniquement s'il y a un système d'acquisition associé et installé#}
+                {% if acquisitionSystem is not null %}
 
-                                {% if acquisitionSystem.temperature is null %}
+                    {% if acquisitionSystem.isInstalled %}
 
-                                <span>Température non disponible </span>
+                        {# Bouton Désattribuer le système d'acquisition #}
+                        <button type="button" class="btn btn-custom-danger btn-md mx-3" data-toggle="modal" data-target="#confirmUnassignModal"><i class="fa-solid fa-link-slash"></i> Désattribuer le S.A.</button>
 
-                                {% else %}
-
-                                <span>{{ acquisitionSystem.temperature }}°C Température</span>
-
-                                {% endif %}
-
-                            </div>
-                        </div>
-
-                        {# Bloc humidité #}
-                        <div class="humidity mt-2 p-0 border-0 rounded">
-                            <div class="icon-container rounded-left">
-                                <img src="{{ asset('images/icon_humidity.png') }}" alt="Logo Temp" class="img-fluid p-2">
-                            </div>
-                            
-                            <div class="humidity-value justify-content-center d-flex align-items-center text-center">
-
-                                {% if acquisitionSystem.humidity is null %}
-                                
-                                <span>Taux d'humidité non disponible</span>
-
-                                {% else %}
-
-                                <span>{{ acquisitionSystem.humidity }}% Humidité</span>
-
-                                {% endif %}
+                        <!-- Modal confirmation -->
+                        <div class="modal fade" id="confirmUnassignModal" tabindex="-1" role="dialog" aria-labelledby="confirmUnassignModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="confirmUnassignModalLabel">Confirmation de désattribution</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Êtes-vous sûr de vouloir désattribuer le système d'acquisition de cette salle ?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-custom-secondary" data-dismiss="modal">Annuler</button>
+                                        <button type="button" class="btn btn-custom-danger" onclick="window.location.href='{{ path('app_admin_unassign_as', {'id': room.id}) }}'"><i class="fa-solid fa-link-slash"></i> Désattribuer</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        {# Bloc CO2 #}
-                        <div class="co2 mt-2 p-0 border-0 rounded">
-                            <div class="icon-container rounded-left">
-                                <img src="{{ asset('images/icon_carbon.png') }}" alt="Logo Temp" class="img-fluid p-2">
+                        <div class="row mt-1 d-flex justify-content-start">
+
+                            {# Bloc température #}
+                            <div class="temp mt-2 p-0 border-0 rounded">
+                                <div class="icon-container rounded-left">
+                                    <img src="{{ asset('images/icon_temperature.png') }}" alt="Logo Temp" class="img-fluid p-2">
+                                </div>
+
+                                <div class="temp-value justify-content-center d-flex align-items-center text-center">
+
+                                    {% if acquisitionSystem.temperature is null %}
+
+                                    <span>Température non disponible </span>
+
+                                    {% else %}
+
+                                    <span>{{ acquisitionSystem.temperature }}°C Température</span>
+
+                                    {% endif %}
+
+                                </div>
                             </div>
-                            
-                            <div class="co2-value justify-content-center d-flex align-items-center text-center">
 
-                                {% if acquisitionSystem.co2 is null %}
-                                
-                                <span>Taux de CO2 non disponible</span>
+                            {# Bloc humidité #}
+                            <div class="humidity mt-2 p-0 border-0 rounded">
+                                <div class="icon-container rounded-left">
+                                    <img src="{{ asset('images/icon_humidity.png') }}" alt="Logo Temp" class="img-fluid p-2">
+                                </div>
 
-                                {% else %}
+                                <div class="humidity-value justify-content-center d-flex align-items-center text-center">
 
-                                <span>{{ acquisitionSystem.co2 }} ppm CO2</span>
+                                    {% if acquisitionSystem.humidity is null %}
 
-                                {% endif %}
+                                    <span>Taux d'humidité non disponible</span>
+
+                                    {% else %}
+
+                                    <span>{{ acquisitionSystem.humidity }}% Humidité</span>
+
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            {# Bloc CO2 #}
+                            <div class="co2 mt-2 p-0 border-0 rounded">
+                                <div class="icon-container rounded-left">
+                                    <img src="{{ asset('images/icon_carbon.png') }}" alt="Logo Temp" class="img-fluid p-2">
+                                </div>
+
+                                <div class="co2-value justify-content-center d-flex align-items-center text-center">
+
+                                    {% if acquisitionSystem.co2 is null %}
+
+                                    <span>Taux de CO2 non disponible</span>
+
+                                    {% else %}
+
+                                    <span>{{ acquisitionSystem.co2 }} ppm CO2</span>
+
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    {# Bouton Afficher les données #}
+                        {# Bouton Afficher les données #}
+
+                    {% else %}
+
+                        {# Bouton Désattribuer le système d'acquisition #}
+                        <button type="button" class="btn btn-custom-danger btn-md mx-3" data-toggle="modal" data-target="#confirmUnassignModal"><i class="fa-solid fa-link-slash"></i> Désattribuer le S.A.</button>
+
+                        <!-- Modal confirmation -->
+                        <div class="modal fade" id="confirmUnassignModal" tabindex="-1" role="dialog" aria-labelledby="confirmUnassignModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="confirmUnassignModalLabel">Confirmation de désattribution</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Êtes-vous sûr de vouloir désattribuer le système d'acquisition de cette salle ?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-custom-secondary" data-dismiss="modal">Annuler</button>
+                                        <button type="button" class="btn btn-custom-danger" onclick="window.location.href='{{ path('app_admin_unassign_as', {'id': room.id}) }}'"><i class="fa-solid fa-link-slash"></i> Désattribuer</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {# Afficher un message si le système est assigné mais pas installé #}
+                        <div class="alert alert-warning mt-3" role="alert">
+                            Le système d'acquisition est assigné, mais il n'est pas encore installé par le technicien.
+                        </div>
+
+                    {% endif %}
 
                 {% else %}
 
-                    {# Bouton Désattribuer le système d'acquisition #}
-                    <button type="button" class="btn btn-custom-danger btn-md mx-3" data-toggle="modal" data-target="#confirmUnassignModal"><i class="fa-solid fa-link-slash"></i> Désattribuer le S.A.</button>
-
-                    <!-- Modal confirmation -->
-                    <div class="modal fade" id="confirmUnassignModal" tabindex="-1" role="dialog" aria-labelledby="confirmUnassignModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="confirmUnassignModalLabel">Confirmation de désattribution</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    Êtes-vous sûr de vouloir désattribuer le système d'acquisition de cette salle ?
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-custom-secondary" data-dismiss="modal">Annuler</button>
-                                    <button type="button" class="btn btn-custom-danger" onclick="window.location.href='{{ path('app_admin_unassign_as', {'id': room.id}) }}'"><i class="fa-solid fa-link-slash"></i> Désattribuer</button>
-                                </div>
-                            </div>
+                    {# Affichez le formulaire de sélection du système d'acquisition #}
+                    <div class="row mt-3">
+                        <div class="col">
+                            <h4>Attribuer un système d'acquisition</h4>
+                            {# Affichez le formulaire de sélection du système d'acquisition #}
+                            {{ form_start(form) }}
+                                {{ form_widget(form.acquisitionSystem, {'attr': {'class': 'form-control'}}) }}
+                                <button type="submit" class="btn custom-btn-primary mt-2"><i class="fa-solid fa-link"></i> Attribuer</button>
+                            {{ form_end(form) }}
                         </div>
-                    </div>
-
-                    {# Afficher un message si le système est assigné mais pas installé #}
-                    <div class="alert alert-warning mt-3" role="alert">
-                        Le système d'acquisition est assigné, mais il n'est pas encore installé par le technicien.
                     </div>
 
                 {% endif %}
 
-            {% else %}
+            </div>
 
-                {# Affichez le formulaire de sélection du système d'acquisition #}
-                <div class="row mt-3">
-                    <div class="col">
-                        <h4>Attribuer un système d'acquisition</h4>
-                        {# Affichez le formulaire de sélection du système d'acquisition #}
-                        {{ form_start(form) }}
-                            {{ form_widget(form.acquisitionSystem, {'attr': {'class': 'form-control'}}) }}
-                            <button type="submit" class="btn custom-btn-primary mt-2"><i class="fa-solid fa-link"></i> Attribuer</button>
-                        {{ form_end(form) }}
-                    </div>
-                </div>
+            <a href="{{ path('app_admin_edit_room', {'id': room.id}) }}"><button type="button" class="btn btn-custom-secondary btn-lg mt-3 mx-2" style="width: 330px; height: 60px;"><i class="fa-solid fa-pencil"></i> Modifier la salle</button></a>
 
-            {% endif %}
+            {# Bouton Supprimer la salle #}
+            <button type="button" class="btn btn-custom-danger btn-lg mt-3 mx-2" style="width: 330px; height: 60px;" data-toggle="modal" data-target="#confirmDeleteModal"><i class="fa-solid fa-trash-can"></i> Supprimer la salle</button>
 
-        </div>
-
-        <a href="{{ path('app_admin_edit_room', {'id': room.id}) }}"><button type="button" class="btn btn-custom-secondary btn-lg mt-3 mx-2" style="width: 330px; height: 60px;"><i class="fa-solid fa-pencil"></i> Modifier la salle</button></a>
-
-        {# Bouton Supprimer la salle #}
-        <button type="button" class="btn btn-custom-danger btn-lg mt-3 mx-2" style="width: 330px; height: 60px;" data-toggle="modal" data-target="#confirmDeleteModal"><i class="fa-solid fa-trash-can"></i> Supprimer la salle</button>
-
-        <!-- Modal confirmation -->
-        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmation de suppression</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        Êtes-vous sûr de vouloir supprimer cette salle ?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-custom-secondary" data-dismiss="modal">Annuler</button>
-                        <button type="button" class="btn btn-custom-danger" onclick="window.location.href = '{{ path('app_admin_delete_room', {'id': room.id}) }}';"><i class="fa-solid fa-trash-can"></i> Supprimer</button>
+            <!-- Modal confirmation -->
+            <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmation de suppression</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Êtes-vous sûr de vouloir supprimer cette salle ?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-custom-secondary" data-dismiss="modal">Annuler</button>
+                            <button type="button" class="btn btn-custom-danger" onclick="window.location.href = '{{ path('app_admin_delete_room', {'id': room.id}) }}';"><i class="fa-solid fa-trash-can"></i> Supprimer</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ asset('js/flashMessageHandler.js') }}"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
 {% endblock %}

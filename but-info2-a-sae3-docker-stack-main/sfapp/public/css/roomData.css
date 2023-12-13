@@ -9,64 +9,48 @@ h2 {
     font-size: 22pt;
 }
 
-.temp {
-    background-color: #ff7675;
-}
-
-.temp .icon-container {
-    background-color: #d63031;
-    width: 100px;
-    height: 100px;
-}
-
-.temp .temp-value {
-    width: 200px;
-    padding: 12px;
-    font-size: 16pt;
-    font-weight: 600;
-}
-
-.humidity {
-    background-color: #636E72;
-}
-
-.humidity .icon-container {
-    background-color: #2D3436;
-    width: 100px;
-    height: 100px;
-}
-
-.humidity .humidity-value {
-    width: 200px;
-    padding: 12px;
-    font-size: 16pt;
-    font-weight: 600;
-}
-
-.co2 {
-    background-color: #55EFC4;
-}
-
-.co2 .icon-container {
-    background-color: #00B894;
-    width: 100px;
-    height: 100px;
-}
-
-.co2 .co2-value {
-    width: 200px;
-    padding: 12px;
-    font-size: 16pt;
-    font-weight: 600;
-}
-
-/* pour temp humidy et cO2 fait la meme chose */
-.temp, .humidity, .co2
-{
+.value-container {
+    
     color: white;
     height: 100px;
     width: 300px;
     display: flex;
     margin-right: 10px;
     margin-left: 10px;
+}
+
+.value-container .icon-container {
+    width: 100px;
+    height: 100px;
+}
+
+.value-container .value {
+    width: 200px;
+    padding: 12px;
+    font-size: 16pt;
+    font-weight: 600;
+}
+
+.normal {
+    background-color: #55efc4;
+}
+
+.orange {
+    background-color: #fdcb6e;
+}
+
+.red {
+    background-color: #ff7675;
+}
+
+.normal .icon-container {
+    background-color: #00b894;
+}
+
+.orange .icon-container {
+    background-color: #fd7e14;
+}
+
+.red .icon-container {
+    background-color: #d63031;
 }

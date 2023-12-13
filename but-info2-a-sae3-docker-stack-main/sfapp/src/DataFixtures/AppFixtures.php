@@ -35,9 +35,29 @@ class AppFixtures extends Fixture
             $system->setTemperature(mt_rand(15, 25));
             $system->setHumidity(mt_rand(30, 80));
             $system->setCo2(mt_rand(300, 1700));
-            $system->setIsInstalled(rand(0, 1));
+            $system->setIsInstalled(1);
             $manager->persist($system);
+            
+            // Override default values to create alerts
+            if ($room->getName() == 'D001') {
+                $system->setTemperature(16);
+            }
+
+            if ($room->getName() == 'D003') {
+                $system->setCo2(1400);
+            }
+
+            if ($room->getName() == 'D004') {
+                $system->setHumidity(75);
+                $system->setTemperature(21);
+            }
+
+            if ($room->getName() == 'D005') {
+                $system->setIsInstalled(0);
+            }
         }
+
+        
 
         $admin = new User();
         $admin->setUsername('admin');

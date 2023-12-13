@@ -1,83 +1,83 @@
 body {
-    background-color: #DFDFDF;
-    font-weight: 500;
+  background-color: #dfdfdf;
+  font-weight: 500;
 }
 
 h2 {
-    background-color: white;
-    padding: 8px;
-    font-size: 22pt;
+  background-color: white;
+  padding: 8px;
+  font-size: 22pt;
 }
 
 .listes ul {
-    list-style: none;
-    padding: 0;
+  list-style: none;
+  padding: 0;
 }
 
 .listes li {
-    background-color: #DFDFDF;
-    padding: 8px 16px;
-    border-radius: 8px;
-    border-left: #00b894 8px solid;
-    margin: 4px 0;
-    transition: .15s;
+  background-color: #dfdfdf;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border-left: #00b894 8px solid;
+  margin: 4px 0;
+  transition: 0.15s;
 }
 
 .red-border {
-    border-left: #d63031 8px solid !important;
+  border-left: #d63031 8px solid !important;
 }
 
 .listes li:hover {
-    background-color: #f0f0f0;
-    transition: .15s;
+  background-color: #f0f0f0;
+  transition: 0.15s;
 }
 
 .alerte {
-    color: white;
-    display: flex;
-    width: fit-content;
-    border-radius: 8px;
-    overflow: hidden;
+  color: white;
+  display: flex;
+  width: fit-content;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .alerte .icon-container {
-    width: 64px;
+  width: 64px;
 }
 
 .alert-orange {
-    background-color: #fdcb6e;
+  background-color: #fdcb6e;
 }
 
 .alert-red {
-    background-color: #ff7675;
+  background-color: #ff7675;
 }
 
 .alert-orange .icon-container {
-    background-color: #FFAD33;
+  background-color: #ffad33;
 }
 
 .alert-red .icon-container {
-    background-color: #d63031;
+  background-color: #d63031;
 }
 
 .alerte .room-name {
-    padding: 8px 12px;
-    font-size: 16pt;
-    font-weight: 600;
+  padding: 8px 12px;
+  font-size: 16pt;
+  font-weight: 600;
 }
 
 .alerte p {
-    margin: 0;
-    line-height: 25px;
+  margin: 0;
+  line-height: 25px;
 }
 
 a:hover {
-    text-decoration: none;
+  text-decoration: none;
 }
 
-.sidebar{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 }

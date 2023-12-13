@@ -28,7 +28,7 @@
                 <span class="fs-5">Alertes</span>
                 <div class="row px-2 mt-2">
                     {% for alert in alerts %}
-                    <div class="alerte mt-2 mx-1 p-0 border-0">
+                    <div class="alerte mt-2 mx-1 p-0 border-0 {{ alert.category == 'red' ? 'alert-red' :'alert-orange' }}">
                         <div class="icon-container p-2 d-inline-flex">
                             {% if alert.type == 'co2' %}
                                 <img src="{{ asset('images/icon_carbon.png') }}" alt="" class="img-fluid">

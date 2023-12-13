@@ -30,7 +30,6 @@ h2 {
 
 .alerte {
     color: white;
-    background-color: #ff7675;
     display: flex;
     width: fit-content;
     border-radius: 8px;
@@ -38,8 +37,23 @@ h2 {
 }
 
 .alerte .icon-container {
-    background-color: #d63031;
     width: 64px;
+}
+
+.alert-orange {
+    background-color: #fdcb6e;
+}
+
+.alert-red {
+    background-color: #ff7675;
+}
+
+.alert-orange .icon-container {
+    background-color: #FFAD33;
+}
+
+.alert-red .icon-container {
+    background-color: #d63031;
 }
 
 .alerte .room-name {

@@ -26,6 +26,9 @@ class Room
     #[ORM\OneToOne(mappedBy: 'room', cascade: ['persist', 'remove'])]
     private ?AcquisitionSystem $acquisitionSystem = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $department = null;
+
     /**
      * Obtient l'identifiant de la salle.
      *
@@ -111,6 +114,18 @@ class Room
         }
 
         $this->acquisitionSystem = $acquisitionSystem;
+
+        return $this;
+    }
+
+    public function getDepartment(): ?string
+    {
+        return $this->department;
+    }
+
+    public function setDepartment(string $department): static
+    {
+        $this->department = $department;
 
         return $this;
     }

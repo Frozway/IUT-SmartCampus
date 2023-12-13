@@ -19,6 +19,7 @@ class AppFixtures extends Fixture
             $room = new Room();
             $room->setName($roomName);
             $room->setFloor(0);
+            $room->setDepartment('Informatique');
             $manager->persist($room);
         }
 

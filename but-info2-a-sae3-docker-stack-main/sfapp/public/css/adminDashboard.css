@@ -18,9 +18,13 @@ h2 {
     background-color: #DFDFDF;
     padding: 8px 16px;
     border-radius: 8px;
-    border-left: #d63031 8px solid;
+    border-left: #00b894 8px solid;
     margin: 4px 0;
     transition: .15s;
+}
+
+.red-border {
+    border-left: #d63031 8px solid !important;
 }
 
 .listes li:hover {
@@ -30,8 +34,6 @@ h2 {
 
 .alerte {
     color: white;
-    background-color: #ff7675;
-    height: 60px;
     display: flex;
     width: fit-content;
     border-radius: 8px;
@@ -39,17 +41,35 @@ h2 {
 }
 
 .alerte .icon-container {
+    width: 64px;
+}
+
+.alert-orange {
+    background-color: #fdcb6e;
+}
+
+.alert-red {
+    background-color: #ff7675;
+}
+
+.alert-orange .icon-container {
+    background-color: #FFAD33;
+}
+
+.alert-red .icon-container {
     background-color: #d63031;
-    width: 60px;
-    height: 60px;
 }
 
 .alerte .room-name {
-    line-height: 60px;
-    padding: 0 12px;
+    padding: 8px 12px;
     font-size: 16pt;
     font-weight: 600;
-}   
+}
+
+.alerte p {
+    margin: 0;
+    line-height: 25px;
+}
 
 a:hover {
     text-decoration: none;

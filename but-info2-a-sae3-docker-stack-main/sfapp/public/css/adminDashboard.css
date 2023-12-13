@@ -18,9 +18,13 @@ h2 {
     background-color: #DFDFDF;
     padding: 8px 16px;
     border-radius: 8px;
-    border-left: #d63031 8px solid;
+    border-left: #00b894 8px solid;
     margin: 4px 0;
     transition: .15s;
+}
+
+.red-border {
+    border-left: #d63031 8px solid !important;
 }
 
 .listes li:hover {

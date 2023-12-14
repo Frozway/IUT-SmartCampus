@@ -1,3 +1,23 @@
+{% set lastTemp = [] %}
+{% set lastCo2 = [] %}
+{% set lastHumidity = [] %}
+
+{% for item in data|reverse %}
+    {% if item.nom == 'temp' %}
+        {% if lastTemp|length < 3 %}
+            {% set lastTemp = lastTemp|merge([item]) %}
+        {% endif %}
+    {% elseif item.nom == 'co2' %}
+        {% if lastCo2|length < 3 %}
+            {% set lastCo2 = lastCo2|merge([item]) %}
+        {% endif %}
+    {% elseif item.nom == 'hum' %}
+        {% if lastHumidity|length < 3 %}
+            {% set lastHumidity = lastHumidity|merge([item]) %}
+        {% endif %}
+    {% endif %}
+{% endfor %}
+
 {% extends 'base.html.twig' %}
 
 {% block title %}Salle - {{ room.name }}{% endblock %}
@@ -18,19 +38,10 @@
             {# Bouton Retour #}
             <a href="{{ path('app_admin_dashboard') }}" class="btn btn-custom-secondary back"><i class="fa-solid fa-left-long"></i> Retour</a>
 
-            {# Afficher les messages Flash pendant 5 secondes #}
-            {% for messageType, flashMessages in app.session.flashbag.all() %}
-                {% for flashMessage in flashMessages %}
-                    <div class="alert alert-{{ messageType }} flash-message shadow" style="width: fit-content; padding: 8px 16px; margin: 8px;">
-                        {{ flashMessage }}
-                    </div>
-                {% endfor %}
-            {% endfor %}
-
             <div class="panel shadow">
                 Vue d'ensemble - {{ acquisitionSystem.name | default('Aucun système d\'acquisition associé') }}
 
-                {# Afficher le contenu uniquement s'il y a un système d'acquisition associé et installé#}
+                {# Afficher le contenu uniquement s'il y a un système d'acquisition associé #}
                 {% if acquisitionSystem is not null %}
 
                     {% if acquisitionSystem.isInstalled %}
@@ -60,67 +71,56 @@
                         </div>
 
                         <div class="row mt-1 d-flex justify-content-start">
+                            {% set lastTemp = null %}
+                            {% set lastCo2 = null %}
+                            {% set lastHum = null %}
 
-                            {# Bloc température #}
-                            <div class="temp mt-2 p-0 border-0 rounded">
-                                <div class="icon-container rounded-left">
-                                    <img src="{{ asset('images/icon_temperature.png') }}" alt="Logo Temp" class="img-fluid p-2">
+                            {% for value in data %}
+                                {% if value.nom == "temp" and lastTemp == null%}
+                                    {% set lastTemp = value %}
+                                {% elseif value.nom == "co2" and lastCo2 == null %}
+                                    {% set lastCo2 = value %}
+                                {% elseif value.nom == "hum" and lastHum == null %}
+                                    {% set lastHum = value %}
+                                {% endif %}
+                            {% endfor %}
+
+                            {# Afficher les dernières valeurs de température, CO2 et humidité #}
+                            {% if lastTemp is not null %}
+                                <div class="temp mt-2 p-0 border-0 rounded">
+                                    <div class="icon-container rounded-left">
+                                        <img src="{{ asset('images/icon_temperature.png') }}" alt="Logo Temp" class="img-fluid p-2">
+                                    </div>
+
+                                    <div class="temp-value justify-content-center d-flex align-items-center text-center">
+                                        <span>{{ lastTemp.valeur }}°C Température</span>
+                                    </div>
                                 </div>
+                            {% endif %}
 
-                                <div class="temp-value justify-content-center d-flex align-items-center text-center">
+                            {% if lastCo2 is not null %}
+                                <div class="co2 mt-2 p-0 border-0 rounded">
+                                    <div class="icon-container rounded-left">
+                                        <img src="{{ asset('images/icon_carbon.png') }}" alt="Logo Temp" class="img-fluid p-2">
+                                    </div>
 
-                                    {% if acquisitionSystem.temperature is null %}
-
-                                    <span>Température non disponible </span>
-
-                                    {% else %}
-
-                                    <span>{{ acquisitionSystem.temperature }}°C Température</span>
-
-                                    {% endif %}
-
+                                    <div class="co2-value justify-content-center d-flex align-items-center text-center">
+                                        <span>{{ lastCo2.valeur }}ppm CO2</span>
+                                    </div>
                                 </div>
-                            </div>
+                            {% endif %}
 
-                            {# Bloc humidité #}
-                            <div class="humidity mt-2 p-0 border-0 rounded">
-                                <div class="icon-container rounded-left">
-                                    <img src="{{ asset('images/icon_humidity.png') }}" alt="Logo Temp" class="img-fluid p-2">
+                            {% if lastHum is not null %}
+                                <div class="humidity mt-2 p-0 border-0 rounded">
+                                    <div class="icon-container rounded-left">
+                                        <img src="{{ asset('images/icon_humidity.png') }}" alt="Logo Temp" class="img-fluid p-2">
+                                    </div>
+
+                                    <div class="humidity-value justify-content-center d-flex align-items-center text-center">
+                                        <span>{{ lastHum.valeur }}% Humidité</span>
+                                    </div>
                                 </div>
-
-                                <div class="humidity-value justify-content-center d-flex align-items-center text-center">
-
-                                    {% if acquisitionSystem.humidity is null %}
-
-                                    <span>Taux d'humidité non disponible</span>
-
-                                    {% else %}
-
-                                    <span>{{ acquisitionSystem.humidity }}% Humidité</span>
-
-                                    {% endif %}
-                                </div>
-                            </div>
-
-                            {# Bloc CO2 #}
-                            <div class="co2 mt-2 p-0 border-0 rounded">
-                                <div class="icon-container rounded-left">
-                                    <img src="{{ asset('images/icon_carbon.png') }}" alt="Logo Temp" class="img-fluid p-2">
-                                </div>
-
-                                <div class="co2-value justify-content-center d-flex align-items-center text-center">
-
-                                    {% if acquisitionSystem.co2 is null %}
-
-                                    <span>Taux de CO2 non disponible</span>
-
-                                    {% else %}
-
-                                    <span>{{ acquisitionSystem.co2 }} ppm CO2</span>
-
-                                    {% endif %}
-                                </div>
-                            </div>
+                            {% endif %}
                         </div>
 
                         {# Bouton Afficher les données #}
@@ -166,8 +166,8 @@
                             <h4>Attribuer un système d'acquisition</h4>
                             {# Affichez le formulaire de sélection du système d'acquisition #}
                             {{ form_start(form) }}
-                                {{ form_widget(form.acquisitionSystem, {'attr': {'class': 'form-control'}}) }}
-                                <button type="submit" class="btn custom-btn-primary mt-2"><i class="fa-solid fa-link"></i> Attribuer</button>
+                            {{ form_widget(form.acquisitionSystem, {'attr': {'class': 'form-control'}}) }}
+                            <button type="submit" class="btn custom-btn-primary mt-2"><i class="fa-solid fa-link"></i> Attribuer</button>
                             {{ form_end(form) }}
                         </div>
                     </div>
@@ -180,6 +180,86 @@
 
             {# Bouton Supprimer la salle #}
             <button type="button" class="btn btn-custom-danger btn-lg mt-3 mx-2" style="width: 330px; height: 60px;" data-toggle="modal" data-target="#confirmDeleteModal"><i class="fa-solid fa-trash-can"></i> Supprimer la salle</button>
+
+            {#        <div class="mt-4">#}
+            {#            <h2>Toutes les données</h2>#}
+            {#            <table class="table table-bordered">#}
+            {#                <thead>#}
+            {#                <tr>#}
+            {#                    <th>Type</th>#}
+            {#                    <th>Date de Capture</th>#}
+            {#                    <th>Valeur</th>#}
+            {#                </tr>#}
+            {#                </thead>#}
+            {#                <tbody>#}
+            {#                {% for value in data %}#}
+            {#                    <tr>#}
+            {#                        <td>#}
+            {#                            {% if value.nom == 'temp' %}#}
+            {#                                Température#}
+            {#                            {% elseif value.nom == 'co2' %}#}
+            {#                                CO2#}
+            {#                            {% elseif value.nom == 'hum' %}#}
+            {#                                Humidité#}
+            {#                            {% endif %}#}
+            {#                        </td>#}
+            {#                        <td>{{ value.dateCapture }}</td>#}
+            {#                        <td>#}
+            {#                            {% if value.nom == 'temp' %}#}
+            {#                                {{ value.valeur }} °C#}
+            {#                            {% elseif value.nom == 'co2' %}#}
+            {#                                {{ value.valeur }} ppm#}
+            {#                            {% elseif value.nom == 'hum' %}#}
+            {#                                {{ value.valeur }} %#}
+            {#                            {% endif %}#}
+            {#                        </td>#}
+            {#                    </tr>#}
+            {#                {% endfor %}#}
+            {#                </tbody>#}
+            {#            </table>#}
+            {#        </div>#}
+
+            <div class="mt-4">
+                <h2>Toutes les données</h2>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Date de Capture</th>
+                        <th>Température (°C)</th>
+                        <th>CO2 (ppm)</th>
+                        <th>Humidité (%)</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% set dataByDate = {} %}
+                    {% for value in data %}
+                        {% set currentDate = value.dateCapture|date('Y-m-d H:i:s') %}
+                        {% if attribute(dataByDate, currentDate) is not defined %}
+                            {% set dataByDate = dataByDate|merge({(currentDate): {'temp': null, 'co2': null, 'hum': null, (value.nom): value.valeur}}) %}
+                        {% else %}
+                            {% set currentData = attribute(dataByDate, currentDate) %}
+                            {% set currentData = currentData|merge({(value.nom): value.valeur}) %}
+                            {% set dataByDate = dataByDate|merge({(currentDate): currentData}) %}
+                        {% endif %}
+                    {% endfor %}
+
+
+
+                    {% for currentDate, values in dataByDate %}
+                        <tr>
+                            <td>{{ currentDate }}</td>
+                            <td>{{ values['temp'] is not null ? values['temp'] ~ ' °C' : 'N/A' }}</td>
+                            <td>{{ values['co2'] is not null ? values['co2'] ~ ' ppm' : 'N/A' }}</td>
+                            <td>{{ values['hum'] is not null ? values['hum'] ~ ' %' : 'N/A' }}</td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="4">Aucune donnée disponible.</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
 
             <!-- Modal confirmation -->
             <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
@@ -204,8 +284,7 @@
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="{{ asset('js/flashMessageHandler.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
 {% endblock %}

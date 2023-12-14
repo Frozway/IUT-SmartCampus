@@ -76,10 +76,20 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('app_admin_room', ['id' => $id]);
         }
 
+        $json = file_get_contents('./json/sa1.json');
+        $values = json_decode($json, true);
+
+        usort($values, function ($a, $b) {
+            return strtotime($a['dateCapture']) - strtotime($b['dateCapture']);
+        });
+
+        $values = array_reverse($values);
+
         return $this->render('admin/room.html.twig', [
             'room' => $room,
             'acquisitionSystem' => $acquisitionSystem,
             'form' => $form->createView(),
+            'data' => $values,
         ]);
     }
 

@@ -72,14 +72,13 @@
                             </div>
                         </div>
 
+                        {# Filtre modal et form #}
                         <ul class="mt-3">
                             {{ form_start(form) }}
                             <div class="d-flex">
-                                <form>
                                     {{ form_widget(form.SearchRoom, {'attr': {'class': 'form-control', 'placeholder': 'Rechercher...'}}) }}
                                     <button type="button" class="btn btn-custom-success ml-1" data-bs-toggle="modal" data-bs-target="#FilterModal"><i class="fa-solid fa-filter"></i></button>
-                                </form>
-                            </div>
+                            </div>                             
                             <div class="ModalDiv">
                                 <div class="modal fade ChangeRoomModal" id="FilterModal" tabindex="-1" aria-labelledby="FilterModal" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered">
@@ -88,7 +87,11 @@
                                                 <h2>Filtres</h2>
                                                 
                                                 <div class="my-4">
+<<<<<<< HEAD
                                                     <label for="floor" class="form-label">Etage</label>
+=======
+                                                    <label for="floor" class="form-label">{{ form_label(form.Floor) }}</label>
+>>>>>>> 0160ae38c81ad57d61ca70cb30afd125fb4c8c1e
                                                     {{ form_widget(form.Floor, {'attr': {'class': 'form-control'}}) }}
                                                 </div>  
                                                 
@@ -99,10 +102,10 @@
                                                 </div>
 
                                                 <div class="my-4">
-                                                    <label for="search" class="form-label">Rechercher</label>
+                                                    <label for="search" class="form-label">{{ form_label(form.SearchAS) }}</label>
                                                     {{ form_widget(form.SearchAS, {'attr': {'class': 'form-control'}}) }}
                                                 </div>
-
+                                                {{ form_label(form.Valid) }}
                                                 {{ form_widget(form.Valid, {'attr' : { 'class' : 'btn btn-custom-success'  }}) }}
                                             </div>
                                         </div>

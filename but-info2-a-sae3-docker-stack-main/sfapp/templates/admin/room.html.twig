@@ -71,48 +71,6 @@
                     </div>
 
                     <div class="row mt-1 d-flex justify-content-start">
-{#                        {% for value in data %}#}
-
-{#                         Bloc température#}
-{#                            {% if value.nom == "temp" %}#}
-{#                        <div class="temp mt-2 p-0 border-0 rounded">#}
-{#                            <div class="icon-container rounded-left">#}
-{#                                <img src="{{ asset('images/icon_temperature.png') }}" alt="Logo Temp" class="img-fluid p-2">#}
-{#                            </div>#}
-
-{#                            <div class="temp-value justify-content-center d-flex align-items-center text-center">#}
-{#                                    <span>{{ value.valeur }}°C Température</span>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                            {% endif %}#}
-
-{#                         Bloc humidité#}
-{#                            {% if value.nom == "hum" %}#}
-{#                        <div class="humidity mt-2 p-0 border-0 rounded">#}
-{#                            <div class="icon-container rounded-left">#}
-{#                                <img src="{{ asset('images/icon_humidity.png') }}" alt="Logo Temp" class="img-fluid p-2">#}
-{#                            </div>#}
-
-{#                            <div class="humidity-value justify-content-center d-flex align-items-center text-center">#}
-{#                                <span>{{ value.valeur }}% Humidité</span>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                            {% endif %}#}
-
-{#                         Bloc CO2#}
-{#                            {% if value.nom == "co2" %}#}
-{#                        <div class="co2 mt-2 p-0 border-0 rounded">#}
-{#                            <div class="icon-container rounded-left">#}
-{#                                <img src="{{ asset('images/icon_carbon.png') }}" alt="Logo Temp" class="img-fluid p-2">#}
-{#                            </div>#}
-
-{#                            <div class="co2-value justify-content-center d-flex align-items-center text-center">#}
-{#                                <span>{{ value.valeur }}ppm CO2</span>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                            {% endif %}#}
-
-{#                        {% endfor %}#}
                         {% set lastTemp = null %}
                         {% set lastCo2 = null %}
                         {% set lastHum = null %}

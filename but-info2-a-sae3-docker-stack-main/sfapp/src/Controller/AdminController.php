@@ -71,7 +71,13 @@ class AdminController extends AbstractController
         }
 
         $json = file_get_contents('./json/sa1.json');
-        $values = json_decode($json);
+        $values = json_decode($json, true);
+
+        usort($values, function ($a, $b) {
+            return strtotime($a['dateCapture']) - strtotime($b['dateCapture']);
+        });
+
+        $values = array_reverse($values);
 
         return $this->render('admin/room.html.twig', [
             'room' => $room,

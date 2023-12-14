@@ -1,3 +1,23 @@
+{% set lastTemp = [] %}
+{% set lastCo2 = [] %}
+{% set lastHumidity = [] %}
+
+{% for item in data|reverse %}
+    {% if item.nom == 'temp' %}
+        {% if lastTemp|length < 3 %}
+            {% set lastTemp = lastTemp|merge([item]) %}
+        {% endif %}
+    {% elseif item.nom == 'co2' %}
+        {% if lastCo2|length < 3 %}
+            {% set lastCo2 = lastCo2|merge([item]) %}
+        {% endif %}
+    {% elseif item.nom == 'hum' %}
+        {% if lastHumidity|length < 3 %}
+            {% set lastHumidity = lastHumidity|merge([item]) %}
+        {% endif %}
+    {% endif %}
+{% endfor %}
+
 {% extends 'base.html.twig' %}
 
 {% block title %}Salle - {{ room.name }}{% endblock %}
@@ -51,48 +71,98 @@
                     </div>
 
                     <div class="row mt-1 d-flex justify-content-start">
+{#                        {% for value in data %}#}
+
+{#                         Bloc température#}
+{#                            {% if value.nom == "temp" %}#}
+{#                        <div class="temp mt-2 p-0 border-0 rounded">#}
+{#                            <div class="icon-container rounded-left">#}
+{#                                <img src="{{ asset('images/icon_temperature.png') }}" alt="Logo Temp" class="img-fluid p-2">#}
+{#                            </div>#}
+
+{#                            <div class="temp-value justify-content-center d-flex align-items-center text-center">#}
+{#                                    <span>{{ value.valeur }}°C Température</span>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                            {% endif %}#}
+
+{#                         Bloc humidité#}
+{#                            {% if value.nom == "hum" %}#}
+{#                        <div class="humidity mt-2 p-0 border-0 rounded">#}
+{#                            <div class="icon-container rounded-left">#}
+{#                                <img src="{{ asset('images/icon_humidity.png') }}" alt="Logo Temp" class="img-fluid p-2">#}
+{#                            </div>#}
+
+{#                            <div class="humidity-value justify-content-center d-flex align-items-center text-center">#}
+{#                                <span>{{ value.valeur }}% Humidité</span>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                            {% endif %}#}
+
+{#                         Bloc CO2#}
+{#                            {% if value.nom == "co2" %}#}
+{#                        <div class="co2 mt-2 p-0 border-0 rounded">#}
+{#                            <div class="icon-container rounded-left">#}
+{#                                <img src="{{ asset('images/icon_carbon.png') }}" alt="Logo Temp" class="img-fluid p-2">#}
+{#                            </div>#}
+
+{#                            <div class="co2-value justify-content-center d-flex align-items-center text-center">#}
+{#                                <span>{{ value.valeur }}ppm CO2</span>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                            {% endif %}#}
+
+{#                        {% endfor %}#}
+                        {% set lastTemp = null %}
+                        {% set lastCo2 = null %}
+                        {% set lastHum = null %}
+
                         {% for value in data %}
-
-                        {# Bloc température #}
-                            {% if value.nom == "temp" %}
-                        <div class="temp mt-2 p-0 border-0 rounded">
-                            <div class="icon-container rounded-left">
-                                <img src="{{ asset('images/icon_temperature.png') }}" alt="Logo Temp" class="img-fluid p-2">
-                            </div>
-                            
-                            <div class="temp-value justify-content-center d-flex align-items-center text-center">
-                                    <span>{{ value.valeur }}°C Température</span>
-                            </div>
-                        </div>
+                            {% if value.nom == "temp" and lastTemp == null%}
+                                {% set lastTemp = value %}
+                            {% elseif value.nom == "co2" and lastCo2 == null %}
+                                {% set lastCo2 = value %}
+                            {% elseif value.nom == "hum" and lastHum == null %}
+                                {% set lastHum = value %}
                             {% endif %}
-
-                        {# Bloc humidité #}
-                            {% if value.nom == "hum" %}
-                        <div class="humidity mt-2 p-0 border-0 rounded">
-                            <div class="icon-container rounded-left">
-                                <img src="{{ asset('images/icon_humidity.png') }}" alt="Logo Temp" class="img-fluid p-2">
-                            </div>
-                            
-                            <div class="humidity-value justify-content-center d-flex align-items-center text-center">
-                                <span>{{ value.valeur }}% Humidité</span>
-                            </div>
-                        </div>
-                            {% endif %}
-
-                        {# Bloc CO2 #}
-                            {% if value.nom == "co2" %}
-                        <div class="co2 mt-2 p-0 border-0 rounded">
-                            <div class="icon-container rounded-left">
-                                <img src="{{ asset('images/icon_carbon.png') }}" alt="Logo Temp" class="img-fluid p-2">
-                            </div>
-                            
-                            <div class="co2-value justify-content-center d-flex align-items-center text-center">
-                                <span>{{ value.valeur }}ppm CO2</span>
-                            </div>
-                        </div>
-                            {% endif %}
-
                         {% endfor %}
+
+                        {# Afficher les dernières valeurs de température, CO2 et humidité #}
+                        {% if lastTemp is not null %}
+                            <div class="temp mt-2 p-0 border-0 rounded">
+                                <div class="icon-container rounded-left">
+                                    <img src="{{ asset('images/icon_temperature.png') }}" alt="Logo Temp" class="img-fluid p-2">
+                                </div>
+
+                                <div class="temp-value justify-content-center d-flex align-items-center text-center">
+                                    <span>{{ lastTemp.valeur }}°C Température</span>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if lastCo2 is not null %}
+                            <div class="co2 mt-2 p-0 border-0 rounded">
+                                <div class="icon-container rounded-left">
+                                    <img src="{{ asset('images/icon_carbon.png') }}" alt="Logo Temp" class="img-fluid p-2">
+                                </div>
+
+                                <div class="co2-value justify-content-center d-flex align-items-center text-center">
+                                    <span>{{ lastCo2.valeur }}ppm CO2</span>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if lastHum is not null %}
+                            <div class="humidity mt-2 p-0 border-0 rounded">
+                                <div class="icon-container rounded-left">
+                                    <img src="{{ asset('images/icon_humidity.png') }}" alt="Logo Temp" class="img-fluid p-2">
+                                </div>
+
+                                <div class="humidity-value justify-content-center d-flex align-items-center text-center">
+                                    <span>{{ lastHum.valeur }}% Humidité</span>
+                                </div>
+                            </div>
+                        {% endif %}
                     </div>
 
                     {# Bouton Afficher les données #}

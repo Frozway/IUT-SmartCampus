@@ -3,18 +3,12 @@
 namespace App\Controller;
 
 use App\Form\FilterRoomDashboardType;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\SearchType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-
 
 class DashboardController extends AbstractController
 {
@@ -41,7 +35,7 @@ class DashboardController extends AbstractController
      */
     #[Route('/admin-dashboard', name: 'app_admin_dashboard')]
     #[IsGranted("ROLE_ADMIN")]
-    public function adminDashboardIndex(ManagerRegistry $doctrine,Request $request): Response
+    public function adminDashboardIndex(ManagerRegistry $doctrine, Request $request): Response
     {
         $entityManager = $doctrine->getManager();
 
@@ -54,45 +48,46 @@ class DashboardController extends AbstractController
         $alerts = array();
 
         foreach ($acquisitionSystems as $as) {
-            if ($as->isIsInstalled()) {
-                // The alert is created if the value is NEAR the limit
+            if ($as->getRoom()) {
+                if ($as->isIsInstalled()) {
+                    // The alert is created if the value is NEAR the limit
 
-                // CO2 too high
-                if ($as->getCo2() > 1300) {
-                    $alerts[] = array(
-                        'type' => 'co2',
-                        'category' => ($as->getCo2() > 1500) ? 'red' : 'orange',
-                        'value' => $as->getCo2() . ' ppm',
-                        'room' => $as->getRoom()->getName()
-                    );
-                }
+                    // CO2 too high
+                    if ($as->getCo2() > 1300) {
+                        $alerts[] = array(
+                            'type' => 'co2',
+                            'category' => ($as->getCo2() > 1500) ? 'red' : 'orange',
+                            'value' => $as->getCo2() . ' ppm',
+                            'room' => $as->getRoom()->getName(),
+                        );
+                    }
 
-                // Temperature to low or too high
-                if ($as->getTemperature() > 21 || $as->getTemperature() < 18) {
-                    $alerts[] = array(
-                        'type' => 'temperature',
-                        'category' => ($as->getTemperature() < 17) ? 'red' : 'orange',
-                        'value' => $as->getTemperature() . '°C',
-                        'room' => $as->getRoom()->getName()
-                    );
-                }
-                
-                // Humidity AND temperature too high
-                if ($as->getHumidity() > 60 && $as->getTemperature() > 20) {
-                    $alerts[] = array(
-                        'type' => 'humidity',
-                        'category' => ($as->getHumidity() > 70) ? 'red' : 'orange',
-                        'value' => $as->getHumidity() . '%',
-                        'room' => $as->getRoom()->getName()
-                    );
+                    // Temperature to low or too high
+                    if ($as->getTemperature() > 21 || $as->getTemperature() < 18) {
+                        $alerts[] = array(
+                            'type' => 'temperature',
+                            'category' => ($as->getTemperature() < 17) ? 'red' : 'orange',
+                            'value' => $as->getTemperature() . '°C',
+                            'room' => $as->getRoom()->getName(),
+                        );
+                    }
+
+                    // Humidity AND temperature too high
+                    if ($as->getHumidity() > 60 && $as->getTemperature() > 20) {
+                        $alerts[] = array(
+                            'type' => 'humidity',
+                            'category' => ($as->getHumidity() > 70) ? 'red' : 'orange',
+                            'value' => $as->getHumidity() . '%',
+                            'room' => $as->getRoom()->getName(),
+                        );
+                    }
                 }
             }
         }
 
         $form = $this->createForm(FilterRoomDashboardType::class, $rooms);
         $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid())
-        {
+        if ($form->isSubmitted() && $form->isValid()) {
             $floor = $form->get('Floor');
             $floor = $floor->getData();
 
@@ -115,7 +110,7 @@ class DashboardController extends AbstractController
                 'searchR' => $searchR,
                 'searchAS' => $searchAS,
                 'form' => $form,
-                'alerts' => $alerts  
+                'alerts' => $alerts,
             ]);
         }
 
@@ -127,7 +122,7 @@ class DashboardController extends AbstractController
             'searchR' => null,
             'searchAS' => null,
             'form' => $form,
-            'alerts' => $alerts
+            'alerts' => $alerts,
         ]);
     }
 

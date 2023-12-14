@@ -144,8 +144,13 @@
                                 </div>
                             {% endfor %}
 
-                            <!-- Ajouter une ligne de séparation -->
-                            <hr class="y-4" style="border-top: 2px solid #000;">
+                            {% if acquisitionSystems|filter(a => a.state == 0)|length == acquisitionSystems|length %}
+                                <!-- Affiche un message si aucun systèmes d'acquisition n'a d'opération à effectuer -->
+                                <p>Tous les systèmes d'acquisition sont installés.</p>
+                            {% else %}
+                                <!-- Ajouter une ligne de séparation -->
+                                <hr class="y-4" style="border-top: 2px solid #000;">
+                            {% endif %}
 
                             <!-- Boucle pour afficher chaque système d'acquisition installé et qui doit être désinstallé -->
                             {% for acquisitionSystem in acquisitionSystems %}

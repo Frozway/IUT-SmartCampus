@@ -63,10 +63,16 @@ class AdminController extends AbstractController
 
             $room->setAcquisitionSystem($selectedAcquisitionSystem);
 
+            if ($selectedAcquisitionSystem->isIsInstalled() == 1) {
+                $selectedAcquisitionSystem->setState(0);
+            } else {
+                $selectedAcquisitionSystem->setState(1);
+            }
+
             $entityManager->persist($room);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Le système d\'acquisition a été attribué à la salle avec succès.');
+            $this->addFlash('success', 'Le système d\'acquisition a été attribué à la salle avec succès. Le technicien en a été informé.');
             return $this->redirectToRoute('app_admin_room', ['id' => $id]);
         }
 
@@ -185,6 +191,15 @@ class AdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Vérifier si une salle a été choisie
+            if ($acquisitionSystem->getRoom() !== null) {
+                // Demander au technicien d'installer le système d'acquisition
+                $acquisitionSystem->setState(1);
+            } else {
+                // Ne rien faire si aucune salle n'a été choisie
+                $acquisitionSystem->setState(0);
+            }
+
             $entityManager->persist($acquisitionSystem);
             $entityManager->flush();
 
@@ -235,6 +250,13 @@ class AdminController extends AbstractController
             $room->setAcquisitionSystem(null);
         }
 
+        // Si le système d'acquisition est installé, demander au technicien de le désinstaller, sinon il s'agissait d'une erreur donc on ne fait rien
+        if ($acquisitionSystem->isIsInstalled() == 1) {
+            $acquisitionSystem->setState(2);
+        } else {
+            $acquisitionSystem->setState(0);
+        }
+
         // Supprimer la salle
         $entityManager->remove($room);
         $entityManager->flush();
@@ -275,6 +297,14 @@ class AdminController extends AbstractController
         if ($acquisitionSystem) {
             $acquisitionSystem->setRoom(null);
             $room->setAcquisitionSystem(null);
+        }
+
+        // Si le système d'acquisition est installé, demander au technicien de le désinstaller, sinon il s'agissait d'une erreur donc on ne fait rien
+        if ($acquisitionSystem->isIsInstalled() == 1) {
+            $acquisitionSystem->setState(2);
+        }
+        else {
+            $acquisitionSystem->setState(0);
         }
 
         $entityManager->flush();
@@ -322,6 +352,15 @@ class AdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Vérifier si une salle a été choisie
+            if ($acquisitionSystem->getRoom() !== null) {
+                // Demander au technicien d'installer le système d'acquisition
+                $acquisitionSystem->setState(1);
+            } else {
+                // Ne rien faire si aucune salle n'a été choisie
+                $acquisitionSystem->setState(0);
+            }
+
             $entityManager->flush();
 
             $this->addFlash('success', 'Le système d\'acquisition a été modifié avec succès.');

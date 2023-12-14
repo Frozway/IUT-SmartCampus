@@ -35,7 +35,8 @@ class AppFixtures extends Fixture
             $system->setTemperature(mt_rand(15, 25));
             $system->setHumidity(mt_rand(30, 80));
             $system->setCo2(mt_rand(300, 1700));
-            $system->setIsInstalled(1);
+            $system->setIsInstalled(mt_rand(0, 1));
+            $system->setState(mt_rand(0, 2));
             $manager->persist($system);
             
             // Override default values to create alerts

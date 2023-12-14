@@ -2,12 +2,12 @@
 
 namespace App\Controller;
 
+use Doctrine\Persistence\ManagerRegistry;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 class TechController extends AbstractController
 {
@@ -38,6 +38,9 @@ class TechController extends AbstractController
 
         // Mettre à jour l'attribut isInstalled à 1
         $acquisitionSystem->setIsInstalled(true);
+
+        // Mettre à jour l'état du système d'acquisition à 0
+        $acquisitionSystem->setState(0);
 
         // Enregistrer les modifications
         $entityManager->persist($acquisitionSystem);
@@ -77,6 +80,9 @@ class TechController extends AbstractController
 
         // Mettre à jour l'attribut isInstalled à 0
         $acquisitionSystem->setIsInstalled(false);
+
+        // Mettre à jour l'état du système d'acquisition à 0
+        $acquisitionSystem->setState(0);
 
         // Enregistrer les modifications
         $entityManager->persist($acquisitionSystem);

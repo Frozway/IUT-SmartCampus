@@ -45,15 +45,6 @@
     "tag": 1
   },
   {
-    "id": 56,
-    "nom": "hum",
-    "valeur": "80",
-    "dateCapture": "2023-12-12 08:00:00",
-    "localisation": "D205",
-    "description": "",
-    "tag": 1
-  },
-  {
     "id": 57,
     "nom": "temp",
     "valeur": "20.5",

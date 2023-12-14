@@ -181,6 +181,86 @@
         {# Bouton Supprimer la salle #}
         <button type="button" class="btn btn-custom-danger btn-lg mt-3 mx-2" style="width: 330px; height: 60px;" data-toggle="modal" data-target="#confirmDeleteModal"><i class="fa-solid fa-trash-can"></i> Supprimer la salle</button>
 
+{#        <div class="mt-4">#}
+{#            <h2>Toutes les données</h2>#}
+{#            <table class="table table-bordered">#}
+{#                <thead>#}
+{#                <tr>#}
+{#                    <th>Type</th>#}
+{#                    <th>Date de Capture</th>#}
+{#                    <th>Valeur</th>#}
+{#                </tr>#}
+{#                </thead>#}
+{#                <tbody>#}
+{#                {% for value in data %}#}
+{#                    <tr>#}
+{#                        <td>#}
+{#                            {% if value.nom == 'temp' %}#}
+{#                                Température#}
+{#                            {% elseif value.nom == 'co2' %}#}
+{#                                CO2#}
+{#                            {% elseif value.nom == 'hum' %}#}
+{#                                Humidité#}
+{#                            {% endif %}#}
+{#                        </td>#}
+{#                        <td>{{ value.dateCapture }}</td>#}
+{#                        <td>#}
+{#                            {% if value.nom == 'temp' %}#}
+{#                                {{ value.valeur }} °C#}
+{#                            {% elseif value.nom == 'co2' %}#}
+{#                                {{ value.valeur }} ppm#}
+{#                            {% elseif value.nom == 'hum' %}#}
+{#                                {{ value.valeur }} %#}
+{#                            {% endif %}#}
+{#                        </td>#}
+{#                    </tr>#}
+{#                {% endfor %}#}
+{#                </tbody>#}
+{#            </table>#}
+{#        </div>#}
+
+        <div class="mt-4">
+            <h2>Toutes les données</h2>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Date de Capture</th>
+                    <th>Température (°C)</th>
+                    <th>CO2 (ppm)</th>
+                    <th>Humidité (%)</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% set dataByDate = {} %}
+                {% for value in data %}
+                    {% set currentDate = value.dateCapture|date('Y-m-d H:i:s') %}
+                    {% if attribute(dataByDate, currentDate) is not defined %}
+                        {% set dataByDate = dataByDate|merge({(currentDate): {'temp': null, 'co2': null, 'hum': null, (value.nom): value.valeur}}) %}
+                    {% else %}
+                        {% set currentData = attribute(dataByDate, currentDate) %}
+                        {% set currentData = currentData|merge({(value.nom): value.valeur}) %}
+                        {% set dataByDate = dataByDate|merge({(currentDate): currentData}) %}
+                    {% endif %}
+                {% endfor %}
+
+
+
+                {% for currentDate, values in dataByDate %}
+                    <tr>
+                        <td>{{ currentDate }}</td>
+                        <td>{{ values['temp'] is not null ? values['temp'] ~ ' °C' : 'N/A' }}</td>
+                        <td>{{ values['co2'] is not null ? values['co2'] ~ ' ppm' : 'N/A' }}</td>
+                        <td>{{ values['hum'] is not null ? values['hum'] ~ ' %' : 'N/A' }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4">Aucune donnée disponible.</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
         <!-- Modal confirmation -->
         <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">

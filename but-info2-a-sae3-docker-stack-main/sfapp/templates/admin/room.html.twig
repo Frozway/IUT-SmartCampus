@@ -33,10 +33,10 @@
         </div>
 
         <div class="content" style="flex-grow: 1;">
-            <h2>Salle - {{ room.name }} - Étage {{ room.floor }} </h2>
-
-            {# Bouton Retour #}
-            <a href="{{ path('app_admin_dashboard') }}" class="btn btn-custom-secondary back"><i class="fa-solid fa-left-long"></i> Retour</a>
+            <h2 class="p-0">
+                <a href="{{ path('app_admin_dashboard') }}" class="btn btn-custom-secondary back"><i class="fa-solid fa-left-long"></i> Retour</a>
+                Salle - {{ room.name }} - Étage {{ room.floor }}
+            </h2>
 
             <div class="panel shadow">
                 Vue d'ensemble - {{ acquisitionSystem.name | default('Aucun système d\'acquisition associé') }}
@@ -87,36 +87,64 @@
 
                             {# Afficher les dernières valeurs de température, CO2 et humidité #}
                             {% if lastTemp is not null %}
-                                <div class="temp mt-2 p-0 border-0 rounded">
+                                <div class="value-container mt-2 p-0 border-0 rounded
+                                {% if acquisitionSystem.temperature is null %}
+                                normal
+                                {% elseif acquisitionSystem.temperature > 21 %}
+                                red
+                                {% elseif acquisitionSystem.temperature < 17 %}
+                                red
+                                {% else %}
+                                normal
+                                {% endif %}
+                                ">
                                     <div class="icon-container rounded-left">
                                         <img src="{{ asset('images/icon_temperature.png') }}" alt="Logo Temp" class="img-fluid p-2">
                                     </div>
 
-                                    <div class="temp-value justify-content-center d-flex align-items-center text-center">
+                                    <div class="value justify-content-center d-flex align-items-center text-center">
                                         <span>{{ lastTemp.valeur }}°C Température</span>
                                     </div>
                                 </div>
                             {% endif %}
 
                             {% if lastCo2 is not null %}
-                                <div class="co2 mt-2 p-0 border-0 rounded">
+                                <div class="value-container mt-2 p-0 border-0 rounded
+                                {% if acquisitionSystem.humidity is null %}
+                                normal
+                                {% elseif acquisitionSystem.humidity > 70 %}
+                                red
+                                {% else %}
+                                normal
+                                {% endif %}
+                                ">
                                     <div class="icon-container rounded-left">
                                         <img src="{{ asset('images/icon_carbon.png') }}" alt="Logo Temp" class="img-fluid p-2">
                                     </div>
 
-                                    <div class="co2-value justify-content-center d-flex align-items-center text-center">
+                                    <div class="value justify-content-center d-flex align-items-center text-center">
                                         <span>{{ lastCo2.valeur }}ppm CO2</span>
                                     </div>
                                 </div>
                             {% endif %}
 
                             {% if lastHum is not null %}
-                                <div class="humidity mt-2 p-0 border-0 rounded">
+                                <div class="value-container mt-2 p-0 border-0 rounded
+                                {% if acquisitionSystem.co2 is null %}
+                                normal
+                                {% elseif acquisitionSystem.co2 > 1500 %}
+                                red
+                                {% elseif acquisitionSystem.co2 > 1000 %}
+                                orange
+                                {% else %}
+                                normal
+                                {% endif %}
+                                ">
                                     <div class="icon-container rounded-left">
                                         <img src="{{ asset('images/icon_humidity.png') }}" alt="Logo Temp" class="img-fluid p-2">
                                     </div>
 
-                                    <div class="humidity-value justify-content-center d-flex align-items-center text-center">
+                                    <div class="value justify-content-center d-flex align-items-center text-center">
                                         <span>{{ lastHum.valeur }}% Humidité</span>
                                     </div>
                                 </div>
@@ -176,49 +204,6 @@
 
             </div>
 
-            <a href="{{ path('app_admin_edit_room', {'id': room.id}) }}"><button type="button" class="btn btn-custom-secondary btn-lg mt-3 mx-2" style="width: 330px; height: 60px;"><i class="fa-solid fa-pencil"></i> Modifier la salle</button></a>
-
-            {# Bouton Supprimer la salle #}
-            <button type="button" class="btn btn-custom-danger btn-lg mt-3 mx-2" style="width: 330px; height: 60px;" data-toggle="modal" data-target="#confirmDeleteModal"><i class="fa-solid fa-trash-can"></i> Supprimer la salle</button>
-
-            {#        <div class="mt-4">#}
-            {#            <h2>Toutes les données</h2>#}
-            {#            <table class="table table-bordered">#}
-            {#                <thead>#}
-            {#                <tr>#}
-            {#                    <th>Type</th>#}
-            {#                    <th>Date de Capture</th>#}
-            {#                    <th>Valeur</th>#}
-            {#                </tr>#}
-            {#                </thead>#}
-            {#                <tbody>#}
-            {#                {% for value in data %}#}
-            {#                    <tr>#}
-            {#                        <td>#}
-            {#                            {% if value.nom == 'temp' %}#}
-            {#                                Température#}
-            {#                            {% elseif value.nom == 'co2' %}#}
-            {#                                CO2#}
-            {#                            {% elseif value.nom == 'hum' %}#}
-            {#                                Humidité#}
-            {#                            {% endif %}#}
-            {#                        </td>#}
-            {#                        <td>{{ value.dateCapture }}</td>#}
-            {#                        <td>#}
-            {#                            {% if value.nom == 'temp' %}#}
-            {#                                {{ value.valeur }} °C#}
-            {#                            {% elseif value.nom == 'co2' %}#}
-            {#                                {{ value.valeur }} ppm#}
-            {#                            {% elseif value.nom == 'hum' %}#}
-            {#                                {{ value.valeur }} %#}
-            {#                            {% endif %}#}
-            {#                        </td>#}
-            {#                    </tr>#}
-            {#                {% endfor %}#}
-            {#                </tbody>#}
-            {#            </table>#}
-            {#        </div>#}
-
             <div class="mt-4">
                 <h2>Toutes les données</h2>
                 <table class="table table-bordered">
@@ -260,6 +245,11 @@
                     </tbody>
                 </table>
             </div>
+
+            <a href="{{ path('app_admin_edit_room', {'id': room.id}) }}"><button type="button" class="btn btn-custom-success mx-2 my-4"><i class="fa-solid fa-pencil"></i> Modifier la salle</button></a>
+    
+            {# Bouton Supprimer la salle #}
+            <button type="button" class="btn btn-danger mx-2 px-4 my-4" data-toggle="modal" data-target="#confirmDeleteModal"><i class="fa-solid fa-trash-can"></i> Supprimer la salle</button>
 
             <!-- Modal confirmation -->
             <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">

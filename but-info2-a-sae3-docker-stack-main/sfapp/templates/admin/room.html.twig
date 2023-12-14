@@ -102,17 +102,26 @@
                                         <img src="{{ asset('images/icon_temperature.png') }}" alt="Logo Temp" class="img-fluid p-2">
                                     </div>
 
-                                    <div class="value justify-content-center d-flex align-items-center text-center">
-                                        <span>{{ lastTemp.valeur }}°C Température</span>
+                                    <div class="value d-flex-columns align-items-center">
+                                        <p class="my-0" style="font-size: 22pt">{{ acquisitionSystem.temperature }}°C</p>
+                                        <p class="my-0">
+                                        {% if acquisitionSystem.temperature > 21 %}
+                                        Elevé
+                                        {% elseif acquisitionSystem.temperature < 17 %}
+                                        Bas
+                                        {% else %}
+                                        Normal
+                                        {% endif %}
+                                        </p>
                                     </div>
                                 </div>
                             {% endif %}
 
                             {% if lastCo2 is not null %}
                                 <div class="value-container mt-2 p-0 border-0 rounded
-                                {% if acquisitionSystem.humidity is null %}
+                                {% if lastCo2.valeur is null %}
                                 normal
-                                {% elseif acquisitionSystem.humidity > 70 %}
+                                {% elseif lastCo2.valeur >= 1500 %}
                                 red
                                 {% else %}
                                 normal
@@ -122,19 +131,26 @@
                                         <img src="{{ asset('images/icon_carbon.png') }}" alt="Logo Temp" class="img-fluid p-2">
                                     </div>
 
-                                    <div class="value justify-content-center d-flex align-items-center text-center">
-                                        <span>{{ lastCo2.valeur }}ppm CO2</span>
+                                    <div class="value d-flex-columns align-items-center">
+                                        <p class="my-0" style="font-size: 22pt">{{ lastCo2.valeur }} ppm</p>
+                                        <p class="my-0">
+                                            {% if lastCo2.valeur <  1500 %}
+                                            Elevé
+                                            {% else %}
+                                            Normal
+                                            {% endif %}
+                                        </p>
                                     </div>
                                 </div>
                             {% endif %}
 
                             {% if lastHum is not null %}
                                 <div class="value-container mt-2 p-0 border-0 rounded
-                                {% if acquisitionSystem.co2 is null %}
+                                {% if lastHum.valeur is null %}
                                 normal
-                                {% elseif acquisitionSystem.co2 > 1500 %}
+                                {% elseif lastHum.valeur >= 70 %}
                                 red
-                                {% elseif acquisitionSystem.co2 > 1000 %}
+                                {% elseif lastHum.valeur >= 60 %}
                                 orange
                                 {% else %}
                                 normal
@@ -144,8 +160,15 @@
                                         <img src="{{ asset('images/icon_humidity.png') }}" alt="Logo Temp" class="img-fluid p-2">
                                     </div>
 
-                                    <div class="value justify-content-center d-flex align-items-center text-center">
-                                        <span>{{ lastHum.valeur }}% Humidité</span>
+                                    <div class="value d-flex-columns align-items-center">
+                                        <p class="my-0" style="font-size: 22pt">{{ lastHum.valeur }}%</p>
+                                        <p class="my-0">
+                                            {% if lastHum.valeur >= 70 %}
+                                            Elevé
+                                            {% else %}
+                                            Normal
+                                            {% endif %}
+                                        </p>
                                     </div>
                                 </div>
                             {% endif %}
@@ -204,46 +227,48 @@
 
             </div>
 
-            <div class="mt-4">
-                <h2>Toutes les données</h2>
-                <table class="table table-bordered">
-                    <thead>
-                    <tr>
-                        <th>Date de Capture</th>
-                        <th>Température (°C)</th>
-                        <th>CO2 (ppm)</th>
-                        <th>Humidité (%)</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% set dataByDate = {} %}
-                    {% for value in data %}
-                        {% set currentDate = value.dateCapture|date('Y-m-d H:i:s') %}
-                        {% if attribute(dataByDate, currentDate) is not defined %}
-                            {% set dataByDate = dataByDate|merge({(currentDate): {'temp': null, 'co2': null, 'hum': null, (value.nom): value.valeur}}) %}
+            <div class="panel shadow">
+                <div class="mt-4">
+                    <h2>Toutes les données</h2>
+                    <table class="table table-stripe">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th>Date de Capture</th>
+                            <th>Température (°C)</th>
+                            <th>CO2 (ppm)</th>
+                            <th>Humidité (%)</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% set dataByDate = {} %}
+                        {% for value in data %}
+                            {% set currentDate = value.dateCapture|date('Y-m-d H:i:s') %}
+                            {% if attribute(dataByDate, currentDate) is not defined %}
+                                {% set dataByDate = dataByDate|merge({(currentDate): {'temp': null, 'co2': null, 'hum': null, (value.nom): value.valeur}}) %}
+                            {% else %}
+                                {% set currentData = attribute(dataByDate, currentDate) %}
+                                {% set currentData = currentData|merge({(value.nom): value.valeur}) %}
+                                {% set dataByDate = dataByDate|merge({(currentDate): currentData}) %}
+                            {% endif %}
+                        {% endfor %}
+
+
+
+                        {% for currentDate, values in dataByDate %}
+                            <tr>
+                                <td>{{ currentDate }}</td>
+                                <td>{{ values['temp'] is not null ? values['temp'] ~ ' °C' : 'N/A' }}</td>
+                                <td>{{ values['co2'] is not null ? values['co2'] ~ ' ppm' : 'N/A' }}</td>
+                                <td>{{ values['hum'] is not null ? values['hum'] ~ ' %' : 'N/A' }}</td>
+                            </tr>
                         {% else %}
-                            {% set currentData = attribute(dataByDate, currentDate) %}
-                            {% set currentData = currentData|merge({(value.nom): value.valeur}) %}
-                            {% set dataByDate = dataByDate|merge({(currentDate): currentData}) %}
-                        {% endif %}
-                    {% endfor %}
-
-
-
-                    {% for currentDate, values in dataByDate %}
-                        <tr>
-                            <td>{{ currentDate }}</td>
-                            <td>{{ values['temp'] is not null ? values['temp'] ~ ' °C' : 'N/A' }}</td>
-                            <td>{{ values['co2'] is not null ? values['co2'] ~ ' ppm' : 'N/A' }}</td>
-                            <td>{{ values['hum'] is not null ? values['hum'] ~ ' %' : 'N/A' }}</td>
-                        </tr>
-                    {% else %}
-                        <tr>
-                            <td colspan="4">Aucune donnée disponible.</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+                            <tr>
+                                <td colspan="4">Aucune donnée disponible.</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <a href="{{ path('app_admin_edit_room', {'id': room.id}) }}"><button type="button" class="btn btn-custom-success mx-2 my-4"><i class="fa-solid fa-pencil"></i> Modifier la salle</button></a>

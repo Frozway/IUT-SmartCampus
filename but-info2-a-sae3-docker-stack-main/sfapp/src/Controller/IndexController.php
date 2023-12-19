@@ -17,7 +17,7 @@ class IndexController extends AbstractController
      * @Route('/', name='app_index')
      * @return Response
      */
-    #[Route('/', name: 'app_index')]
+    #[Route('/login', name: 'app_index')]
     public function index(AuthenticationUtils $authenticationUtils): Response
     {
         if ($this->getUser() && in_array("ROLE_ADMIN", $this->getUser()->getRoles())) {

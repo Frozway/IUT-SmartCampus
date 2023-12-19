@@ -1,0 +1,23 @@
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-custom-danger btn-md mx-3" data-toggle="modal" data-target="#confirmUnassignModal"><i class="fa-solid fa-link-slash"></i> Désattribuer le S.A.</button>
+
+<!-- Modal confirmation unassign an AcquisitionSystem in Room Details -->
+<div class="modal fade" id="confirmUnassignModal" tabindex="-1" role="dialog" aria-labelledby="confirmUnassignModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmUnassignModalLabel">Confirmation de désattribution</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Êtes-vous sûr de vouloir désattribuer le système d'acquisition de cette salle ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-custom-secondary" data-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-custom-danger" onclick="window.location.href='{{ path('app_admin_unassign_as', {'id': room.id}) }}'"><i class="fa-solid fa-link-slash"></i> Désattribuer</button>
+            </div>
+        </div>
+    </div>
+</div>

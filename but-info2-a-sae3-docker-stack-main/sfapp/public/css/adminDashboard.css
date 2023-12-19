@@ -32,45 +32,6 @@ h2 {
   transition: 0.15s;
 }
 
-.alerte {
-  color: white;
-  display: flex;
-  width: fit-content;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.alerte .icon-container {
-  width: 64px;
-}
-
-.alert-orange {
-  background-color: #fdcb6e;
-}
-
-.alert-red {
-  background-color: #ff7675;
-}
-
-.alert-orange .icon-container {
-  background-color: #ffad33;
-}
-
-.alert-red .icon-container {
-  background-color: #d63031;
-}
-
-.alerte .room-name {
-  padding: 8px 12px;
-  font-size: 16pt;
-  font-weight: 600;
-}
-
-.alerte p {
-  margin: 0;
-  line-height: 25px;
-}
-
 a:hover {
   text-decoration: none;
 }

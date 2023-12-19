@@ -1,0 +1,14 @@
+{% block stylesheets %}
+
+<link rel="stylesheet" href="{{ asset('css/sidebar.css') }}">
+
+{% endblock %}
+
+<div class="sidebar">
+    <div>
+        <img src="{{ asset('images/logo.png') }}" alt="Logo"/>
+    </div>
+    <div class="align-self-baseline d-flex justify-content-center w-100">
+        <a href="{{ path('app_logout') }}" class="btn" style="color: white"><i class="fa-solid fa-right-from-bracket fa-xl"></i></a>
+    </div>
+</div>

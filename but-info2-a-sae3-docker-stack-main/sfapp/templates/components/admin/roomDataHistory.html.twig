@@ -15,7 +15,7 @@
             {% for value in data %}
                 {% set currentDate = value.dateCapture|date('Y-m-d H:i:s') %}
                 {% if attribute(dataByDate, currentDate) is not defined %}
-                    {% set dataByDate = dataByDate|merge({(currentDate): {'temp': null, 'co2': null, 'hum': null, (value.nom): value.valeur}}) %}
+                    {% set dataByDate = dataByDate|merge({(currentDate): {'temperature': null, 'co2': null, 'humidity': null, (value.nom): value.valeur}}) %}
                 {% else %}
                     {% set currentData = attribute(dataByDate, currentDate) %}
                     {% set currentData = currentData|merge({(value.nom): value.valeur}) %}
@@ -28,9 +28,9 @@
             {% for currentDate, values in dataByDate %}
                 <tr>
                     <td>{{ currentDate }}</td>
-                    <td>{{ values['temp'] is not null ? values['temp'] ~ ' °C' : 'N/A' }}</td>
+                    <td>{{ values['temperature'] is not null ? values['temperature'] ~ ' °C' : 'N/A' }}</td>
                     <td>{{ values['co2'] is not null ? values['co2'] ~ ' ppm' : 'N/A' }}</td>
-                    <td>{{ values['hum'] is not null ? values['hum'] ~ ' %' : 'N/A' }}</td>
+                    <td>{{ values['humidity'] is not null ? values['humidity'] ~ ' %' : 'N/A' }}</td>
                 </tr>
             {% else %}
                 <tr>

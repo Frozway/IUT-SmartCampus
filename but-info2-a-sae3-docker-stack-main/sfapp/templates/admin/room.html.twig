@@ -63,11 +63,11 @@
                             {% set lastHum = null %}
 
                             {% for value in data %}
-                                {% if value.nom == "temp" and lastTemp == null%}
+                                {% if value.nom == "temperature" and lastTemp == null%}
                                     {% set lastTemp = value %}
                                 {% elseif value.nom == "co2" and lastCo2 == null %}
                                     {% set lastCo2 = value %}
-                                {% elseif value.nom == "hum" and lastHum == null %}
+                                {% elseif value.nom == "humidity" and lastHum == null %}
                                     {% set lastHum = value %}
                                 {% endif %}
                             {% endfor %}
@@ -90,7 +90,7 @@
                                     </div>
 
                                     <div class="value d-flex-columns align-items-center">
-                                        <p class="my-0" style="font-size: 22pt">{{ acquisitionSystem.temperature }}°C</p>
+                                        <p class="my-0" style="font-size: 22pt">{{ lastTemp.valeur }}°C</p>
                                         <p class="my-0">
                                         {% if acquisitionSystem.temperature > 21 %}
                                         Elevé
@@ -144,7 +144,7 @@
                                 {% endif %}
                                 ">
                                     <div class="icon-container rounded-left">
-                                        <img src="{{ asset('images/icon_humidity.png') }}" alt="Logo Temp" class="img-fluid p-2">
+                                        <img src="{{ asset('images/icon_humidity.png') }}" alt="Logo Hum" class="img-fluid p-2">
                                     </div>
 
                                     <div class="value d-flex-columns align-items-center">

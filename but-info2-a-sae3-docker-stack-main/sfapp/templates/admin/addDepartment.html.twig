@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <link rel="stylesheet" href="{{ asset('css/adminDashboard.css') }}">
 
-
     <div class="page-wrapper d-inline-flex">
         
         {% include 'components/sidebar.html.twig' %}
@@ -18,6 +17,7 @@
                     <div class="col-lg-6 panel shadow">
                         <h1 class="text-center mb-4">Ajouter un Département</h1>
 
+                        {# Affichage des erreurs du formulaire #}
                         {% for error in errors %}
                             <div class="alert alert-danger">{{ error.message }}</div>
                         {% endfor %}

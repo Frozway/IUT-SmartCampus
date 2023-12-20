@@ -26,8 +26,8 @@ class Room
     #[ORM\OneToOne(mappedBy: 'room', cascade: ['persist', 'remove'])]
     private ?AcquisitionSystem $acquisitionSystem = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $department = null;
+    #[ORM\ManyToOne(inversedBy: 'rooms')]
+    private ?Department $department = null;
 
     /**
      * Obtient l'identifiant de la salle.
@@ -118,12 +118,12 @@ class Room
         return $this;
     }
 
-    public function getDepartment(): ?string
+    public function getDepartment(): ?Department
     {
         return $this->department;
     }
 
-    public function setDepartment(string $department): static
+    public function setDepartment(?Department $department): static
     {
         $this->department = $department;
 

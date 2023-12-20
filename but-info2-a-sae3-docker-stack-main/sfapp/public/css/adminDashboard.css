@@ -34,11 +34,4 @@ h2 {
 
 a:hover {
   text-decoration: none;
-}
-
-.sidebar {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-}
+} 

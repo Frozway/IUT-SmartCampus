@@ -1,15 +1,11 @@
 {% block stylesheets %}
 
-<link rel="stylesheet" href="{{ asset('css/sidebar.css') }}">
+<link rel="stylesheet" href="{{ asset('css/sidebar.css') }}"><link rel="stylesheet" href="{{ asset('css/adminDashboard.css') }}">
+
 
 {% endblock %}
 
 <div class="sidebar">
-    <div>
-        <a href="{{ path('app_index') }}" class="icon"><img src="{{ asset('images/logo.png') }}" alt="Logo"/></a>
-        
-    </div>
-    <div>
-        <a href="{{ path('app_logout') }}" class="icon" style="color: white"><i class="fa-solid fa-right-from-bracket fa-xl"></i></a>
-    </div>
+        <a href="{{ path('app_index') }}"><img src="{{ asset('images/logo.png') }}"  alt="Logo" width="50" height="50"></a>    
+        <a href="{{ path('app_logout') }}"><img src="{{ asset('svg/logout.svg') }}" class="logout" alt="Logout" width="50" height="50"></a>
 </div>

@@ -1,12 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Ajouter une Salle{% endblock %}
+{% block title %}Ajouter un Département{% endblock %}
 
 {% block body %}
 
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <link rel="stylesheet" href="{{ asset('css/adminDashboard.css') }}">
-
 
     <div class="page-wrapper d-inline-flex">
         <div class="sidebar">
@@ -17,7 +16,7 @@
             <div class="container mt-5">
                 <div class="row justify-content-center">
                     <div class="col-lg-6 panel shadow">
-                        <h1 class="text-center mb-4">Ajouter une Salle</h1>
+                        <h1 class="text-center mb-4">Ajouter un Département</h1>
 
                         {% for error in errors %}
                             <div class="alert alert-danger">{{ error.message }}</div>
@@ -26,22 +25,13 @@
                         {{ form_start(form) }}
 
                         <div class="form-group">
-                            {{ form_row(form.name, {'attr': {'class': 'form-control'}, 'label': 'Nom de la Salle'}) }}
-                        </div>
-
-                        <div class="form-group">
-                            {{ form_row(form.floor, {'attr': {'class': 'form-control'}, 'label': 'Étage'}) }}
-                        </div>
-
-                        <div class="form-group">
-                            {{ form_row(form.department, {'attr': {'class': 'form-control'}, 'label': 'Département'}) }}
+                            {{ form_row(form.name, {'attr': {'class': 'form-control'}, 'label': 'Nom du Département'}) }}
                         </div>
 
                         {{ form_rest(form) }}
 
                         <button type="submit" class="btn custom-btn custom-btn-primary btn-block mt-3"><i class="fa-solid fa-floppy-disk"></i> Enregistrer</button>
-                        <a href="{{ path('app_admin_add_department') }}" class="btn custom-btn btn-custom-success btn-block mt-2"><i class="fa-solid fa-pencil"></i> Modifier les départements</a>
-                        <a href="{{ path('app_admin_dashboard') }}" class="btn custom-btn btn-custom-danger btn-block mt-2"><i class="fa-solid fa-xmark"></i> Annuler</a>
+                        <a href="#" onclick="history.back();" class="btn custom-btn btn-custom-danger btn-block mt-2"><i class="fa-solid fa-xmark"></i> Annuler</a>
 
                         {{ form_end(form) }}
                     </div>

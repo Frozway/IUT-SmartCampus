@@ -3,10 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\AcquisitionSystem;
+use App\Entity\Department;
 use App\Entity\Room;
 use App\Form\AcquisitionSystemSelectionType;
 use App\Form\AcquisitionSystemType;
 use App\Form\RoomType;
+use App\Form\DepartmentType;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -426,6 +428,42 @@ class AdminController extends AbstractController
 
         // Rediriger vers une autre page après la suppression
         return $this->redirectToRoute('app_admin_dashboard');
+    }
+
+    /**
+     * @Route('/admin-dashboard/add-department', name: 'app_admin_add_department')
+     *
+     * Affiche le formulaire d'ajout d'un departement et l'ajoute à la base de données.
+     *
+     * @param Request $request La requête HTTP
+     * @param EntityManagerInterface $entityManager L'entité de gestion
+     * @return Response
+     */
+    #[Route('/admin-dashboard/add-department', name: 'app_admin_add_department')]
+    #[IsGranted("ROLE_ADMIN")]
+    public function addDepartment(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator): Response
+    {
+        $department = new Department();
+
+        $form = $this->createForm(DepartmentType::class, $department);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($department);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Le département a été ajouté avec succès.');
+
+            return $this->redirectToRoute('app_admin_add_room');
+        }
+
+        $errors = $validator->validate($department);
+
+        return $this->render('admin/addDepartment.html.twig', [
+            'form' => $form->createView(),
+            'errors' => $errors,
+        ]);
     }
 
 }

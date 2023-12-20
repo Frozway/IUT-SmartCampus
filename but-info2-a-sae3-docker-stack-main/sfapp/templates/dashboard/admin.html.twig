@@ -78,19 +78,19 @@
                             <div class="d-flex">
                                     {{ form_widget(form.SearchRoom, {'attr': {'class': 'form-control', 'placeholder': 'Rechercher...'}}) }}
                                     <button type="button" class="btn btn-custom-success ml-1" data-bs-toggle="modal" data-bs-target="#FilterModal"><i class="fa-solid fa-filter"></i></button>
-                            </div>                             
+                            </div>
                             <div class="ModalDiv">
                                 <div class="modal fade ChangeRoomModal" id="FilterModal" tabindex="-1" aria-labelledby="FilterModal" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered">
                                         <div class="modal-content">
                                             <div class="modal-body">
                                                 <h2>Filtres</h2>
-                                                
+
                                                 <div class="my-4">
                                                     <label for="floor" class="form-label">{{ form_label(form.Floor) }}</label>
                                                     {{ form_widget(form.Floor, {'attr': {'class': 'form-control'}}) }}
-                                                </div>  
-                                                
+                                                </div>
+
                                                 <div class="form-check my-4">
                                                     {{ form_widget(form.isAssigned, {'attr': {'class': 'form-check-input'}}) }}
                                                     <input type="checkbox" name="is-assigned" value={{ field_value(form.isAssigned) }} class="form-check-input">

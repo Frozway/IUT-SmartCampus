@@ -36,6 +36,10 @@
             <h2 class="p-0">
                 <a href="{{ path('app_admin_dashboard') }}" class="btn btn-custom-secondary back"><i class="fa-solid fa-left-long"></i> Retour</a>
                 Salle - {{ room.name }} - Étage {{ room.floor }}
+
+                {% if room.department is not null %}
+                    - Département {{ room.department.name }}
+                {% endif %}
             </h2>
 
             <div class="panel shadow">

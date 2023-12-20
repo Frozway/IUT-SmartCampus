@@ -13,14 +13,33 @@
 
         <div class="content" style="flex-grow: 1;">
 
-            <h2 class="p-0">
-                <a href="{{ path('app_admin_dashboard') }}" class="btn btn-custom-secondary back"><i class="fa-solid fa-left-long"></i> Retour</a>
-                Salle - {{ room.name }} - Étage {{ room.floor }}
+            <div class="title-bar d-flex align-items-center">
+                <a href="{{ path('app_admin_dashboard') }}" class="btn btn-custom-secondary back mr-3"><i class="fa-solid fa-left-long"></i> Retour</a>
+                
+                <span>
+                    Salle - {{ room.name }} - Étage {{ room.floor }}
+                    {% if room.department is not null %}
+                        - Département {{ room.department.name }}
+                    {% endif %}
+                </span>
 
                 {% if room.department is not null %}
                     - Département {{ room.department.name }}
                 {% endif %}
-            </h2>
+
+                <div class="ml-auto">
+                    
+                    {# Bouton modifier salle #}
+                    <a href="{{ path('app_admin_edit_room', {'id': room.id}) }}" class="btn btn-custom-success mx-2 my-4"><i class="fa-solid fa-pencil"></i> <span class="text-button">Modifier la salle</span></a>
+
+                    {# Bouton supprimer Salle #}
+                    {% include 'components/buttons/deleteRoom.html.twig' %}
+
+                </div>
+            </div>
+
+
+            
 
             {# Afficher les messages Flash pendant 5 secondes #}
             {% for messageType, flashMessages in app.session.flashbag.all() %}
@@ -175,12 +194,6 @@
                 {% endif %}
 
             </div>
-
-
-            <a href="{{ path('app_admin_edit_room', {'id': room.id}) }}"><button type="button" class="btn btn-custom-success mx-2 my-4"><i class="fa-solid fa-pencil"></i> Modifier la salle</button></a>
-    
-            {# Bouton Supprimer la salle #}
-            {% include 'components/buttons/deleteRoom.html.twig' %}
 
             {# Block d'historique des données #}
             {% include 'components/admin/roomDataHistory.html.twig' %}

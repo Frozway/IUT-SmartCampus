@@ -3,11 +3,17 @@ body {
     font-weight: 500;
 }
 
-h2 {
+.title-bar{
     background-color: white;
-    padding: 8px;
     font-size: 22pt;
 }
+
+@media (max-width: 935px) {
+    .text-button {
+        display: none !important;
+    }
+}
+
 
 .value-container {
     

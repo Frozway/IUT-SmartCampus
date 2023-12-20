@@ -6,9 +6,10 @@
 
 <div class="sidebar">
     <div>
-        <img src="{{ asset('images/logo.png') }}" alt="Logo"/>
+        <a href="{{ path('app_index') }}" class="icon"><img src="{{ asset('images/logo.png') }}" alt="Logo"/></a>
+        
     </div>
-    <div class="align-self-baseline d-flex justify-content-center w-100">
-        <a href="{{ path('app_logout') }}" class="btn" style="color: white"><i class="fa-solid fa-right-from-bracket fa-xl"></i></a>
+    <div>
+        <a href="{{ path('app_logout') }}" class="icon" style="color: white"><i class="fa-solid fa-right-from-bracket fa-xl"></i></a>
     </div>
 </div>

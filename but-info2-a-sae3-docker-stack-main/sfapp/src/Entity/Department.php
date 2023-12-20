@@ -6,8 +6,11 @@ use App\Repository\DepartmentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 
 #[ORM\Entity(repositoryClass: DepartmentRepository::class)]
+#[UniqueEntity(fields: "name", message: "Un département avec ce nom existe déjà.")]
 class Department
 {
     #[ORM\Id]
@@ -15,7 +18,7 @@ class Department
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique : true)]
     private ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'department', targetEntity: Room::class)]

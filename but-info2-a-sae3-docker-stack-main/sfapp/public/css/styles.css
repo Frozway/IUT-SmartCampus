@@ -88,3 +88,27 @@
 }
 
 /* end form */
+
+/* header */
+
+.title-bar{
+  background-color: white;
+  font-size: 15pt;
+  text-align: center;
+}
+
+.title-bar .dashboard-title {
+  padding: 8px;
+  font-size: 20pt;
+}
+
+  /* responsive for roomData page */
+
+@media (max-width: 1400px) {
+  .text-button {
+      display: none !important;
+  }
+}
+
+/* end header */
+

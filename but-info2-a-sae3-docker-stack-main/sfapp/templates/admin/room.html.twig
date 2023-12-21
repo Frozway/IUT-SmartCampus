@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <link rel="stylesheet" href="{{ asset('css/roomData.css') }}">
 
+
     <div class="page-wrapper d-inline-flex">
         
         {% include 'components/sidebar.html.twig'%}
@@ -14,10 +15,11 @@
         <div class="content" style="flex-grow: 1;">
 
             <div class="title-bar d-flex align-items-center">
+
                 <a href="{{ path('app_admin_dashboard') }}" class="btn btn-custom-secondary back mr-3"><i class="fa-solid fa-left-long"></i> Retour</a>
                 
                 <span>
-                    Salle - {{ room.name }} - Étage {{ room.floor }}
+                    Salle {{ room.name }} - Étage {{ room.floor }}
                     {% if room.department is not null %}
                         - Département {{ room.department.name }}
                     {% endif %}
@@ -32,10 +34,8 @@
                     {% include 'components/buttons/deleteRoom.html.twig' %}
 
                 </div>
+
             </div>
-
-
-            
 
             {# Afficher les messages Flash pendant 5 secondes #}
             {% for messageType, flashMessages in app.session.flashbag.all() %}

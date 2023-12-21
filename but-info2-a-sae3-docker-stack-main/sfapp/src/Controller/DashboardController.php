@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Room;
+use App\Entity\AcquisitionSystem;
 use App\Form\FilterRoomDashboardType;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,10 +21,94 @@ class DashboardController extends AbstractController
      * @return Response
      */
     #[Route('/', name: 'app_user_dashboard')]
-    public function userDashboardIndex(): Response
+    public function userDashboardIndex(ManagerRegistry $doctrine, Request $request): Response
     {
+        $entityManager = $doctrine->getManager();
+
+        $roomRepository = $entityManager->getRepository('App\Entity\Room');
+        $acquisitionSystemRepository = $entityManager->getRepository('App\Entity\AcquisitionSystem');
+
+        $rooms = $roomRepository->findAll();
+        $acquisitionSystems = $acquisitionSystemRepository->findAll();
+
+        $alerts = array();
+
+        foreach ($acquisitionSystems as $as) {
+            if ($as->getRoom()) {
+                if ($as->isIsInstalled()) {
+                    // The alert is created if the value is NEAR the limit
+
+                    // CO2 too high
+                    if ($as->getCo2() > 1300) {
+                        $alerts[] = array(
+                            'type' => 'co2',
+                            'category' => ($as->getCo2() > 1500) ? 'red' : 'orange',
+                            'value' => $as->getCo2() . ' ppm',
+                            'room' => $as->getRoom()->getName(),
+                        );
+                    }
+
+                    // Temperature to low or too high
+                    if ($as->getTemperature() > 21 || $as->getTemperature() < 18) {
+                        $alerts[] = array(
+                            'type' => 'temperature',
+                            'category' => ($as->getTemperature() < 17) ? 'red' : 'orange',
+                            'value' => $as->getTemperature() . '°C',
+                            'room' => $as->getRoom()->getName(),
+                        );
+                    }
+
+                    // Humidity AND temperature too high
+                    if ($as->getHumidity() > 60 && $as->getTemperature() > 20) {
+                        $alerts[] = array(
+                            'type' => 'humidity',
+                            'category' => ($as->getHumidity() > 70) ? 'red' : 'orange',
+                            'value' => $as->getHumidity() . '%',
+                            'room' => $as->getRoom()->getName(),
+                        );
+                    }
+                }
+            }
+        }
+
+        $form = $this->createForm(FilterRoomDashboardType::class, $rooms);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $floor = $form->get('Floor');
+            $floor = $floor->getData();
+
+            $assigned = $form->get('isAssigned');
+            $assigned = $assigned->getData();
+
+            $searchR = $form->get('SearchRoom');
+            $searchR = $searchR->getData();
+            $searchR = strtoupper($searchR);
+
+            $searchAS = $form->get('SearchAS');
+            $searchAS = $searchAS->getData();
+            $searchAS = strtoupper($searchAS);
+
+            return $this->render('dashboard/user.html.twig', [
+                'rooms' => $rooms,
+                'acquisitionSystems' => $acquisitionSystems,
+                'floor' => $floor,
+                'assigned' => $assigned,
+                'searchR' => $searchR,
+                'searchAS' => $searchAS,
+                'form' => $form,
+                'alerts' => $alerts,
+            ]);
+        }
+
         return $this->render('dashboard/user.html.twig', [
-            'controller_name' => 'DashboardController',
+            'rooms' => $rooms,
+            'acquisitionSystems' => $acquisitionSystems,
+            'floor' => null,
+            'assigned' => null,
+            'searchR' => null,
+            'searchAS' => null,
+            'form' => $form,
+            'alerts' => $alerts,
         ]);
     }
 

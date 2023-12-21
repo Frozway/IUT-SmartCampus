@@ -4,9 +4,9 @@
 
 {% block body %}
 <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
-<link rel="stylesheet" href="{{ asset('css/landingPage.css') }}">
+<link rel="stylesheet" href="{{ asset('css/login.css') }}">
 
-<h1><span style="font-weight: 800">SMART</span><span style="font-weight: 200">CAMPUS</span></h1>
+<a href="{{ path('app_user_dashboard') }}"><img src="{{ asset('images/smartlogo/logo_3.png') }}"  alt="Logo" class="logoName" height="80"></a>    
 
 {% if error %}
     <div class="alert alert-danger fixed-bottom my-0">{{ error.messageKey|trans(error.messageData, 'security') }}</div>

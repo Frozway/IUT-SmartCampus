@@ -31,7 +31,7 @@ class IndexController extends AbstractController
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        return $this->render('index/index.html.twig', [
+        return $this->render('index/login.html.twig', [
             'last_username' => $lastUsername,
             'error' => $error,
         ]);

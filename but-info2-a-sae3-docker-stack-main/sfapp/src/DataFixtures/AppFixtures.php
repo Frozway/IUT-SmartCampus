@@ -6,6 +6,7 @@ namespace App\DataFixtures;
 use App\Entity\Room;
 use App\Entity\AcquisitionSystem;
 use App\Entity\User;
+use App\Entity\Department;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -13,22 +14,38 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager)
     {
+        // Création des départements
+        $departmentNames = ['Informatique', 'Réseaux et Télécommunications', 'Génie Biologique', 'Génie Civile', 'Techniques de commercialisation'];
+
+        foreach ($departmentNames as $departmentName) {
+            $department = new Department();
+            $department->setName($departmentName);
+            $manager->persist($department);
+        }
+
+        $manager->flush();
+
+        // Récupération des départements
+        $departments = $manager->getRepository(Department::class)->findAll();
+
+        // Création des salles et association avec les départements
         $rooms = ['D001', 'D002', 'D003', 'D004', 'D005'];
 
-        foreach ($rooms as $roomName) {
+        foreach ($rooms as $key => $roomName) {
             $room = new Room();
             $room->setName($roomName);
             $room->setFloor(0);
-            $room->setDepartment('Informatique');
+            $room->setDepartment($departments[$key]);
             $manager->persist($room);
         }
 
         $manager->flush();
 
+        // Récupération de toutes les salles
         $allRooms = $manager->getRepository(Room::class)->findAll();
 
+        // Création des systèmes d'acquisition associés à chaque salle avec des données fictives
         foreach ($allRooms as $room) {
-            // Ajout d'un système d'acquisition associé à chaque salle avec des données fictives
             $system = new AcquisitionSystem();
             $system->setName('SA-' . substr($room->getName(), -3));
             $system->setRoom($room);
@@ -38,8 +55,8 @@ class AppFixtures extends Fixture
             $system->setIsInstalled(mt_rand(0, 1));
             $system->setState(mt_rand(0, 2));
             $manager->persist($system);
-            
-            // Override default values to create alerts
+
+            // Override des valeurs par défaut pour créer des alertes
             if ($room->getName() == 'D001') {
                 $system->setTemperature(16);
             }
@@ -58,8 +75,7 @@ class AppFixtures extends Fixture
             }
         }
 
-        
-
+        // Création des utilisateurs
         $admin = new User();
         $admin->setUsername('admin');
         $admin->setPassword('admin');

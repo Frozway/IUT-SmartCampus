@@ -1,23 +1,3 @@
-{% set lastTemp = [] %}
-{% set lastCo2 = [] %}
-{% set lastHumidity = [] %}
-
-{% for item in data|reverse %}
-    {% if item.nom == 'temp' %}
-        {% if lastTemp|length < 3 %}
-            {% set lastTemp = lastTemp|merge([item]) %}
-        {% endif %}
-    {% elseif item.nom == 'co2' %}
-        {% if lastCo2|length < 3 %}
-            {% set lastCo2 = lastCo2|merge([item]) %}
-        {% endif %}
-    {% elseif item.nom == 'hum' %}
-        {% if lastHumidity|length < 3 %}
-            {% set lastHumidity = lastHumidity|merge([item]) %}
-        {% endif %}
-    {% endif %}
-{% endfor %}
-
 {% extends 'base.html.twig' %}
 
 {% block title %}Salle - {{ room.name }}{% endblock %}
@@ -27,16 +7,44 @@
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <link rel="stylesheet" href="{{ asset('css/roomData.css') }}">
 
+
     <div class="page-wrapper d-inline-flex">
-        <div class="sidebar">
-            <img src="{{ asset('images/logo.png') }}" alt="Logo" />
-        </div>
+        
+        {% include 'components/sidebar.html.twig'%}
 
         <div class="content" style="flex-grow: 1;">
-            <h2 class="p-0">
-                <a href="{{ path('app_admin_dashboard') }}" class="btn btn-custom-secondary back"><i class="fa-solid fa-left-long"></i> Retour</a>
-                Salle - {{ room.name }} - Étage {{ room.floor }}
-            </h2>
+
+            <div class="title-bar d-flex align-items-center">
+
+                <a href="{{ path('app_admin_dashboard') }}" class="btn btn-custom-secondary back mr-3"><i class="fa-solid fa-left-long"></i> Retour</a>
+                
+                <span>
+                    Salle {{ room.name }} - Étage {{ room.floor }}
+                    {% if room.department is not null %}
+                        - Département {{ room.department.name }}
+                    {% endif %}
+                </span>
+
+                <div class="ml-auto">
+                    
+                    {# Bouton modifier salle #}
+                    <a href="{{ path('app_admin_edit_room', {'id': room.id}) }}" class="btn btn-custom-success mx-2 my-4"><i class="fa-solid fa-pencil"></i> <span class="text-button">Modifier la salle</span></a>
+
+                    {# Bouton supprimer Salle #}
+                    {% include 'components/buttons/deleteRoom.html.twig' %}
+
+                </div>
+
+            </div>
+
+            {# Afficher les messages Flash pendant 5 secondes #}
+            {% for messageType, flashMessages in app.session.flashbag.all() %}
+                {% for flashMessage in flashMessages %}
+                    <div class="alert alert-{{ messageType }} flash-message shadow" style="width: fit-content; padding: 8px 16px; margin: 8px;">
+                        {{ flashMessage }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
 
             <div class="panel shadow">
                 Vue d'ensemble - {{ acquisitionSystem.name | default('Aucun système d\'acquisition associé') }}
@@ -47,28 +55,7 @@
                     {% if acquisitionSystem.isInstalled %}
 
                         {# Bouton Désattribuer le système d'acquisition #}
-                        <button type="button" class="btn btn-custom-danger btn-md mx-3" data-toggle="modal" data-target="#confirmUnassignModal"><i class="fa-solid fa-link-slash"></i> Désattribuer le S.A.</button>
-
-                        <!-- Modal confirmation -->
-                        <div class="modal fade" id="confirmUnassignModal" tabindex="-1" role="dialog" aria-labelledby="confirmUnassignModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="confirmUnassignModalLabel">Confirmation de désattribution</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        Êtes-vous sûr de vouloir désattribuer le système d'acquisition de cette salle ?
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-custom-secondary" data-dismiss="modal">Annuler</button>
-                                        <button type="button" class="btn btn-custom-danger" onclick="window.location.href='{{ path('app_admin_unassign_as', {'id': room.id}) }}'"><i class="fa-solid fa-link-slash"></i> Désattribuer</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        {% include 'components/buttons/unassignAS.html.twig' %}
 
                         <div class="row mt-1 d-flex justify-content-start">
                             {% set lastTemp = null %}
@@ -76,11 +63,11 @@
                             {% set lastHum = null %}
 
                             {% for value in data %}
-                                {% if value.nom == "temp" and lastTemp == null%}
+                                {% if value.nom == "temperature" and lastTemp == null%}
                                     {% set lastTemp = value %}
                                 {% elseif value.nom == "co2" and lastCo2 == null %}
                                     {% set lastCo2 = value %}
-                                {% elseif value.nom == "hum" and lastHum == null %}
+                                {% elseif value.nom == "humidity" and lastHum == null %}
                                     {% set lastHum = value %}
                                 {% endif %}
                             {% endfor %}
@@ -103,7 +90,7 @@
                                     </div>
 
                                     <div class="value d-flex-columns align-items-center">
-                                        <p class="my-0" style="font-size: 22pt">{{ acquisitionSystem.temperature }}°C</p>
+                                        <p class="my-0" style="font-size: 22pt">{{ lastTemp.valeur }}°C</p>
                                         <p class="my-0">
                                         {% if acquisitionSystem.temperature > 21 %}
                                         Elevé
@@ -157,7 +144,7 @@
                                 {% endif %}
                                 ">
                                     <div class="icon-container rounded-left">
-                                        <img src="{{ asset('images/icon_humidity.png') }}" alt="Logo Temp" class="img-fluid p-2">
+                                        <img src="{{ asset('images/icon_humidity.png') }}" alt="Logo Hum" class="img-fluid p-2">
                                     </div>
 
                                     <div class="value d-flex-columns align-items-center">
@@ -174,33 +161,10 @@
                             {% endif %}
                         </div>
 
-                        {# Bouton Afficher les données #}
-
                     {% else %}
 
                         {# Bouton Désattribuer le système d'acquisition #}
-                        <button type="button" class="btn btn-custom-danger btn-md mx-3" data-toggle="modal" data-target="#confirmUnassignModal"><i class="fa-solid fa-link-slash"></i> Désattribuer le S.A.</button>
-
-                        <!-- Modal confirmation -->
-                        <div class="modal fade" id="confirmUnassignModal" tabindex="-1" role="dialog" aria-labelledby="confirmUnassignModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="confirmUnassignModalLabel">Confirmation de désattribution</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        Êtes-vous sûr de vouloir désattribuer le système d'acquisition de cette salle ?
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-custom-secondary" data-dismiss="modal">Annuler</button>
-                                        <button type="button" class="btn btn-custom-danger" onclick="window.location.href='{{ path('app_admin_unassign_as', {'id': room.id}) }}'"><i class="fa-solid fa-link-slash"></i> Désattribuer</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        {% include 'components/buttons/unassignAS.html.twig' %}
 
                         {# Afficher un message si le système est assigné mais pas installé #}
                         <div class="alert alert-warning mt-3" role="alert">
@@ -227,79 +191,14 @@
 
             </div>
 
-            <div class="panel shadow">
-                <div class="mt-4">
-                    <h2>Toutes les données</h2>
-                    <table class="table table-stripe">
-                        <thead class="thead-dark">
-                        <tr>
-                            <th>Date de Capture</th>
-                            <th>Température (°C)</th>
-                            <th>CO2 (ppm)</th>
-                            <th>Humidité (%)</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% set dataByDate = {} %}
-                        {% for value in data %}
-                            {% set currentDate = value.dateCapture|date('Y-m-d H:i:s') %}
-                            {% if attribute(dataByDate, currentDate) is not defined %}
-                                {% set dataByDate = dataByDate|merge({(currentDate): {'temp': null, 'co2': null, 'hum': null, (value.nom): value.valeur}}) %}
-                            {% else %}
-                                {% set currentData = attribute(dataByDate, currentDate) %}
-                                {% set currentData = currentData|merge({(value.nom): value.valeur}) %}
-                                {% set dataByDate = dataByDate|merge({(currentDate): currentData}) %}
-                            {% endif %}
-                        {% endfor %}
+            {# Block d'historique des données #}
+            {% include 'components/admin/roomDataHistory.html.twig' %}
 
-
-
-                        {% for currentDate, values in dataByDate %}
-                            <tr>
-                                <td>{{ currentDate }}</td>
-                                <td>{{ values['temp'] is not null ? values['temp'] ~ ' °C' : 'N/A' }}</td>
-                                <td>{{ values['co2'] is not null ? values['co2'] ~ ' ppm' : 'N/A' }}</td>
-                                <td>{{ values['hum'] is not null ? values['hum'] ~ ' %' : 'N/A' }}</td>
-                            </tr>
-                        {% else %}
-                            <tr>
-                                <td colspan="4">Aucune donnée disponible.</td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <a href="{{ path('app_admin_edit_room', {'id': room.id}) }}"><button type="button" class="btn btn-custom-success mx-2 my-4"><i class="fa-solid fa-pencil"></i> Modifier la salle</button></a>
-    
-            {# Bouton Supprimer la salle #}
-            <button type="button" class="btn btn-danger mx-2 px-4 my-4" data-toggle="modal" data-target="#confirmDeleteModal"><i class="fa-solid fa-trash-can"></i> Supprimer la salle</button>
-
-            <!-- Modal confirmation -->
-            <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmation de suppression</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            Êtes-vous sûr de vouloir supprimer cette salle ?
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-custom-secondary" data-dismiss="modal">Annuler</button>
-                            <button type="button" class="btn btn-custom-danger" onclick="window.location.href = '{{ path('app_admin_delete_room', {'id': room.id}) }}';"><i class="fa-solid fa-trash-can"></i> Supprimer</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ asset('js/flashMessageHandler.js') }}"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
 {% endblock %}

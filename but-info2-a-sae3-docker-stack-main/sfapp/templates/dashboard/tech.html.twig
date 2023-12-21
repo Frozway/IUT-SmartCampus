@@ -8,58 +8,18 @@
 
     <div class="page-wrapper d-inline-flex">
 
-    <div class="sidebar">
-        <div>
-            <div>
-                <img src="{{ asset('images/logo.png') }}" alt="Logo"/>
-            </div>
-            <div class="logout-button fixed-bottom">
-                <!-- Make the logout button transparent and white text -->
-                <a href="{{ path('app_logout') }}" class="btn mx-1" style="color: white"><i class="fa-solid fa-right-from-bracket"></i></a>
-            </div>
-        </div>
-    </div>
+        {% include 'components/sidebar.html.twig' %}
 
         <div class="content" style="flex-grow: 1;">
 
-            <h2><i class="fa-solid fa-house"></i> Tableau de bord</h2>
+            <div class="title-bar d-flex align-items-center">
 
-            {# Alertes #}
-            <div class="flex">
+                <span class="dashboard-title">Tableau de bord</span>
 
-                <div class="panel shadow">
-                    <span class="fs-5">Alertes</span>
-                    <div class="row px-2 mt-2">
-                        <div class="alerte mt-2 mx-1 p-0 border-0">
-                            {# TODO: Icon #}
-                            <div class="icon-container p-2">
-                                <img src="{{ asset('images/icon_carbon.png') }}" alt
-                                    class="img-fluid">
-                            </div>
-                            <div class="room-name">D302</div>
-                        </div>
-
-                        <div class="alerte mt-2 mx-1 p-0 border-0">
-                            {# TODO: Icon #}
-                            <div class="icon-container p-2">
-                                <img
-                                    src="{{ asset('images/icon_temperature.png') }}"
-                                    alt class="img-fluid">
-                            </div>
-                            <div class="room-name">D302</div>
-                        </div>
-
-                        <div class="alerte mt-2 mx-1 p-0 border-0">
-                            {# TODO: Icon #}
-                            <div class="icon-container p-2">
-                                <img src="{{ asset('images/icon_humidity.png') }}"
-                                    alt class="img-fluid">
-                            </div>
-                            <div class="room-name">D302</div>
-                        </div>
-                    </div>
-                </div>
             </div>
+
+            <!-- Alertes -->
+            {% include 'components/alertsList.html.twig' %}
 
             {# Afficher les messages Flash pendant 5 secondes #}
             {% for messageType, flashMessages in app.session.flashbag.all() %}
@@ -73,119 +33,14 @@
             {# Systèmes D'acquisitions #}
             <div class="container m-0">
                 <div class="row listes">
-                    <div class="col panel shadow">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div class="fs-5">Systemes d'aquisition installés</div>
-                        </div>
 
-                        {% if acquisitionSystems|filter(a => a.isInstalled)|length == 0 %}
-                            <!-- Affiche un message si aucun système d'acquisition n'est installé -->
-                            <p>Aucun système d'acquisition installé.</p>
-                        {% else %}
-                            <ul class="mt-3">
-                                <!-- Boucle pour afficher chaque système d'acquisition -->
-                                {% for acquisitionSystem in acquisitionSystems %}
-                                    {% if acquisitionSystem.isInstalled %}
-                                        <li class="acquisition-system d-flex justify-content-between align-items-center">
-                                            <span>{{ acquisitionSystem.name }}</span>
+                    <!-- Liste des systèmes d'acquisition -->
+                    {% include 'components/acquisitionSystemList.html.twig'%}
 
-                                            {% if acquisitionSystem.getRoom() is null %}
-                                                <!-- Afficher "Non associé" si tel est le cas -->
-                                                <div class="alert alert-warning m-0 px-2 p-1">
-                                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                                    (Non associé)
-                                                </div>
-                                            {% else %}
-                                                <!-- Afficher la salle associée -->
-                                                <span>{{ acquisitionSystem.getRoom().name }}</span>
-                                            {% endif %}
-                                        </li>
-                                    {% endif %}
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
-                    </div>
+                    <!-- Liste des opérations -->
+                    {% include 'components/tech/operationList.html.twig'%}
 
-                    <div class="col panel shadow">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div class="fs-5">Opérations à effectuer</div>
-                        </div>
-                        <ul class="mt-3">
-                            <!-- Boucle pour afficher chaque système d'acquisition non installé et qui doit l'être -->
-                            {% for acquisitionSystem in acquisitionSystems %}
-                                {% if not acquisitionSystem.isInstalled %}
-                                    {% if acquisitionSystem.state == 1 %}
-                                        <li class="acquisition-system d-flex justify-content-between align-items-center">
-                                            <span>{{ acquisitionSystem.name }}</span>
-                                            <button type="button" class="btn btn-custom-success" data-toggle="modal" data-target="#confirmInstallModal-{{acquisitionSystem.id}}"><i class="fa-solid fa-plus"></i> Installer</button>
-                                        </li>
-                                    {% endif %}
-                                {% endif %}
-
-                                <!-- Modal confirmation -->
-                                <div class="modal fade" id="confirmInstallModal-{{acquisitionSystem.id}}" tabindex="-1" role="dialog" aria-labelledby="confirmInstallModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="confirmInstallModalLabel">Confirmation d'installation</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                Êtes-vous sûr de vouloir installer le système d'aquisition ?
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-custom-danger" data-dismiss="modal">Annuler</button>
-                                                <button type="button" class="btn btn-custom-success" onclick="window.location.href = '{{ path('app_tech_install_acquisition_system', {'id': acquisitionSystem.id}) }}'"><i class="fa-solid fa-plus"></i> Installer</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endfor %}
-
-                            {% if acquisitionSystems|filter(a => a.state == 0)|length == acquisitionSystems|length %}
-                                <!-- Affiche un message si aucun systèmes d'acquisition n'a d'opération à effectuer -->
-                                <p>Tous les systèmes d'acquisition sont installés.</p>
-                            {% else %}
-                                <!-- Ajouter une ligne de séparation -->
-                                <hr class="y-4" style="border-top: 2px solid #000;">
-                            {% endif %}
-
-                            <!-- Boucle pour afficher chaque système d'acquisition installé et qui doit être désinstallé -->
-                            {% for acquisitionSystem in acquisitionSystems %}
-                                {% if acquisitionSystem.isInstalled %}
-                                    {% if acquisitionSystem.state == 2 %}
-                                        <li class="acquisition-system d-flex justify-content-between align-items-center red-border">
-                                            <span>{{ acquisitionSystem.name }}</span>
-                                            <button type="button" class="btn btn-custom-danger" data-toggle="modal" data-target="#confirmUninstallModal-{{acquisitionSystem.id}}"><i class="fa-solid fa-minus"></i> Désinstaller</button>
-                                        </li>
-                                    {% endif %}
-                                {% endif %}
-
-                                <!-- Modal confirmation -->
-                                <div class="modal fade" id="confirmUninstallModal-{{acquisitionSystem.id}}" tabindex="-1" role="dialog" aria-labelledby="confirmUninstallModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="confirmUninstallModalLabel">Confirmation de désinstallation</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                Êtes-vous sûr de vouloir désinstaller le système d'aquisition ?
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-custom-danger" data-dismiss="modal">Annuler</button>
-                                                <button type="button" class="btn btn-custom-success" onclick="window.location.href = '{{ path('app_tech_uninstall_acquisition_system', {'id': acquisitionSystem.id}) }}'"><i class="fa-solid fa-minus"></i> Désinstaller</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </ul>
-                    </div>
+                    
                 </div>
             </div>
         </div>

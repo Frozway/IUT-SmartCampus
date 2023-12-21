@@ -3,10 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\AcquisitionSystem;
+use App\Entity\Department;
 use App\Entity\Room;
 use App\Form\AcquisitionSystemSelectionType;
 use App\Form\AcquisitionSystemType;
 use App\Form\RoomType;
+use App\Form\DepartmentType;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,6 +18,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
+
 
 class AdminController extends AbstractController
 {
@@ -31,13 +35,12 @@ class AdminController extends AbstractController
      */
     #[Route('/admin-dashboard/room/{id?}', name: 'app_admin_room')]
     #[IsGranted("ROLE_ADMIN")]
-    public function roomIndex(?int $id, ManagerRegistry $doctrine, Request $request): Response
+    public function roomIndex(?int $id, ManagerRegistry $doctrine, Request $request, HttpClientInterface $httpClient): Response
     {
         $entityManager = $doctrine->getManager();
-
         $acquisitionSystemRepository = $entityManager->getRepository('App\Entity\AcquisitionSystem');
-
         $roomRepository = $entityManager->getRepository('App\Entity\Room');
+
         $room = $roomRepository->find($id);
 
         if (!$room) {
@@ -45,12 +48,8 @@ class AdminController extends AbstractController
         }
 
         $acquisitionSystem = $room->getAcquisitionSystem();
+        $unassignedAcquisitionSystems = $acquisitionSystemRepository->findBy(['room' => null]);
 
-        // Récupérer la liste des systèmes d'acquisition non assignés
-        $unassignedAcquisitionSystems = $acquisitionSystemRepository
-            ->findBy(['room' => null]);
-
-        // Créer le formulaire de sélection du système d'acquisition avec la liste des systèmes non assignés
         $form = $this->createForm(AcquisitionSystemSelectionType::class, null, [
             'unassigned_acquisition_systems' => $unassignedAcquisitionSystems,
         ]);
@@ -58,7 +57,6 @@ class AdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Récupérer le système d'acquisition sélectionné
             $selectedAcquisitionSystem = $form->getData()['acquisitionSystem'];
 
             $room->setAcquisitionSystem($selectedAcquisitionSystem);
@@ -76,20 +74,33 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('app_admin_room', ['id' => $id]);
         }
 
-        $json = file_get_contents('./json/sa1.json');
-        $values = json_decode($json, true);
+        try {
+            // Effectuer une requête HTTP à votre API
+            $apiResponse = $httpClient->request('GET', 'https://sae34.k8s.iut-larochelle.fr/api/captures', [
+                'headers' => [
+                    'accept' => 'application/ld+json',
+                    'dbname' => 'sae34bdk1eq3',
+                    'username' => 'k1eq3',
+                    'userpass' => 'wohtuh-nigzup-diwhE4'
+                ],
+            ]);
+            $apiData = $apiResponse->toArray();
+        } catch (\Exception $e) {
+            $this->addFlash('error', 'Impossible de récupérer les données de l\'API.');
+            $apiData = [];
+        }
 
-        usort($values, function ($a, $b) {
+        usort($apiData, function ($a, $b) {
             return strtotime($a['dateCapture']) - strtotime($b['dateCapture']);
         });
 
-        $values = array_reverse($values);
+        $apiData = array_reverse($apiData);
 
         return $this->render('admin/room.html.twig', [
             'room' => $room,
             'acquisitionSystem' => $acquisitionSystem,
             'form' => $form->createView(),
-            'data' => $values,
+            'data' => $apiData,
         ]);
     }
 
@@ -426,6 +437,42 @@ class AdminController extends AbstractController
 
         // Rediriger vers une autre page après la suppression
         return $this->redirectToRoute('app_admin_dashboard');
+    }
+
+    /**
+     * @Route('/admin-dashboard/add-department', name: 'app_admin_add_department')
+     *
+     * Affiche le formulaire d'ajout d'un departement et l'ajoute à la base de données.
+     *
+     * @param Request $request La requête HTTP
+     * @param EntityManagerInterface $entityManager L'entité de gestion
+     * @return Response
+     */
+    #[Route('/admin-dashboard/add-department', name: 'app_admin_add_department')]
+    #[IsGranted("ROLE_ADMIN")]
+    public function addDepartment(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator): Response
+    {
+        $department = new Department();
+
+        $form = $this->createForm(DepartmentType::class, $department);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($department);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Le département a été ajouté avec succès.');
+
+            return $this->redirectToRoute('app_admin_add_room');
+        }
+
+        $errors = $validator->validate($department);
+
+        return $this->render('admin/addDepartment.html.twig', [
+            'form' => $form->createView(),
+            'errors' => $errors,
+        ]);
     }
 
 }

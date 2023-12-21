@@ -23,9 +23,10 @@
                 {% endif %}
             {% endfor %}
 
+            {# Get only the last 12 values #}
+            {% set last12Data = dataByDate|slice(0, 12) %}
 
-
-            {% for currentDate, values in dataByDate %}
+            {% for currentDate, values in last12Data %}
                 <tr>
                     <td>{{ currentDate }}</td>
                     <td>{{ values['temperature'] is not null ? values['temperature'] ~ ' °C' : 'N/A' }}</td>

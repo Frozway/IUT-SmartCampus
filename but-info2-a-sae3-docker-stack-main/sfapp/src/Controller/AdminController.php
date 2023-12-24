@@ -7,8 +7,8 @@ use App\Entity\Department;
 use App\Entity\Room;
 use App\Form\AcquisitionSystemSelectionType;
 use App\Form\AcquisitionSystemType;
-use App\Form\RoomType;
 use App\Form\DepartmentType;
+use App\Form\RoomType;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,7 +19,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-
 
 class AdminController extends AbstractController
 {
@@ -76,12 +75,12 @@ class AdminController extends AbstractController
 
         try {
             // Effectuer une requête HTTP à votre API
-            $apiResponse = $httpClient->request('GET', 'https://sae34.k8s.iut-larochelle.fr/api/captures', [
+            $apiResponse = $httpClient->request('GET', 'https://sae34.k8s.iut-larochelle.fr/api/captures/last?limit=36', [
                 'headers' => [
                     'accept' => 'application/ld+json',
                     'dbname' => 'sae34bdk1eq3',
                     'username' => 'k1eq3',
-                    'userpass' => 'wohtuh-nigzup-diwhE4'
+                    'userpass' => 'wohtuh-nigzup-diwhE4',
                 ],
             ]);
             $apiData = $apiResponse->toArray();
@@ -91,10 +90,8 @@ class AdminController extends AbstractController
         }
 
         usort($apiData, function ($a, $b) {
-            return strtotime($a['dateCapture']) - strtotime($b['dateCapture']);
+            return strtotime($b['dateCapture']) - strtotime($a['dateCapture']); // Les valeurs sont triées par ordre décroissant (la plus récente en premier)
         });
-
-        $apiData = array_reverse($apiData);
 
         return $this->render('admin/room.html.twig', [
             'room' => $room,
@@ -323,8 +320,7 @@ class AdminController extends AbstractController
         // Si le système d'acquisition est installé, demander au technicien de le désinstaller, sinon il s'agissait d'une erreur donc on ne fait rien
         if ($acquisitionSystem->isIsInstalled() == 1) {
             $acquisitionSystem->setState(2);
-        }
-        else {
+        } else {
             $acquisitionSystem->setState(0);
         }
 
@@ -362,12 +358,12 @@ class AdminController extends AbstractController
 
         $assignedRoom = $acquisitionSystem->getRoom();
 
-        if($assignedRoom) {
+        if ($assignedRoom) {
             $unassociatedRooms = array_merge($unassociatedRooms, array($assignedRoom));
         }
 
         $form = $this->createForm(AcquisitionSystemType::class, $acquisitionSystem, [
-            'unassociated_rooms' => $unassociatedRooms
+            'unassociated_rooms' => $unassociatedRooms,
         ]);
 
         $form->handleRequest($request);
@@ -400,7 +396,7 @@ class AdminController extends AbstractController
             'form_errors' => $form->getErrors(true),
         ]);
     }
-    
+
     /**
      * @Route('/admin-dashboard/acquisition-system/{id}/delete', name: 'app_admin_delete_acquisition_system')
      *

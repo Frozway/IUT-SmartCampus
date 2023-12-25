@@ -182,7 +182,7 @@
                             {# Affichez le formulaire de sélection du système d'acquisition #}
                             {{ form_start(form) }}
                             {{ form_widget(form.acquisitionSystem, {'attr': {'class': 'form-control'}}) }}
-                            <button type="submit" class="btn custom-btn-primary mt-2"><i class="fa-solid fa-link"></i> Attribuer</button>
+                            <button type="submit" class="btn custom-btn-primary mt-2">Attribuer</button>
                             {{ form_end(form) }}
                         </div>
                     </div>
@@ -190,6 +190,15 @@
                 {% endif %}
 
             </div>
+
+            <form class="panel shadow mt-4" id="dataLimitForm" action="{{ path('app_admin_room', {'id': room.id}) }}" method="get">
+                <select class="form-control" id="dataLimit" name="dataLimit">
+                    <option value="12" {% if app.request.query.get('dataLimit') == '12' %}selected{% endif %}>Dernières 12 heures</option>
+                    <option value="24" {% if app.request.query.get('dataLimit') == '24' %}selected{% endif %}>Dernières 24 heures</option>
+                    <option value="48" {% if app.request.query.get('dataLimit') == '48' %}selected{% endif %}>Dernières 48 heures</option>
+                </select>
+            </form>
+
 
             {# Block d'historique des données #}
             {% include 'components/admin/roomDataHistory.html.twig' %}
@@ -203,5 +212,23 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{ asset('js/flashMessageHandler.js') }}"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Récupérer la valeur de dataLimit depuis le stockage local
+            var savedDataLimit = localStorage.getItem('dataLimit');
+
+            // Définir la valeur par défaut de la liste déroulante
+            if (savedDataLimit) {
+                $('#dataLimit').val(savedDataLimit);
+            }
+
+            // Mettre à jour la valeur de la liste déroulante lorsqu'elle change
+            $('#dataLimit').on('change', function () {
+                // Soumettre automatiquement le formulaire lorsque la valeur change
+                $('#dataLimitForm').submit();
+            });
+        });
+    </script>
 
 {% endblock %}

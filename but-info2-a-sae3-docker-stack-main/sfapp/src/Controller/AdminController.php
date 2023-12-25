@@ -73,9 +73,11 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('app_admin_room', ['id' => $id]);
         }
 
+        $dataLimit = $request->query->get('dataLimit', 12);
+
         try {
             // Effectuer une requête HTTP à votre API
-            $apiResponse = $httpClient->request('GET', 'https://sae34.k8s.iut-larochelle.fr/api/captures/last?limit=36', [
+            $apiResponse = $httpClient->request('GET', "https://sae34.k8s.iut-larochelle.fr/api/captures/last?limit={$dataLimit}", [
                 'headers' => [
                     'accept' => 'application/ld+json',
                     'dbname' => 'sae34bdk1eq3',

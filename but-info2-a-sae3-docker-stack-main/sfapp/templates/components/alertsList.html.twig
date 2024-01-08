@@ -11,22 +11,11 @@
             {% if alerts is defined %}
             {% for alert in alerts %}
             <div class="alerte mt-2 mx-1 p-0 border-0 {{ alert.category == 'red' ? 'alert-red' :'alert-orange' }}">
-                <div class="icon-container p-2 d-inline-flex">
-                    {% if alert.type == 'co2' %}
-                        <img src="{{ asset('images/icon_carbon.png') }}" alt="" class="img-fluid">
-                    {% endif %}
-
-                    {% if alert.type == 'temperature' %}
-                        <img src="{{ asset('images/icon_temperature.png') }}" alt="" class="img-fluid">
-                    {% endif %}
-
-                    {% if alert.type == 'humidity' %}
-                        <img src="{{ asset('images/icon_humidity.png') }}" alt="" class="img-fluid">
-                    {% endif %}
+                <div class="icon-container p-2">
+                    <i class="fa-solid fa-triangle-exclamation fa-xl"></i>
                 </div>
-                <div class="room-name">
-                    <p style="font-size: 12pt; font-weight: 500;">{{ alert.room }}</p>
-                    <p style="font-weight: 800;">{{ alert.value }}</p>    
+                <div class="room-name d-flex justify-content-center align-items-center">
+                    <p>{{ alert.room }}</p>
                 </div>
             </div>
             {% endfor %}

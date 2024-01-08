@@ -55,31 +55,28 @@ class DashboardController extends AbstractController
                     // CO2 too high
                     if ($as->getCo2() > 1300) {
                         $alerts[] = array(
-                            'type' => 'co2',
                             'category' => ($as->getCo2() > 1500) ? 'red' : 'orange',
-                            'value' => $as->getCo2() . ' ppm',
                             'room' => $as->getRoom()->getName(),
                         );
+                        continue;
                     }
 
-                    // Temperature to low or too high
+                    // Temperature too low or too high
                     if ($as->getTemperature() > 21 || $as->getTemperature() < 18) {
                         $alerts[] = array(
-                            'type' => 'temperature',
                             'category' => ($as->getTemperature() < 17) ? 'red' : 'orange',
-                            'value' => $as->getTemperature() . '°C',
                             'room' => $as->getRoom()->getName(),
                         );
+                        continue;
                     }
 
                     // Humidity AND temperature too high
                     if ($as->getHumidity() > 60 && $as->getTemperature() > 20) {
                         $alerts[] = array(
-                            'type' => 'humidity',
                             'category' => ($as->getHumidity() > 70) ? 'red' : 'orange',
-                            'value' => $as->getHumidity() . '%',
                             'room' => $as->getRoom()->getName(),
                         );
+                        continue;
                     }
                 }
             }

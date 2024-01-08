@@ -5,11 +5,7 @@
     border-radius: 8px;
     overflow: hidden;
   }
-  
-  .alerte .icon-container {
-    width: 64px;
-  }
-  
+    
   .alert-orange {
     background-color: #fdcb6e;
   }

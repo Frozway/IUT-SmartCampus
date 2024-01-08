@@ -57,20 +57,35 @@
                         {# Bouton Désattribuer le système d'acquisition #}
                         {% include 'components/buttons/unassignAS.html.twig' %}
 
-                        <div class="row mt-1 d-flex justify-content-start">
-                            {% set lastTemp = null %}
-                            {% set lastCo2 = null %}
-                            {% set lastHum = null %}
+                        
+                        {% set lastTemp = null %}
+                        {% set lastCo2 = null %}
+                        {% set lastHum = null %}
 
-                            {% for value in data %}
-                                {% if value.nom == "temperature" and lastTemp == null%}
-                                    {% set lastTemp = value %}
-                                {% elseif value.nom == "co2" and lastCo2 == null %}
-                                    {% set lastCo2 = value %}
-                                {% elseif value.nom == "humidity" and lastHum == null %}
-                                    {% set lastHum = value %}
+                        {% for value in data %}
+                            {% if value.nom == "temp" and lastTemp == null%}
+                                {% set lastTemp = value %}
+                            {% elseif value.nom == "co2" and lastCo2 == null %}
+                                {% set lastCo2 = value %}
+                            {% elseif value.nom == "hum" and lastHum == null %}
+                                {% set lastHum = value %}
+                            {% endif %}
+                        {% endfor %}
+
+                        <div class="mt-1">
+                            {# Afficher le message une seule fois en haut de la page #}
+                            {% if lastTemp is not null and lastTemp.dateCapture is not null %}
+                                {% set temperatureDate = lastTemp.dateCapture|date('Y-m-d H:i:s') %}
+                                {% set currentDateTime = 'now'|date('Y-m-d H:i:s') %}
+                                {% set temperatureDifference = currentDateTime|date('U') - temperatureDate|date('U') %}
+
+                                {% if temperatureDifference > 360 %} {# 6 minutes en secondes #}
+                                    <p class="my-0 text-danger"><i class="fa-solid fa-exclamation-triangle"></i> Les données ne sont pas actuelles</p>
                                 {% endif %}
-                            {% endfor %}
+                            {% endif %}
+                        </div>
+
+                        <div class="row mt-1 d-flex justify-content-start">
 
                             {# Afficher les dernières valeurs de température, CO2 et humidité #}
                             {% if lastTemp is not null %}
@@ -191,7 +206,17 @@
 
             </div>
 
-            {# Block d'historique des données #}
+            <form class="panel shadow mt-4" id="dataLimitForm" action="{{ path('app_admin_room', {'id': room.id}) }}" method="get">
+                <label for="dataLimit">Plage de données visibles</label>
+                <select class="form-control" id="dataLimit" name="dataLimit">
+                    <option value="12" {% if app.request.query.get('dataLimit') == '12' %}selected{% endif %}>Dernières 12 heures</option>
+                    <option value="24" {% if app.request.query.get('dataLimit') == '24' %}selected{% endif %}>Dernières 24 heures</option>
+                    <option value="288" {% if app.request.query.get('dataLimit') == '288' %}selected{% endif %}>Dernières 288 heures</option>
+                </select>
+            </form>
+
+
+            {# Block d'historiques des données et des graphiques avec changement de plage de données #}
             {% include 'components/admin/roomDataHistory.html.twig' %}
 
         </div>

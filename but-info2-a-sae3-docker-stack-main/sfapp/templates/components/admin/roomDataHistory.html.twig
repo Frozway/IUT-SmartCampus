@@ -11,34 +11,61 @@
             </tr>
             </thead>
             <tbody>
-            {% set dataByDate = {} %}
-            {% for value in data %}
-                {% set currentDate = value.dateCapture|date('Y-m-d H:i:s') %}
-                {% if attribute(dataByDate, currentDate) is not defined %}
-                    {% set dataByDate = dataByDate|merge({(currentDate): {'temperature': null, 'co2': null, 'humidity': null, (value.nom): value.valeur}}) %}
-                {% else %}
-                    {% set currentData = attribute(dataByDate, currentDate) %}
-                    {% set currentData = currentData|merge({(value.nom): value.valeur}) %}
-                    {% set dataByDate = dataByDate|merge({(currentDate): currentData}) %}
-                {% endif %}
-            {% endfor %}
+                {% set dataByDate = {} %}
+                {% for value in data %}
+                    {% set currentDate = value.dateCapture|date('Y-m-d H:i:s') %}
+                    {% if attribute(dataByDate, currentDate) is not defined %}
+                        {% set dataByDate = dataByDate|merge({(currentDate): {'temp': null, 'co2': null, 'hum': null, (value.nom): value.valeur}}) %}
+                    {% else %}
+                        {% set currentData = attribute(dataByDate, currentDate) %}
+                        {% set currentData = currentData|merge({(value.nom): value.valeur}) %}
+                        {% set dataByDate = dataByDate|merge({(currentDate): currentData}) %}
+                    {% endif %}
+                {% endfor %}
 
             {# Get only the last 12 values #}
             {% set last12Data = dataByDate|slice(0, 12) %}
 
-            {% for currentDate, values in last12Data %}
-                <tr>
-                    <td>{{ currentDate }}</td>
-                    <td>{{ values['temperature'] is not null ? values['temperature'] ~ ' °C' : 'N/A' }}</td>
-                    <td>{{ values['co2'] is not null ? values['co2'] ~ ' ppm' : 'N/A' }}</td>
-                    <td>{{ values['humidity'] is not null ? values['humidity'] ~ ' %' : 'N/A' }}</td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="4">Aucune donnée disponible.</td>
-                </tr>
-            {% endfor %}
+                {% for currentDate, values in dataByDate %}
+                    <tr>
+                        <td>{{ currentDate }}</td>
+                        <td>{{ values['temp'] is not null ? values['temp'] ~ ' °C' : 'N/A' }}</td>
+                        <td>{{ values['co2'] is not null ? values['co2'] ~ ' ppm' : 'N/A' }}</td>
+                        <td>{{ values['hum'] is not null ? values['hum'] ~ ' %' : 'N/A' }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4">Aucune donnée disponible.</td>
+                    </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var labels = [];
+        var temperatureData = [];
+        var co2Data = [];
+        var humidityData = [];
+
+        {% for currentDate, values in dataByDate %}
+            labels.push('{{ currentDate|date('Y-m-d H:i') }}');
+            temperatureData.push({{ values['temp'] is not null ? values['temp'] : 'null' }});
+            co2Data.push({{ values['co2'] is not null ? values['co2'] : 'null' }});
+            humidityData.push({{ values['hum'] is not null ? values['hum'] : 'null' }});
+        {% endfor %}
+
+        // Inverser l'ordre des données
+        labels.reverse();
+        temperatureData.reverse();
+        co2Data.reverse();
+        humidityData.reverse();
+
+        createCharts(labels, temperatureData, co2Data, humidityData);
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ asset('js/roomDataCharts.js') }}"></script>

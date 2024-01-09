@@ -34,12 +34,14 @@
             <div class="container m-0">
                 <div class="row listes">
 
-                    <!-- Liste des systèmes d'acquisition -->
+                    {# Liste des systèmes d'acquisition #}
                     {% include 'components/acquisitionSystemList.html.twig'%}
 
-                    <!-- Liste des opérations -->
+                    {# Liste des opérations #}
                     {% include 'components/tech/operationList.html.twig'%}
 
+                    {# Notifications #}
+                    {% include 'components/tech/notificationsList.html.twig'%}
                     
                 </div>
             </div>

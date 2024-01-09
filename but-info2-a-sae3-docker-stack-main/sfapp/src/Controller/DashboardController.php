@@ -141,6 +141,9 @@ class DashboardController extends AbstractController
         $rooms = $roomRepository->findAll();
         $acquisitionSystems = $acquisitionSystemRepository->findAll();
 
+        $notificationsRepository = $entityManager->getRepository('App\Entity\TechNotification');
+        $notifications = $notificationsRepository->findAll();
+
         $alerts = array();
 
         foreach ($acquisitionSystems as $as) {
@@ -185,6 +188,7 @@ class DashboardController extends AbstractController
             'rooms' => $rooms,
             'acquisitionSystems' => $acquisitionSystems,
             'alerts' => $alerts,
+            'notifications' => $notifications,
         ]);
 
     }

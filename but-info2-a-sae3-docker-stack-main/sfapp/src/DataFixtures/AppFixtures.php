@@ -7,6 +7,7 @@ use App\Entity\Room;
 use App\Entity\AcquisitionSystem;
 use App\Entity\User;
 use App\Entity\Department;
+use App\Entity\TechNotification;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -74,6 +75,20 @@ class AppFixtures extends Fixture
                 $system->setIsInstalled(0);
             }
         }
+
+        //  Création des notification du technicien
+        $notification1 = new TechNotification();
+
+        $notification1->setText('Capteur déconnecté');
+        $notification1->setCreationDate(date_create('2024-01-06'));
+        $manager->persist($notification1);
+
+        $notification2 = new TechNotification();
+
+        $notification2->setText('La valeur affichée ne correspond pas à la réalité. L\'application affiche 18°C mais la temperature reele est plus proche de 22°C');
+        $notification2->setCreationDate(date_create('2024-01-02'));
+        $manager->persist($notification2);
+
 
         // Création des utilisateurs
         $admin = new User();

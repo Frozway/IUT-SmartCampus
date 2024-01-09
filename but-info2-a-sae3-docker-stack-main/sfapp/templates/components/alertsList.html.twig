@@ -9,16 +9,20 @@
         <span class="fs-5">Alertes</span>
         <div class="row px-2 mt-2">
             {% if alerts is defined %}
-            {% for alert in alerts %}
-            <div class="alerte mt-2 mx-1 p-0 border-0 {{ alert.category == 'red' ? 'alert-red' :'alert-orange' }}">
-                <div class="icon-container p-2">
-                    <i class="fa-solid fa-triangle-exclamation fa-xl"></i>
-                </div>
-                <div class="room-name d-flex justify-content-center align-items-center">
-                    <p>{{ alert.room }}</p>
-                </div>
-            </div>
-            {% endfor %}
+                {% if alerts | length > 0 %}
+                    {% for alert in alerts %}
+                        <div class="alerte mt-2 mx-1 p-0 border-0 {{ alert.category == 'red' ? 'alert-red' :'alert-orange' }}">
+                            <div class="icon-container p-2">
+                                <i class="fa-solid fa-triangle-exclamation fa-xl"></i>
+                            </div>
+                            <div class="room-name d-flex justify-content-center align-items-center">
+                                <p>{{ alert.room }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>Aucune alerte</p>
+                {% endif %}
             {% endif %}
         </div>
     </div>

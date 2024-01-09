@@ -73,7 +73,7 @@
                         {% endfor %}
 
                         <div class="mt-1">
-                            {# Afficher le message une seule fois en haut de la page #}
+                            {# Afficher un message si les données ont plus de 6 minutes en haut de la page #}
                             {% if lastTemp is not null and lastTemp.dateCapture is not null %}
                                 {% set temperatureDate = lastTemp.dateCapture|date('Y-m-d H:i:s') %}
                                 {% set currentDateTime = 'now'|date('Y-m-d H:i:s') %}
@@ -206,21 +206,29 @@
 
             </div>
 
-            <form class="panel shadow mt-4" id="dataLimitForm" action="{{ path('app_admin_room', {'id': room.id}) }}" method="get">
-                <label for="dataLimit">Plage de données visibles</label>
-                <select class="form-control" id="dataLimit" name="dataLimit">
-                    <option value="12" {% if app.request.query.get('dataLimit') == '12' %}selected{% endif %}>Dernières 12 heures</option>
-                    <option value="24" {% if app.request.query.get('dataLimit') == '24' %}selected{% endif %}>Dernières 24 heures</option>
-                    <option value="288" {% if app.request.query.get('dataLimit') == '288' %}selected{% endif %}>Dernières 288 heures</option>
-                </select>
-            </form>
+            {% if acquisitionSystem is not null %}
+
+                {% if acquisitionSystem.isInstalled %}
+
+                    <form class="panel shadow mt-4" id="dataLimitForm" action="{{ path('app_admin_room', {'id': room.id}) }}" method="get">
+                        <label for="dataLimit">Plage de données visibles</label>
+                        <select class="form-control" id="dataLimit" name="dataLimit">
+                            <option value="288" {% if app.request.query.get('dataLimit') == '288' %}selected{% endif %}>Dernières 24 heures</option>
+                            <option value="864" {% if app.request.query.get('dataLimit') == '864' %}selected{% endif %}>3 Derniers jours</option>
+                            <option value="2016" {% if app.request.query.get('dataLimit') == '2016' %}selected{% endif %}>Dernière semaine</option>
+                        </select>
+                    </form>
 
 
-            {# Block d'historiques des données et des graphiques avec changement de plage de données #}
-            {% include 'components/admin/roomDataHistory.html.twig' %}
+                    {# Block d'historiques des données et des graphiques avec changement de plage de données #}
+                    {% include 'components/admin/roomDataHistory.html.twig' %}
 
-            {# Block des graphiques des données
-            {% include 'components/admin/roomDataCharts.html.twig' %} #}
+                    {# Block des graphiques des données
+                    {% include 'components/admin/roomDataCharts.html.twig' %} #}
+
+                {% endif %}
+            
+            {% endif %}
 
         </div>
     </div>

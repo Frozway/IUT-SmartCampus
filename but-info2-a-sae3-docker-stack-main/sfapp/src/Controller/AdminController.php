@@ -73,7 +73,7 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('app_admin_room', ['id' => $id]);
         }
 
-        $dataLimit = $request->query->get('dataLimit', 12);
+        $dataLimit = $request->query->get('dataLimit', 288);
 
         try {
             // Effectuer une requête HTTP à votre API

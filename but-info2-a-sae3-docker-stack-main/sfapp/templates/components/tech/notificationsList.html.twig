@@ -3,32 +3,35 @@
         <div class="fs-5">Notifications</div>
     </div>
     <ul class="mt-3">
-        {% for notification in notifications %}
+        {% if notifications | length > 0 %}
+            {% for notification in notifications %}
 
-        {# Affiche le texte de la notification limité à 100 characteres #}
-        <li data-bs-toggle="modal" data-bs-target="#test{{loop.index}}">
-            {{ notification.text | length > 100 ? notification.text|slice(0, 100) ~ '...' : notification.text }}
-        </li>
+                {# Affiche le texte de la notification limité à 100 characteres #}
+                <li data-bs-toggle="modal" data-bs-target="#test{{loop.index}}">
+                    {{ notification.text | length > 100 ? notification.text|slice(0, 100) ~ '...' : notification.text }}
+                </li>
 
-        {# Modale contenant plus de détails sur la notification #}
-        <div class="modal" tabindex="-1" id="test{{loop.index}}">
-        <div class="modal-dialog">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Notification</h5>
-            </div>
-            <div class="modal-body">
-                <p><i>{{ notification.creationDate | date("d/m/y - H:i") }}</i></p>
-                <p>{{ notification.text }}</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-            </div>
-        </div>
-        </div>
+                {# Modale contenant plus de détails sur la notification #}
+                <div class="modal" tabindex="-1" id="test{{loop.index}}">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Notification</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p><i>{{ notification.creationDate | date("d/m/y - H:i") }}</i></p>
+                        <p>{{ notification.text }}</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                    </div>
+                </div>
+                </div>
 
-
-        {% endfor %}
+            {% endfor %}
+        {% else %}
+            <p>Aucune notification</p>
+        {% endif %}
     </ul>
 </div>

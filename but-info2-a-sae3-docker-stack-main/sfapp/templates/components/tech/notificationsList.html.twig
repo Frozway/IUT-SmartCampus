@@ -20,6 +20,7 @@
                     </div>
                     <div class="modal-body">
                         <p><i>{{ notification.creationDate | date("d/m/y - H:i") }}</i></p>
+                        <p><strong>{{ notification.room.name }}</strong></p>
                         <p>{{ notification.text }}</p>
                     </div>
                     <div class="modal-footer">

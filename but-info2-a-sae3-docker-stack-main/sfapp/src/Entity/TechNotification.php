@@ -17,6 +17,9 @@ class TechNotification
     #[ORM\Column(length: 255)]
     private ?string $text = null;
 
+    #[ORM\ManyToOne(targetEntity: Room::class)]
+    private ?Room $room = null;
+
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $creationDate = null;
 
@@ -36,6 +39,19 @@ class TechNotification
     public function setText(string $text): static
     {
         $this->text = $text;
+
+        return $this;
+    }
+
+    public function getRoom(): ?Room
+    {
+        return $this->room;
+    }
+
+
+    public function setRoom(?Room $room): static
+    {
+        $this->room = $room;
 
         return $this;
     }

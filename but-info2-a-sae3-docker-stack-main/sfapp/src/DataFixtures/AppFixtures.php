@@ -80,12 +80,14 @@ class AppFixtures extends Fixture
         $notification1 = new TechNotification();
 
         $notification1->setText('Capteur déconnecté');
+        $notification1->setRoom($allRooms[0]);
         $notification1->setCreationDate(date_create('2024-01-06'));
         $manager->persist($notification1);
 
         $notification2 = new TechNotification();
 
         $notification2->setText('La valeur affichée ne correspond pas à la réalité. L\'application affiche 18°C mais la temperature reele est plus proche de 22°C');
+        $notification2->setRoom($allRooms[1]);
         $notification2->setCreationDate(date_create('2024-01-02'));
         $manager->persist($notification2);
 

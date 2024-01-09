@@ -91,6 +91,13 @@ class AppFixtures extends Fixture
         $notification2->setCreationDate(date_create('2024-01-02'));
         $manager->persist($notification2);
 
+        $notification3 = new TechNotification();
+
+        $notification3->setText('heheheha');
+        $notification3->setRoom($allRooms[1]);
+        $notification3->setCreationDate(date_create('2069-03-09'));
+        $manager->persist($notification3);
+
 
         // Création des utilisateurs
         $admin = new User();

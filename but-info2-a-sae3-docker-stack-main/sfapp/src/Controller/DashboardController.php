@@ -144,6 +144,21 @@ class DashboardController extends AbstractController
         $notificationsRepository = $entityManager->getRepository('App\Entity\TechNotification');
         $notifications = $notificationsRepository->findAll();
 
+        usort($notifications, function ($a, $b) {
+            if ($a->isIsRead() != $b->isIsRead()) {
+                return $a->isIsRead() - $b->isIsRead(); // La distinction entre lu et non lu est prioritaire
+            }
+            else
+            {
+                if ($a->getCreationDate() == $b->getCreationDate())
+                {
+                    return 0;
+                }  
+                return $a->getCreationDate() < $b->getCreationDate() ? 1 : -1; // Tri du plus recent au plus ancien
+            }
+        });
+
+
         $alerts = array();
 
         foreach ($acquisitionSystems as $as) {
@@ -187,7 +202,19 @@ class DashboardController extends AbstractController
             'alerts' => $alerts,
             'notifications' => $notifications,
         ]);
-
     }
 
+    #[Route('/notification-read/{id}', name: 'app_notification_read')]
+    public function notificationRead(Request $request, int $id, ManagerRegistry $doctrine): Response
+    {
+        $entityManager = $doctrine->getManager();
+
+        $notificationsRepository = $entityManager->getRepository('App\Entity\TechNotification');
+        $notification = $notificationsRepository->find($id);
+
+        $notification->setIsRead(true); 
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_tech_dashboard');
+    }
 }

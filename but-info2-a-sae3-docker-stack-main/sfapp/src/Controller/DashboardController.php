@@ -12,6 +12,17 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+use App\Entity\Department;
+use App\Form\AcquisitionSystemSelectionType;
+use App\Form\AcquisitionSystemType;
+use App\Form\RoomType;
+use App\Form\DepartmentType;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
+
+
 class DashboardController extends AbstractController
 {
     /**
@@ -29,47 +40,6 @@ class DashboardController extends AbstractController
         $acquisitionSystemRepository = $entityManager->getRepository('App\Entity\AcquisitionSystem');
 
         $rooms = $roomRepository->findAll();
-        $acquisitionSystems = $acquisitionSystemRepository->findAll();
-
-        $alerts = array();
-
-        foreach ($acquisitionSystems as $as) {
-            if ($as->getRoom()) {
-                if ($as->isIsInstalled()) {
-                    // The alert is created if the value is NEAR the limit
-
-                    // CO2 too high
-                    if ($as->getCo2() > 1300) {
-                        $alerts[] = array(
-                            'type' => 'co2',
-                            'category' => ($as->getCo2() > 1500) ? 'red' : 'orange',
-                            'value' => $as->getCo2() . ' ppm',
-                            'room' => $as->getRoom()->getName(),
-                        );
-                    }
-
-                    // Temperature to low or too high
-                    if ($as->getTemperature() > 21 || $as->getTemperature() < 18) {
-                        $alerts[] = array(
-                            'type' => 'temperature',
-                            'category' => ($as->getTemperature() < 17) ? 'red' : 'orange',
-                            'value' => $as->getTemperature() . '°C',
-                            'room' => $as->getRoom()->getName(),
-                        );
-                    }
-
-                    // Humidity AND temperature too high
-                    if ($as->getHumidity() > 60 && $as->getTemperature() > 20) {
-                        $alerts[] = array(
-                            'type' => 'humidity',
-                            'category' => ($as->getHumidity() > 70) ? 'red' : 'orange',
-                            'value' => $as->getHumidity() . '%',
-                            'room' => $as->getRoom()->getName(),
-                        );
-                    }
-                }
-            }
-        }
 
         $form = $this->createForm(FilterRoomDashboardType::class, $rooms);
         $form->handleRequest($request);
@@ -90,27 +60,133 @@ class DashboardController extends AbstractController
 
             return $this->render('dashboard/user.html.twig', [
                 'rooms' => $rooms,
-                'acquisitionSystems' => $acquisitionSystems,
                 'floor' => $floor,
                 'assigned' => $assigned,
                 'searchR' => $searchR,
                 'searchAS' => $searchAS,
                 'form' => $form,
-                'alerts' => $alerts,
             ]);
         }
 
         return $this->render('dashboard/user.html.twig', [
             'rooms' => $rooms,
-            'acquisitionSystems' => $acquisitionSystems,
             'floor' => null,
             'assigned' => null,
             'searchR' => null,
             'searchAS' => null,
             'form' => $form,
-            'alerts' => $alerts,
         ]);
     }
+
+    /**
+     * @Route('/user-dashboard/room/{id?}', name: 'app_admin_room')
+     *
+     * Affiche le détail d'une salle pour un utilisateur non connecté
+     *
+     * @param int|null $id L'identifiant de la salle
+     * @param ManagerRegistry $doctrine Le registre de gestionnaire d'entités
+     * @param Request $request La requête HTTP
+     * @return Response
+     */
+    #[Route('/room/{id?}', name: 'app_room')]
+    public function roomIndex(?int $id, ManagerRegistry $doctrine, Request $request, HttpClientInterface $httpClient): Response
+    {
+        $entityManager = $doctrine->getManager();
+        $acquisitionSystemRepository = $entityManager->getRepository('App\Entity\AcquisitionSystem');
+        $roomRepository = $entityManager->getRepository('App\Entity\Room');
+
+        $room = $roomRepository->find($id);
+
+        $rooms = $roomRepository->findAll();
+
+        $acquisitionSystem = $room->getAcquisitionSystem();
+
+        $form = $this->createForm(FilterRoomDashboardType::class, $rooms);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $floor = $form->get('Floor');
+            $floor = $floor->getData();
+
+            $assigned = $form->get('isAssigned');
+            $assigned = $assigned->getData();
+
+            $searchR = $form->get('SearchRoom');
+            $searchR = $searchR->getData();
+            $searchR = strtoupper($searchR);
+
+            $searchAS = $form->get('SearchAS');
+            $searchAS = $searchAS->getData();
+            $searchAS = strtoupper($searchAS);
+
+            try {
+                // Effectuer une requête HTTP à votre API
+                $apiResponse = $httpClient->request('GET', 'https://sae34.k8s.iut-larochelle.fr/api/captures', [
+                    'headers' => [
+                        'accept' => 'application/ld+json',
+                        'dbname' => 'sae34bdk1eq3',
+                        'username' => 'k1eq3',
+                        'userpass' => 'wohtuh-nigzup-diwhE4'
+                    ],
+                ]);
+                $apiData = $apiResponse->toArray();
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Impossible de récupérer les données de l\'API.');
+                $apiData = [];
+            }
+
+            usort($apiData, function ($a, $b) {
+                return strtotime($a['dateCapture']) - strtotime($b['dateCapture']);
+            });
+
+            $apiData = array_reverse($apiData);
+
+            return $this->render('dashboard/user.html.twig', [
+                'rooms' => $rooms,
+                'floor' => $floor,
+                'assigned' => $assigned,
+                'searchR' => $searchR,
+                'searchAS' => $searchAS,
+                'form' => $form,
+                'data' => $apiData,
+                'acquisitionSystem' => $acquisitionSystem,
+            ]);
+        }
+
+        try {
+            // Effectuer une requête HTTP à votre API
+            $apiResponse = $httpClient->request('GET', 'https://sae34.k8s.iut-larochelle.fr/api/captures', [
+                'headers' => [
+                    'accept' => 'application/ld+json',
+                    'dbname' => 'sae34bdk1eq3',
+                    'username' => 'k1eq3',
+                    'userpass' => 'wohtuh-nigzup-diwhE4'
+                ],
+            ]);
+            $apiData = $apiResponse->toArray();
+        } catch (\Exception $e) {
+            $this->addFlash('error', 'Impossible de récupérer les données de l\'API.');
+            $apiData = [];
+        }
+
+        usort($apiData, function ($a, $b) {
+            return strtotime($a['dateCapture']) - strtotime($b['dateCapture']);
+        });
+
+        $apiData = array_reverse($apiData);
+
+        return $this->render('dashboard/user.html.twig', [
+            'room' => $room,
+            'rooms' => $rooms,
+            'floor' => null,
+            'assigned' => null,
+            'searchR' => null,
+            'searchAS' => null,
+            'form' => $form,
+            'data' => $apiData,
+            'acquisitionSystem' => $acquisitionSystem,
+        ]);
+    }
+
 
     /**
      * Affiche le tableau de bord de l'administrateur.

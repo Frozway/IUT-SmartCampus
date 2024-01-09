@@ -5,6 +5,10 @@
     border-radius: 8px;
     overflow: hidden;
   }
+
+.alerte-list {
+  height: auto;
+}
   
   .alerte .icon-container {
     width: 64px;

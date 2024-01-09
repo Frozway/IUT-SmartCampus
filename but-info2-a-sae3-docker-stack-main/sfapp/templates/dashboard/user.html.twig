@@ -1,30 +1,41 @@
+{% set onRoomPage = app.request.attributes.get('_route') == 'app_room' %}
+
 {% extends 'base.html.twig' %}
 
-{% block title %}User Home{% endblock %}
+{% block title %}
+    {% if onRoomPage %}
+        Salle - {{ room.name }}
+    {% else %}
+        Home
+    {% endif %}
+{% endblock %}
 
 {% block body %}
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <link rel="stylesheet" href="{{ asset('css/userDashboard.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/roomData.css') }}">
     
-    <div class="page-wrapper d-inline-flex">
+    <div>
     
-        {% include 'components/userNavbar.hmtl.twig' %}
+        {% include 'components/navbar.hmtl.twig' %}
 
-        <div class="content" style="flex-grow: 1;">
+        <div class="container-fluid">
 
-            <div class="container m-0">
+            <div class="row listes">
 
-                <div class="row listes">
+                <!-- Liste des salles -->
+                {% include 'components/roomList.html.twig' %}
 
-                    {% include 'components/roomList.html.twig' %}
+                {% if onRoomPage %}
+                    {% include 'components/default/userRoomDetails.html.twig' %}
 
-                </div>
+                {% endif %}
 
-            </div>  
+            </div>
 
         </div>
 
-    </div>  
+    </div>
 
 
 {% endblock %}

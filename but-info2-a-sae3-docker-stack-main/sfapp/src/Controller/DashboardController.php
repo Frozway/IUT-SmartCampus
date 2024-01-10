@@ -2,13 +2,20 @@
 
 namespace App\Controller;
 
+use App\Entity\TechNotification;
 use App\Form\FilterRoomDashboardType;
+use App\Form\NotificationType;
+use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use App\Controller\DateTime;
+
 
 class DashboardController extends AbstractController
 {
@@ -23,6 +30,35 @@ class DashboardController extends AbstractController
     {
         return $this->render('dashboard/user.html.twig', [
             'controller_name' => 'DashboardController',
+        ]);
+    }
+
+    #[Route('/envoyer-alerte', name: 'app_submit_tech_notification')]
+    public function submintNotificationIndex(ManagerRegistry $doctrine, Request $request, EntityManagerInterface $entityManager): Response
+    {
+
+        $notification = new TechNotification();
+
+        $roomRepository = $entityManager->getRepository('App\Entity\Room');
+        $rooms = $roomRepository->findAll();
+
+        $form = $this->createForm(NotificationType::class, $notification, ['rooms' => $rooms]);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted()) {
+            $notification->setCreationDate(new \DateTime("now", new \DateTimeZone("CET")));
+
+            $entityManager->persist($notification);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_index');
+
+        }
+
+        return $this->render('user/submitTechNotification.html.twig', [
+            'controller_name' => 'DashboardController',
+            'error' => null,
+            'form' => $form->createView()
         ]);
     }
 

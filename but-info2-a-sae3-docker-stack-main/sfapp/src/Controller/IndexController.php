@@ -14,7 +14,7 @@ class IndexController extends AbstractController
     /**
      * Affiche la page d'accueil de connexion.
      *
-     * @Route('/', name='app_index')
+     * @Route('/login', name='app_index')
      * @return Response
      */
     #[Route('/login', name: 'app_index')]

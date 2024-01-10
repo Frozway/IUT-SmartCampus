@@ -14,19 +14,19 @@
   width: 64px;
 }
 
-.alert-orange {
+.alerte-orange {
   background-color: #fdcb6e;
 }
 
-.alert-red {
+.alerte-red {
   background-color: #ff7675;
 }
 
-.alert-orange .icon-container {
+.alerte-orange .icon-container {
   background-color: #ffad33;
 }
 
-.alert-red .icon-container {
+.alerte-red .icon-container {
   background-color: #d63031;
 }
 

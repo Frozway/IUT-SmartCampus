@@ -44,19 +44,13 @@ class DashboardController extends AbstractController
         $form = $this->createForm(FilterRoomDashboardType::class, $rooms);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $floor = $form->get('Floor');
-            $floor = $floor->getData();
+            $floor = $form->get('Floor')->getData();
 
-            $assigned = $form->get('isAssigned');
-            $assigned = $assigned->getData();
+            $assigned = $form->get('isAssigned')->getData();
 
-            $searchR = $form->get('SearchRoom');
-            $searchR = $searchR->getData();
-            $searchR = strtoupper($searchR);
+            $searchR = strtoupper($form->get('SearchRoom')->getData());
 
-            $searchAS = $form->get('SearchAS');
-            $searchAS = $searchAS->getData();
-            $searchAS = strtoupper($searchAS);
+            $searchAS = strtoupper($form->get('SearchAS')->getData());
 
             return $this->render('dashboard/user.html.twig', [
                 'rooms' => $rooms,
@@ -104,19 +98,13 @@ class DashboardController extends AbstractController
         $form = $this->createForm(FilterRoomDashboardType::class, $rooms);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $floor = $form->get('Floor');
-            $floor = $floor->getData();
+            $floor = $form->get('Floor')->getData();
 
-            $assigned = $form->get('isAssigned');
-            $assigned = $assigned->getData();
+            $assigned = $form->get('isAssigned')->getData();
 
-            $searchR = $form->get('SearchRoom');
-            $searchR = $searchR->getData();
-            $searchR = strtoupper($searchR);
+            $searchR = strtoupper($form->get('SearchRoom')->getData());
 
-            $searchAS = $form->get('SearchAS');
-            $searchAS = $searchAS->getData();
-            $searchAS = strtoupper($searchAS);
+            $searchAS = strtoupper($form->get('SearchAS')->getData());
 
             try {
                 // Effectuer une requête HTTP à votre API
@@ -164,7 +152,7 @@ class DashboardController extends AbstractController
             ]);
             $apiData = $apiResponse->toArray();
         } catch (\Exception $e) {
-            $this->addFlash('error', 'Impossible de récupérer les données de l\'API.');
+            $this->addFlash('error', 'Impossible de récupérer les données de l\'API pour cette salle.');
             $apiData = [];
         }
 
@@ -186,7 +174,6 @@ class DashboardController extends AbstractController
             'acquisitionSystem' => $acquisitionSystem,
         ]);
     }
-
 
     /**
      * Affiche le tableau de bord de l'administrateur.
@@ -247,19 +234,13 @@ class DashboardController extends AbstractController
         $form = $this->createForm(FilterRoomDashboardType::class, $rooms);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $floor = $form->get('Floor');
-            $floor = $floor->getData();
+            $floor = $form->get('Floor')->getData();
 
-            $assigned = $form->get('isAssigned');
-            $assigned = $assigned->getData();
+            $assigned = $form->get('isAssigned')->getData();
 
-            $searchR = $form->get('SearchRoom');
-            $searchR = $searchR->getData();
-            $searchR = strtoupper($searchR);
+            $searchR = strtoupper($form->get('SearchRoom')->getData());
 
-            $searchAS = $form->get('SearchAS');
-            $searchAS = $searchAS->getData();
-            $searchAS = strtoupper($searchAS);
+            $searchAS = strtoupper($form->get('SearchAS')->getData());
 
             return $this->render('dashboard/admin.html.twig', [
                 'rooms' => $rooms,

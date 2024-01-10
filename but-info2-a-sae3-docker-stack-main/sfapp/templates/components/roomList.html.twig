@@ -1,14 +1,14 @@
 {% set onRoomPage = app.request.attributes.get('_route') == 'app_room' %}
 
 {% if is_granted('ROLE_ADMIN') %}
-    <div class="col panel shadow listes" style="height: 68vh">
+    <div class="col panel shadow lists" style="height: 68vh">
 {% elseif is_granted('ROLE_TECHNICIAN') %}
-    <div class="col panel shadow listes" style="height: 50vh">
+    <div class="col panel shadow lists" style="height: 50vh">
 {% else %}
     {% if onRoomPage %}
         {% set currentRoomID = room.id %}
     {% endif %}
-    <div class="col-2 panel shadow listes" style="height: 88vh">
+    <div class="col-2 panel shadow lists" style="height: 88vh">
 {% endif %}
 
     <div class="d-flex justify-content-between align-items-center mb-3">

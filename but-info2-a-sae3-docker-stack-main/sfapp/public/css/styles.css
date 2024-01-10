@@ -116,12 +116,12 @@
 
 /* Room List & AS List */
 
-.listes ul {
+.lists ul {
   list-style: none;
   padding: 0;
 }
 
-.listes li {
+.lists li {
   background-color: #f0f0f0;
   padding: 8px 16px;
   border-radius: 8px;
@@ -135,7 +135,7 @@
   border-left: #d63031 8px solid !important;
 }
 
-.listes li:hover {
+.lists li:hover {
   background-color: #f0f0f0;
   transition: 0.15s;
 }
@@ -144,7 +144,7 @@ a:hover {
   text-decoration: none;
 }
 
-.listes li.highlighted {
+.lists li.highlighted {
   background-color: #00b894;
   border: black 1px solid;
 }

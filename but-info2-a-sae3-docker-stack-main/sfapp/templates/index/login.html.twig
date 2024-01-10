@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
 <link rel="stylesheet" href="{{ asset('css/login.css') }}">
 
-    <a href="{{ path('app_user_dashboard') }}"><img src="{{ asset('images/smartlogo/logo_3.png') }}"  alt="Logo" style="position: absolute" height="80"></a>
+<a href="{{ path('app_user_dashboard') }}"><img src="{{ asset('images/smartlogo/logo_3.png') }}"  alt="Logo" style="position: absolute" height="80"></a>
 
 {% if error %}
     <div class="alert alert-danger fixed-bottom my-0">{{ error.messageKey|trans(error.messageData, 'security') }}</div>

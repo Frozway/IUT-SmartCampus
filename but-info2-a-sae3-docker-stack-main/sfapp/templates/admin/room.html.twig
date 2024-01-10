@@ -7,195 +7,192 @@
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <link rel="stylesheet" href="{{ asset('css/roomData.css') }}">
 
+    {% include 'components/navbar.html.twig' %}
 
-    <div class="page-wrapper d-inline-flex">
-        
-        {% include 'components/navbar.html.twig'%}
+    <div class="title-bar d-flex align-items-center">
 
-        <div class="content" style="flex-grow: 1;">
+        <a href="{{ path('app_admin_dashboard') }}" class="btn btn-custom-secondary back mr-3"><i
+                    class="fa-solid fa-left-long"></i> Retour</a>
 
-            <div class="title-bar d-flex align-items-center">
-
-                <a href="{{ path('app_admin_dashboard') }}" class="btn btn-custom-secondary back mr-3"><i class="fa-solid fa-left-long"></i> Retour</a>
-                
-                <span>
+        <span>
                     Salle {{ room.name }} - Étage {{ room.floor }}
-                    {% if room.department is not null %}
-                        - Département {{ room.department.name }}
-                    {% endif %}
+            {% if room.department is not null %}
+                - Département {{ room.department.name }}
+            {% endif %}
                 </span>
 
-                <div class="ml-auto">
-                    
-                    {# Bouton modifier salle #}
-                    <a href="{{ path('app_admin_edit_room', {'id': room.id}) }}" class="btn btn-custom-success mx-2 my-4"><i class="fa-solid fa-pencil"></i> <span class="text-button">Modifier la salle</span></a>
+        <div class="ml-auto">
 
-                    {# Bouton supprimer Salle #}
-                    {% include 'components/buttons/deleteRoom.html.twig' %}
+            {# Bouton modifier salle #}
+            <a href="{{ path('app_admin_edit_room', {'id': room.id}) }}" class="btn btn-custom-success mx-2 my-4"><i
+                        class="fa-solid fa-pencil"></i> <span class="text-button">Modifier la salle</span></a>
 
-                </div>
+            {# Bouton supprimer Salle #}
+            {% include 'components/buttons/deleteRoom.html.twig' %}
 
+        </div>
+
+    </div>
+
+    {# Afficher les messages Flash pendant 5 secondes #}
+    {% for messageType, flashMessages in app.session.flashbag.all() %}
+        {% for flashMessage in flashMessages %}
+            <div class="alert alert-{{ messageType }} flash-message shadow"
+                 style="width: fit-content; padding: 8px 16px; margin: 8px;">
+                {{ flashMessage }}
             </div>
+        {% endfor %}
+    {% endfor %}
 
-            {# Afficher les messages Flash pendant 5 secondes #}
-            {% for messageType, flashMessages in app.session.flashbag.all() %}
-                {% for flashMessage in flashMessages %}
-                    <div class="alert alert-{{ messageType }} flash-message shadow" style="width: fit-content; padding: 8px 16px; margin: 8px;">
-                        {{ flashMessage }}
-                    </div>
-                {% endfor %}
-            {% endfor %}
+    <div class="panel shadow">
+        Vue d'ensemble - {{ acquisitionSystem.name | default('Aucun système d\'acquisition associé') }}
 
-            <div class="panel shadow">
-                Vue d'ensemble - {{ acquisitionSystem.name | default('Aucun système d\'acquisition associé') }}
+        {# Afficher le contenu uniquement s'il y a un système d'acquisition associé #}
+        {% if acquisitionSystem is not null %}
 
-                {# Afficher le contenu uniquement s'il y a un système d'acquisition associé #}
-                {% if acquisitionSystem is not null %}
+            {% if acquisitionSystem.isInstalled %}
 
-                    {% if acquisitionSystem.isInstalled %}
+                {# Bouton Désattribuer le système d'acquisition #}
+                {% include 'components/buttons/unassignAS.html.twig' %}
 
-                        {# Bouton Désattribuer le système d'acquisition #}
-                        {% include 'components/buttons/unassignAS.html.twig' %}
+                <div class="row mt-1 d-flex justify-content-start">
+                    {% set lastTemp = null %}
+                    {% set lastCo2 = null %}
+                    {% set lastHum = null %}
 
-                        <div class="row mt-1 d-flex justify-content-start">
-                            {% set lastTemp = null %}
-                            {% set lastCo2 = null %}
-                            {% set lastHum = null %}
+                    {% for value in data %}
+                        {% if value.nom == "temp" and lastTemp == null%}
+                            {% set lastTemp = value.valeur %}
+                        {% elseif value.nom == "co2" and lastCo2 == null %}
+                            {% set lastCo2 = value.valeur %}
+                        {% elseif value.nom == "hum" and lastHum == null %}
+                            {% set lastHum = value.valeur %}
+                        {% endif %}
+                    {% endfor %}
 
-                            {% for value in data %}
-                                {% if value.nom == "temperature" and lastTemp == null%}
-                                    {% set lastTemp = value %}
-                                {% elseif value.nom == "co2" and lastCo2 == null %}
-                                    {% set lastCo2 = value %}
-                                {% elseif value.nom == "humidity" and lastHum == null %}
-                                    {% set lastHum = value %}
-                                {% endif %}
-                            {% endfor %}
-
-                            {# Afficher les dernières valeurs de température, CO2 et humidité #}
-                            {% if lastTemp is not null %}
-                                <div class="value-container mt-2 p-0 border-0 rounded
-                                {% if acquisitionSystem.temperature is null %}
+                    {# Afficher les dernières valeurs de température, CO2 et humidité #}
+                    {% if lastTemp is not null %}
+                        <div class="value-container mt-2 p-0 border-0 rounded
+                                {% if lastTemp is null %}
                                 normal
-                                {% elseif acquisitionSystem.temperature > 21 %}
+                                {% elseif lastTemp > 21 %}
                                 red
-                                {% elseif acquisitionSystem.temperature < 17 %}
+                                {% elseif lastTemp < 17 %}
                                 red
                                 {% else %}
                                 normal
                                 {% endif %}
                                 ">
-                                    <div class="icon-container rounded-left">
-                                        <img src="{{ asset('images/icon_temperature.png') }}" alt="Logo Temp" class="img-fluid p-2">
-                                    </div>
+                            <div class="icon-container rounded-left">
+                                <img src="{{ asset('images/icon_temperature.png') }}" alt="Logo Temp" class="img-fluid p-2">
+                            </div>
 
-                                    <div class="value d-flex-columns align-items-center">
-                                        <p class="my-0" style="font-size: 22pt">{{ lastTemp.valeur }}°C</p>
-                                        <p class="my-0">
-                                        {% if acquisitionSystem.temperature > 21 %}
+                            <div class="value d-flex-columns align-items-center">
+                                <p class="my-0" style="font-size: 22pt">{{ lastTemp }}°C</p>
+                                <p class="my-0">
+                                    {% if lastTemp > 21 %}
                                         Elevé
-                                        {% elseif acquisitionSystem.temperature < 17 %}
+                                    {% elseif lastTemp < 17 %}
                                         Bas
-                                        {% else %}
+                                    {% else %}
                                         Normal
-                                        {% endif %}
-                                        </p>
-                                    </div>
-                                </div>
-                            {% endif %}
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                    {% endif %}
 
-                            {% if lastCo2 is not null %}
-                                <div class="value-container mt-2 p-0 border-0 rounded
-                                {% if lastCo2.valeur is null %}
+                    {% if lastCo2 is not null %}
+                        <div class="value-container mt-2 p-0 border-0 rounded
+                                {% if lastCo2 is null %}
                                 normal
-                                {% elseif lastCo2.valeur >= 1500 %}
+                                {% elseif lastCo2 >= 1500 %}
                                 red
                                 {% else %}
                                 normal
                                 {% endif %}
                                 ">
-                                    <div class="icon-container rounded-left">
-                                        <img src="{{ asset('images/icon_carbon.png') }}" alt="Logo Temp" class="img-fluid p-2">
-                                    </div>
+                            <div class="icon-container rounded-left">
+                                <img src="{{ asset('images/icon_carbon.png') }}" alt="Logo Temp" class="img-fluid p-2">
+                            </div>
 
-                                    <div class="value d-flex-columns align-items-center">
-                                        <p class="my-0" style="font-size: 22pt">{{ lastCo2.valeur }} ppm</p>
-                                        <p class="my-0">
-                                            {% if lastCo2.valeur <  1500 %}
-                                            Elevé
-                                            {% else %}
-                                            Normal
-                                            {% endif %}
-                                        </p>
-                                    </div>
-                                </div>
-                            {% endif %}
+                            <div class="value d-flex-columns align-items-center">
+                                <p class="my-0" style="font-size: 22pt">{{ lastCo2 }} ppm</p>
+                                <p class="my-0">
+                                    {% if lastCo2 <  1500 %}
+                                        Elevé
+                                    {% else %}
+                                        Normal
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                    {% endif %}
 
-                            {% if lastHum is not null %}
-                                <div class="value-container mt-2 p-0 border-0 rounded
-                                {% if lastHum.valeur is null %}
+                    {% if lastHum is not null %}
+                        <div class="value-container mt-2 p-0 border-0 rounded
+                                {% if lastHum is null %}
                                 normal
-                                {% elseif lastHum.valeur >= 70 %}
+                                {% elseif lastHum >= 70 %}
                                 red
-                                {% elseif lastHum.valeur >= 60 %}
+                                {% elseif lastHum >= 60 %}
                                 orange
                                 {% else %}
                                 normal
                                 {% endif %}
                                 ">
-                                    <div class="icon-container rounded-left">
-                                        <img src="{{ asset('images/icon_humidity.png') }}" alt="Logo Hum" class="img-fluid p-2">
-                                    </div>
+                            <div class="icon-container rounded-left">
+                                <img src="{{ asset('images/icon_humidity.png') }}" alt="Logo Hum" class="img-fluid p-2">
+                            </div>
 
-                                    <div class="value d-flex-columns align-items-center">
-                                        <p class="my-0" style="font-size: 22pt">{{ lastHum.valeur }}%</p>
-                                        <p class="my-0">
-                                            {% if lastHum.valeur >= 70 %}
-                                            Elevé
-                                            {% else %}
-                                            Normal
-                                            {% endif %}
-                                        </p>
-                                    </div>
-                                </div>
-                            {% endif %}
+                            <div class="value d-flex-columns align-items-center">
+                                <p class="my-0" style="font-size: 22pt">{{ lastHum }}%</p>
+                                <p class="my-0">
+                                    {% if lastHum >= 70 %}
+                                        Elevé
+                                    {% else %}
+                                        Normal
+                                    {% endif %}
+                                </p>
+                            </div>
                         </div>
-
-                    {% else %}
-
-                        {# Bouton Désattribuer le système d'acquisition #}
-                        {% include 'components/buttons/unassignAS.html.twig' %}
-
-                        {# Afficher un message si le système est assigné mais pas installé #}
-                        <div class="alert alert-warning mt-3" role="alert">
-                            Le système d'acquisition est assigné, mais il n'est pas encore installé par le technicien.
-                        </div>
-
                     {% endif %}
+                </div>
 
-                {% else %}
+            {% else %}
 
+                {# Bouton Désattribuer le système d'acquisition #}
+                {% include 'components/buttons/unassignAS.html.twig' %}
+
+                {# Afficher un message si le système est assigné mais pas installé #}
+                <div class="alert alert-warning mt-3" role="alert">
+                    Le système d'acquisition est assigné, mais il n'est pas encore installé par le technicien.
+                </div>
+
+            {% endif %}
+
+        {% else %}
+
+            {# Affichez le formulaire de sélection du système d'acquisition #}
+            <div class="row mt-3">
+                <div class="col">
+                    <h4>Attribuer un système d'acquisition</h4>
                     {# Affichez le formulaire de sélection du système d'acquisition #}
-                    <div class="row mt-3">
-                        <div class="col">
-                            <h4>Attribuer un système d'acquisition</h4>
-                            {# Affichez le formulaire de sélection du système d'acquisition #}
-                            {{ form_start(form) }}
-                            {{ form_widget(form.acquisitionSystem, {'attr': {'class': 'form-control'}}) }}
-                            <button type="submit" class="btn custom-btn-primary mt-2"><i class="fa-solid fa-link"></i> Attribuer</button>
-                            {{ form_end(form) }}
-                        </div>
-                    </div>
-
-                {% endif %}
-
+                    {{ form_start(form) }}
+                    {{ form_widget(form.acquisitionSystem, {'attr': {'class': 'form-control'}}) }}
+                    <button type="submit" class="btn custom-btn-primary mt-2"><i class="fa-solid fa-link"></i> Attribuer
+                    </button>
+                    {{ form_end(form) }}
+                </div>
             </div>
 
-            {# Block d'historique des données #}
-            {% include 'components/admin/roomDataHistory.html.twig' %}
+        {% endif %}
 
-        </div>
     </div>
+
+    {# Block d'historique des données #}
+    {% include 'components/admin/roomDataHistory.html.twig' %}
+
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{ asset('js/flashMessageHandler.js') }}"></script>

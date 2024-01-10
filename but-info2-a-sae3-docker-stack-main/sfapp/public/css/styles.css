@@ -1,13 +1,11 @@
 * {
   font-family: "Montserrat";
 }
-
 .panel {
   border-top: #00b894 6px solid;
   background-color: #fff;
   padding: 8px 16px;
   margin: 8px;
-  height: 88vh;
 }
 
 .content {
@@ -108,3 +106,39 @@
 
 /* end header */
 
+/* Room List & AS List */
+
+.listes ul {
+  list-style: none;
+  padding: 0;
+}
+
+.listes li {
+  background-color: #E0F2DE;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border-left: #00b894 8px solid;
+  margin: 4px 0;
+  height: 50px;
+  transition: 0.15s;
+}
+
+.red-border {
+  border-left: #d63031 8px solid !important;
+}
+
+.listes li:hover {
+  background-color: #f0f0f0;
+  transition: 0.15s;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+.listes li.highlighted {
+  background-color: #00b894;
+  border: black 1px solid;
+}
+
+/* end Room List & AS List */

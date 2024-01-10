@@ -6,39 +6,35 @@
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <link rel="stylesheet" href="{{ asset('css/adminDashboard.css') }}">
 
+    {% include 'components/navbar.html.twig' %}
 
-    <div>
+    <div class="title-bar d-flex align-items-center justify-content-center">
 
-        {% include 'components/navbar.hmtl.twig' %}
+        <span class="dashboard-title">Tableau de bord</span>
 
-        <div class="title-bar d-flex align-items-center">
+    </div>
 
-            <span class="dashboard-title">Tableau de bord</span>
+    <!-- Alertes -->
+    {% include 'components/alertsList.html.twig' %}
 
-        </div>
-
-        <!-- Alertes -->
-        {% include 'components/alertsList.html.twig' %}
-
-        {# Afficher les messages Flash pendant 5 secondes #}
-        {% for messageType, flashMessages in app.session.flashbag.all() %}
-            {% for flashMessage in flashMessages %}
-                <div class="alert alert-{{ messageType }} flash-message shadow" style="width: fit-content; padding: 8px 16px; margin: 8px;">
-                    {{ flashMessage }}
-                </div>
-            {% endfor %}
-        {% endfor %}
-
-        <div class="container-fluid m-0">
-            <div class="row listes">
-
-                <!-- Liste des salles -->
-                {% include 'components/roomList.html.twig' %}
-
-                <!-- Liste des systèmes d'acquisition -->
-                {% include 'components/acquisitionSystemList.html.twig'%}
-
+    {# Afficher les messages Flash pendant 5 secondes #}
+    {% for messageType, flashMessages in app.session.flashbag.all() %}
+        {% for flashMessage in flashMessages %}
+            <div class="alert alert-{{ messageType }} flash-message shadow" style="width: fit-content; padding: 8px 16px; margin: 8px;">
+                {{ flashMessage }}
             </div>
+        {% endfor %}
+    {% endfor %}
+
+    <div class="container-fluid m-0">
+        <div class="row row-cols-2">
+
+            <!-- Liste des salles -->
+            {% include 'components/roomList.html.twig' %}
+
+            <!-- Liste des systèmes d'acquisition -->
+            {% include 'components/acquisitionSystemList.html.twig'%}
+
         </div>
     </div>
 

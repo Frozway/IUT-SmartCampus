@@ -7,41 +7,35 @@
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <link rel="stylesheet" href="{{ asset('css/adminDashboard.css') }}">
 
+    {% include 'components/navbar.html.twig' %}
 
-    <div class="page-wrapper d-inline-flex">
-        
-        {% include 'components/navbar.html.twig' %}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6 panel shadow">
+                <h1 class="text-center mb-4">Ajouter un Système d'acquisition</h1>
 
-        <div class="content" style="flex-grow: 1;">
-            <div class="container mt-5">
-                <div class="row justify-content-center">
-                    <div class="col-md-6 panel shadow">
-                        <h1 class="text-center mb-4">Ajouter un Système d'acquisition</h1>
+                {% for error in errors %}
+                    <div class="alert alert-danger">{{ error.message }}</div>
+                {% endfor %}
 
-                        {% for error in errors %}
-                            <div class="alert alert-danger">{{ error.message }}</div>
-                        {% endfor %}
+                {{ form_start(form, {'attr': {'class': 'rounded-panel'}}) }}
 
-                        {{ form_start(form, {'attr': {'class': 'rounded-panel'}}) }}
-
-                        <div class="form-group">
-                            {{ form_label(form.name, 'Nom du Système d\'acquisition') }}
-                            {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
-                        </div>
-
-                        <div class="form-group mt-3">
-                            {{ form_label(form.room, 'Salle associée') }}
-                            {{ form_widget(form.room, {'attr': {'class': 'form-control'}}) }}
-                        </div>
-
-                        {{ form_rest(form) }}
-
-                        <button type="submit" class="btn custom-btn custom-btn-primary btn-block mt-3"><i class="fa-solid fa-floppy-disk"></i> Enregistrer</button>
-                        <a href="{{ path('app_admin_dashboard') }}" class="btn custom-btn btn-custom-danger btn-block mt-2"><i class="fa-solid fa-xmark"></i> Annuler</a>
-
-                        {{ form_end(form) }}
-                    </div>
+                <div class="form-group">
+                    {{ form_label(form.name, 'Nom du Système d\'acquisition') }}
+                    {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
                 </div>
+
+                <div class="form-group mt-3">
+                    {{ form_label(form.room, 'Salle associée') }}
+                    {{ form_widget(form.room, {'attr': {'class': 'form-control'}}) }}
+                </div>
+
+                {{ form_rest(form) }}
+
+                <button type="submit" class="btn custom-btn custom-btn-primary btn-block mt-3"><i class="fa-solid fa-floppy-disk"></i> Enregistrer</button>
+                <a href="{{ path('app_admin_dashboard') }}" class="btn custom-btn btn-custom-danger btn-block mt-2"><i class="fa-solid fa-xmark"></i> Annuler</a>
+
+                {{ form_end(form) }}
             </div>
         </div>
     </div>

@@ -2,6 +2,11 @@
   font-family: "Montserrat";
 }
 
+body {
+  background-color: #dfdfdf;
+  font-weight: 500;
+}
+
 .panel {
   border-top: #00b894 6px solid;
   background-color: #fff;

@@ -46,7 +46,7 @@ class DashboardController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
-            $notification->setCreationDate(new \DateTime("now", new \DateTimeZone::EUROPE));
+            $notification->setCreationDate(new \DateTime("now", new \DateTimeZone("CET")));
 
             $entityManager->persist($notification);
             $entityManager->flush();

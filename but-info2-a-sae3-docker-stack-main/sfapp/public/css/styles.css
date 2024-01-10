@@ -96,6 +96,14 @@
   font-size: 20pt;
 }
 
+.fixed-title-bar {
+  border-bottom: black 1px solid;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000; /* Adjust the z-index as needed */
+}
+
   /* responsive for roomData page */
 
 @media (max-width: 1400px) {
@@ -114,7 +122,7 @@
 }
 
 .listes li {
-  background-color: #E0F2DE;
+  background-color: #f0f0f0;
   padding: 8px 16px;
   border-radius: 8px;
   border-left: #00b894 8px solid;

@@ -14,11 +14,6 @@ body {
   margin: 8px;
 }
 
-.page-wrapper {
-  height: 100vh;
-  width: 100vw;
-}
-
 .content {
   overflow-y: scroll;
 }
@@ -107,6 +102,14 @@ body {
   font-size: 20pt;
 }
 
+.fixed-title-bar {
+  border-bottom: black 1px solid;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000; /* Adjust the z-index as needed */
+}
+
   /* responsive for roomData page */
 
 @media (max-width: 1400px) {
@@ -117,3 +120,39 @@ body {
 
 /* end header */
 
+/* Room List & AS List */
+
+.lists ul {
+  list-style: none;
+  padding: 0;
+}
+
+.lists li {
+  background-color: #f0f0f0;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border-left: #00b894 8px solid;
+  margin: 4px 0;
+  height: 50px;
+  transition: 0.15s;
+}
+
+.red-border {
+  border-left: #d63031 8px solid !important;
+}
+
+.lists li:hover {
+  background-color: #f0f0f0;
+  transition: 0.15s;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+.lists li.highlighted {
+  background-color: #00b894;
+  border: black 1px solid;
+}
+
+/* end Room List & AS List */

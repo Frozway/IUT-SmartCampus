@@ -1,0 +1,28 @@
+<div class="col-8 panel shadow p-4">
+
+    <h1 class="d-flex justify-content-between">
+        {{ room.name }} - Étage {{ room.floor }}
+        <a href="{{ path('app_user_dashboard') }}" class="btn btn-custom-secondary back mr-3"><i class="fa-solid fa-left-long"></i> Retour</a>
+    </h1>
+
+    {# Afficher le contenu uniquement s'il y a un système d'acquisition associé #}
+    {% if acquisitionSystem is not null %}
+
+        {% if acquisitionSystem.isInstalled %}
+
+            {% include 'components/currentRoomData.html.twig' %}
+
+        {% else %}
+
+            {# Afficher un message si le système est assigné mais pas installé #}
+            <div class="alert alert-warning mt-3" role="alert">
+                Les données seront prochainement disponible !
+            </div>
+
+        {% endif %}
+
+    {% endif %}
+
+    <h3 style="text-transform: uppercase; margin-top: 50px;"> vous constatez un problème ? </h3>
+
+</div>

@@ -1,0 +1,130 @@
+{% set lastTemp = null %}
+                {% set lastCo2 = null %}
+                {% set lastHum = null %}
+
+                {% for value in data %}
+                    {% if value.nom == "temp" and lastTemp == null%}
+                        {% set lastTemp = value %}
+                    {% elseif value.nom == "co2" and lastCo2 == null %}
+                        {% set lastCo2 = value %}
+                    {% elseif value.nom == "hum" and lastHum == null %}
+                        {% set lastHum = value %}
+                    {% endif %}
+                {% endfor %}
+
+<div class="mt-1">
+    {# Afficher le message une seule fois en haut de la page #}
+    {% if lastTemp is not null and lastTemp.dateCapture is not null %}
+        {% set temperatureDate = lastTemp.dateCapture|date('Y-m-d H:i:s') %}
+        {% set currentDateTime = 'now'|date('Y-m-d H:i:s') %}
+        {% set temperatureDifference = currentDateTime|date('U') - temperatureDate|date('U') %}
+
+        {% if temperatureDifference > 360 %} {# 6 minutes en secondes #}
+            <p class="my-0 text-danger"><i class="fa-solid fa-exclamation-triangle"></i> Les données ne sont pas actuelles</p>
+        {% endif %}
+    {% endif %}
+</div>
+
+<div class="row mt-1 d-flex justify-content-start">
+    {% set lastTemp = null %}
+    {% set lastCo2 = null %}
+    {% set lastHum = null %}
+
+    {% for value in data %}
+        {% if value.nom == "temp" and lastTemp == null%}
+            {% set lastTemp = value.valeur %}
+        {% elseif value.nom == "co2" and lastCo2 == null %}
+            {% set lastCo2 = value.valeur %}
+        {% elseif value.nom == "hum" and lastHum == null %}
+            {% set lastHum = value.valeur %}
+        {% endif %}
+    {% endfor %}
+
+    {# Afficher les dernières valeurs de température, CO2 et humidité #}
+    {% if lastTemp is not null %}
+        <div class="value-container mt-2 p-0 border-0 rounded
+                                {% if lastTemp is null %}
+                                normal
+                                {% elseif lastTemp > 21 %}
+                                red
+                                {% elseif lastTemp < 17 %}
+                                red
+                                {% else %}
+                                normal
+                                {% endif %}
+                                ">
+            <div class="icon-container rounded-left">
+                <img src="{{ asset('images/icon_temperature.png') }}" alt="Logo Temp" class="img-fluid p-2">
+            </div>
+
+            <div class="value d-flex-columns align-items-center">
+                <p class="my-0" style="font-size: 22pt">{{ lastTemp }}°C</p>
+                <p class="my-0">
+                    {% if lastTemp > 21 %}
+                        Elevé
+                    {% elseif lastTemp < 17 %}
+                        Bas
+                    {% else %}
+                        Normal
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if lastCo2 is not null %}
+        <div class="value-container mt-2 p-0 border-0 rounded
+                                {% if lastCo2 is null %}
+                                normal
+                                {% elseif lastCo2 >= 1500 %}
+                                red
+                                {% else %}
+                                normal
+                                {% endif %}
+                                ">
+            <div class="icon-container rounded-left">
+                <img src="{{ asset('images/icon_carbon.png') }}" alt="Logo Temp" class="img-fluid p-2">
+            </div>
+
+            <div class="value d-flex-columns align-items-center">
+                <p class="my-0" style="font-size: 22pt">{{ lastCo2 }} ppm</p>
+                <p class="my-0">
+                    {% if lastCo2 <  1500 %}
+                        Elevé
+                    {% else %}
+                        Normal
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if lastHum is not null %}
+        <div class="value-container mt-2 p-0 border-0 rounded
+                                {% if lastHum is null %}
+                                normal
+                                {% elseif lastHum >= 70 %}
+                                red
+                                {% elseif lastHum >= 60 %}
+                                orange
+                                {% else %}
+                                normal
+                                {% endif %}
+                                ">
+            <div class="icon-container rounded-left">
+                <img src="{{ asset('images/icon_humidity.png') }}" alt="Logo Hum" class="img-fluid p-2">
+            </div>
+
+            <div class="value d-flex-columns align-items-center">
+                <p class="my-0" style="font-size: 22pt">{{ lastHum }}%</p>
+                <p class="my-0">
+                    {% if lastHum >= 70 %}
+                        Elevé
+                    {% else %}
+                        Normal
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    {% endif %}
+</div>

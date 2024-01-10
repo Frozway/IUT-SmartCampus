@@ -9,7 +9,7 @@ h2 {
   font-size: 22pt;
 }
 
-.listes ul {
+.lists ul {
   list-style: none;
   padding: 0;
 }
@@ -27,7 +27,7 @@ h2 {
   border-left: #d63031 8px solid !important;
 }
 
-.listes li:hover {
+.lists li:hover {
   background-color: #f0f0f0;
   transition: 0.15s;
 }

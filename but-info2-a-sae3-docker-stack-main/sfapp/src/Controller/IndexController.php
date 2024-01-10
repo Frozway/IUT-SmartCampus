@@ -14,10 +14,10 @@ class IndexController extends AbstractController
     /**
      * Affiche la page d'accueil de connexion.
      *
-     * @Route('/', name='app_index')
+     * @Route('/login', name='app_index')
      * @return Response
      */
-    #[Route('/', name: 'app_index')]
+    #[Route('/login', name: 'app_index')]
     public function index(AuthenticationUtils $authenticationUtils): Response
     {
         if ($this->getUser() && in_array("ROLE_ADMIN", $this->getUser()->getRoles())) {
@@ -31,7 +31,7 @@ class IndexController extends AbstractController
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        return $this->render('index/index.html.twig', [
+        return $this->render('index/login.html.twig', [
             'last_username' => $lastUsername,
             'error' => $error,
         ]);

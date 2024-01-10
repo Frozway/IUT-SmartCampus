@@ -7,44 +7,43 @@
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <link rel="stylesheet" href="{{ asset('css/adminDashboard.css') }}">
 
+    {% include 'components/navbar.html.twig' %}
 
-    <div class="page-wrapper d-inline-flex">
-        
-        {% include 'components/sidebar.html.twig' %}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 panel shadow">
+                <h1 class="text-center mb-4">Ajouter une Salle</h1>
 
-        <div class="content" style="flex-grow: 1;">
-            <div class="container mt-5">
-                <div class="row justify-content-center">
-                    <div class="col-lg-6 panel shadow">
-                        <h1 class="text-center mb-4">Ajouter une Salle</h1>
+                {% for error in errors %}
+                    <div class="alert alert-danger">{{ error.message }}</div>
+                {% endfor %}
 
-                        {% for error in errors %}
-                            <div class="alert alert-danger">{{ error.message }}</div>
-                        {% endfor %}
+                {{ form_start(form) }}
 
-                        {{ form_start(form) }}
-
-                        <div class="form-group">
-                            {{ form_row(form.name, {'attr': {'class': 'form-control'}, 'label': 'Nom de la Salle'}) }}
-                        </div>
-
-                        <div class="form-group">
-                            {{ form_row(form.floor, {'attr': {'class': 'form-control'}, 'label': 'Étage'}) }}
-                        </div>
-
-                        <div class="form-group">
-                            {{ form_row(form.department, {'attr': {'class': 'form-control'}, 'label': 'Département'}) }}
-                        </div>
-
-                        {{ form_rest(form) }}
-
-                        <button type="submit" class="btn custom-btn custom-btn-primary btn-block mt-3"><i class="fa-solid fa-floppy-disk"></i> Enregistrer</button>
-                        <a href="{{ path('app_admin_add_department') }}" class="btn custom-btn btn-custom-success btn-block mt-2"><i class="fa-solid fa-pencil"></i> Modifier les départements</a>
-                        <a href="{{ path('app_admin_dashboard') }}" class="btn custom-btn btn-custom-danger btn-block mt-2"><i class="fa-solid fa-xmark"></i> Annuler</a>
-
-                        {{ form_end(form) }}
-                    </div>
+                <div class="form-group">
+                    {{ form_row(form.name, {'attr': {'class': 'form-control'}, 'label': 'Nom de la Salle'}) }}
                 </div>
+
+                <div class="form-group">
+                    {{ form_row(form.floor, {'attr': {'class': 'form-control'}, 'label': 'Étage'}) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_row(form.department, {'attr': {'class': 'form-control'}, 'label': 'Département'}) }}
+                </div>
+
+                {{ form_rest(form) }}
+
+                <button type="submit" class="btn custom-btn custom-btn-primary btn-block mt-3"><i
+                            class="fa-solid fa-floppy-disk"></i> Enregistrer
+                </button>
+                <a href="{{ path('app_admin_add_department') }}"
+                   class="btn custom-btn btn-custom-success btn-block mt-2"><i class="fa-solid fa-pencil"></i> Modifier
+                    les départements</a>
+                <a href="{{ path('app_admin_dashboard') }}" class="btn custom-btn btn-custom-danger btn-block mt-2"><i
+                            class="fa-solid fa-xmark"></i> Annuler</a>
+
+                {{ form_end(form) }}
             </div>
         </div>
     </div>

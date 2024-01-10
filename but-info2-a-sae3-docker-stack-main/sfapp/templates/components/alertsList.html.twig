@@ -4,14 +4,14 @@
 
 {% endblock %}
 
-<div class="flex">
-    <div class="panel shadow">
+<div class="">
+    <div class="panel alerte-panel shadow">
         <span class="fs-5">Alertes</span>
         <div class="row px-2 mt-2">
             {% if alerts is defined %}
                 {% if alerts | length > 0 %}
                     {% for alert in alerts %}
-                        <div class="alerte mt-2 mx-1 p-0 border-0 {{ alert.category == 'red' ? 'alert-red' :'alert-orange' }}">
+                        <div class="alerte mt-2 mx-1 p-0 border-0 {{ alert.category == 'red' ? 'alerte-red' :'alerte-orange' }}">
                             <div class="icon-container p-2">
                                 <i class="fa-solid fa-triangle-exclamation fa-xl"></i>
                             </div>

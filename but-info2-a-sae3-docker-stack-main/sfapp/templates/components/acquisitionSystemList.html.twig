@@ -11,7 +11,7 @@
 {# Affichage pour le mode administrateur #}
 {% if is_granted('ROLE_ADMIN') %}
 
-    <div class="col panel shadow">
+    <div class="col panel shadow lists" style="height: 68vh">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <div class="fs-5">{{ titre }}</div>
             <div>
@@ -22,30 +22,33 @@
             </div>
         </div>
 
-        <ul class="mt-3">
-            <!-- Boucle pour afficher chaque système d'acquisition -->
-            {% for acquisitionSystem in acquisitionSystems %}
-                <a href="{{ path('app_admin_edit_acquisition_system', {id: acquisitionSystem.id}) }}">
-                    <li class="acquisition-system d-flex justify-content-between align-items-center">
-                        <span>{{ acquisitionSystem.name }}</span>
+        <div style="overflow-y: scroll; height: 89%; padding: 0px;">
 
-                        {% if acquisitionSystem.getRoom() is null %}
-                            <!-- Afficher "Non associé" si tel est le cas -->
-                            <div class="alert alert-warning m-0 px-2 p-1">
-                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                (Non associé)
-                            </div>
-                        {% endif %}
-                    </li>
-                </a>
-            {% endfor %}
-        </ul>
+            <ul class="mt-3">
+                <!-- Boucle pour afficher chaque système d'acquisition -->
+                {% for acquisitionSystem in acquisitionSystems %}
+                    <a href="{{ path('app_admin_edit_acquisition_system', {id: acquisitionSystem.id}) }}">
+                        <li class="acquisition-system d-flex justify-content-between align-items-center">
+                            <span>{{ acquisitionSystem.name }}</span>
+
+                            {% if acquisitionSystem.getRoom() is null %}
+                                <!-- Afficher "Non associé" si tel est le cas -->
+                                <div class="alert alert-warning m-0 px-2 p-1">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                    (Non associé)
+                                </div>
+                            {% endif %}
+                        </li>
+                    </a>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 
 {# Affichage pour le mode technicien #}
 {% elseif is_granted('ROLE_TECHNICIAN') %}
 
-    <div class="col panel shadow">
+    <div class="col panel shadow lists" style="height: 68vh">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <div class="fs-5">{{ titre }}</div>
         </div>
@@ -54,6 +57,8 @@
             <!-- Affiche un message si aucun système d'acquisition n'est installé -->
             <p>Aucun système d'acquisition installé.</p>
         {% else %}
+
+        <div style="overflow-y: scroll; height: 90%; padding: 0px;">
             <ul class="mt-3">
                 <!-- Boucle pour afficher chaque système d'acquisition -->
                 {% for acquisitionSystem in acquisitionSystems %}
@@ -75,6 +80,7 @@
                     {% endif %}
                 {% endfor %}
             </ul>
+        </div>
         {% endif %}
     </div>
 

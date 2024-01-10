@@ -7,252 +7,112 @@
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <link rel="stylesheet" href="{{ asset('css/roomData.css') }}">
 
+    {% include 'components/navbar.html.twig' %}
 
-    <div class="page-wrapper d-inline-flex">
-        
-        {% include 'components/sidebar.html.twig'%}
+    <div class="title-bar d-flex align-items-center">
 
-        <div class="content" style="flex-grow: 1;">
+        <a href="{{ path('app_admin_dashboard') }}" class="btn btn-custom-secondary back mr-3"><i
+                    class="fa-solid fa-left-long"></i> Retour</a>
 
-            <div class="title-bar d-flex align-items-center">
-
-                <a href="{{ path('app_admin_dashboard') }}" class="btn btn-custom-secondary back mr-3"><i class="fa-solid fa-left-long"></i> Retour</a>
-                
-                <span>
+        <span>
                     Salle {{ room.name }} - Étage {{ room.floor }}
-                    {% if room.department is not null %}
-                        - Département {{ room.department.name }}
-                    {% endif %}
+            {% if room.department is not null %}
+                - Département {{ room.department.name }}
+            {% endif %}
                 </span>
 
-                <div class="ml-auto">
-                    
-                    {# Bouton modifier salle #}
-                    <a href="{{ path('app_admin_edit_room', {'id': room.id}) }}" class="btn btn-custom-success mx-2 my-4"><i class="fa-solid fa-pencil"></i> <span class="text-button">Modifier la salle</span></a>
+        <div class="ml-auto">
 
-                    {# Bouton supprimer Salle #}
-                    {% include 'components/buttons/deleteRoom.html.twig' %}
+            {# Bouton modifier salle #}
+            <a href="{{ path('app_admin_edit_room', {'id': room.id}) }}" class="btn btn-custom-success mx-2 my-4"><i
+                        class="fa-solid fa-pencil"></i> <span class="text-button">Modifier la salle</span></a>
 
-                </div>
-
-            </div>
-
-            {# Afficher les messages Flash pendant 5 secondes #}
-            {% for messageType, flashMessages in app.session.flashbag.all() %}
-                {% for flashMessage in flashMessages %}
-                    <div class="alert alert-{{ messageType }} flash-message shadow" style="width: fit-content; padding: 8px 16px; margin: 8px;">
-                        {{ flashMessage }}
-                    </div>
-                {% endfor %}
-            {% endfor %}
-
-            <div class="panel shadow">
-                Vue d'ensemble - {{ acquisitionSystem.name | default('Aucun système d\'acquisition associé') }}
-
-                {# Afficher le contenu uniquement s'il y a un système d'acquisition associé #}
-                {% if acquisitionSystem is not null %}
-
-                    {% if acquisitionSystem.isInstalled %}
-
-                        {# Bouton Désattribuer le système d'acquisition #}
-                        {% include 'components/buttons/unassignAS.html.twig' %}
-
-                        
-                        {% set lastTemp = null %}
-                        {% set lastCo2 = null %}
-                        {% set lastHum = null %}
-
-                        {% for value in data %}
-                            {% if value.nom == "temp" and lastTemp == null%}
-                                {% set lastTemp = value %}
-                            {% elseif value.nom == "co2" and lastCo2 == null %}
-                                {% set lastCo2 = value %}
-                            {% elseif value.nom == "hum" and lastHum == null %}
-                                {% set lastHum = value %}
-                            {% endif %}
-                        {% endfor %}
-
-                        <div class="mt-1">
-                            {# Afficher un message si les données ont plus de 6 minutes en haut de la page #}
-                            {% if lastTemp is not null and lastTemp.dateCapture is not null %}
-                                {% set temperatureDate = lastTemp.dateCapture|date('Y-m-d H:i:s') %}
-                                {% set currentDateTime = 'now'|date('Y-m-d H:i:s') %}
-                                {% set temperatureDifference = currentDateTime|date('U') - temperatureDate|date('U') %}
-
-                                {% if temperatureDifference > 360 %} {# 6 minutes en secondes #}
-                                    <p class="my-0 text-danger"><i class="fa-solid fa-exclamation-triangle"></i> Les données ne sont pas actuelles</p>
-                                {% endif %}
-                            {% endif %}
-                        </div>
-
-                        <div class="row mt-1 d-flex justify-content-start">
-
-                            {# Afficher les dernières valeurs de température, CO2 et humidité #}
-                            {% if lastTemp is not null %}
-                                <div class="value-container mt-2 p-0 border-0 rounded
-                                {% if acquisitionSystem.temperature is null %}
-                                normal
-                                {% elseif acquisitionSystem.temperature > 21 %}
-                                red
-                                {% elseif acquisitionSystem.temperature < 17 %}
-                                red
-                                {% else %}
-                                normal
-                                {% endif %}
-                                ">
-                                    <div class="icon-container rounded-left">
-                                        <img src="{{ asset('images/icon_temperature.png') }}" alt="Logo Temp" class="img-fluid p-2">
-                                    </div>
-
-                                    <div class="value d-flex-columns align-items-center">
-                                        <p class="my-0" style="font-size: 22pt">{{ lastTemp.valeur }}°C</p>
-                                        <p class="my-0">
-                                        {% if acquisitionSystem.temperature > 21 %}
-                                        Elevé
-                                        {% elseif acquisitionSystem.temperature < 17 %}
-                                        Bas
-                                        {% else %}
-                                        Normal
-                                        {% endif %}
-                                        </p>
-                                    </div>
-                                </div>
-                            {% endif %}
-
-                            {% if lastCo2 is not null %}
-                                <div class="value-container mt-2 p-0 border-0 rounded
-                                {% if lastCo2.valeur is null %}
-                                normal
-                                {% elseif lastCo2.valeur >= 1500 %}
-                                red
-                                {% else %}
-                                normal
-                                {% endif %}
-                                ">
-                                    <div class="icon-container rounded-left">
-                                        <img src="{{ asset('images/icon_carbon.png') }}" alt="Logo Temp" class="img-fluid p-2">
-                                    </div>
-
-                                    <div class="value d-flex-columns align-items-center">
-                                        <p class="my-0" style="font-size: 22pt">{{ lastCo2.valeur }} ppm</p>
-                                        <p class="my-0">
-                                            {% if lastCo2.valeur <  1500 %}
-                                            Elevé
-                                            {% else %}
-                                            Normal
-                                            {% endif %}
-                                        </p>
-                                    </div>
-                                </div>
-                            {% endif %}
-
-                            {% if lastHum is not null %}
-                                <div class="value-container mt-2 p-0 border-0 rounded
-                                {% if lastHum.valeur is null %}
-                                normal
-                                {% elseif lastHum.valeur >= 70 %}
-                                red
-                                {% elseif lastHum.valeur >= 60 %}
-                                orange
-                                {% else %}
-                                normal
-                                {% endif %}
-                                ">
-                                    <div class="icon-container rounded-left">
-                                        <img src="{{ asset('images/icon_humidity.png') }}" alt="Logo Hum" class="img-fluid p-2">
-                                    </div>
-
-                                    <div class="value d-flex-columns align-items-center">
-                                        <p class="my-0" style="font-size: 22pt">{{ lastHum.valeur }}%</p>
-                                        <p class="my-0">
-                                            {% if lastHum.valeur >= 70 %}
-                                            Elevé
-                                            {% else %}
-                                            Normal
-                                            {% endif %}
-                                        </p>
-                                    </div>
-                                </div>
-                            {% endif %}
-                        </div>
-
-                    {% else %}
-
-                        {# Bouton Désattribuer le système d'acquisition #}
-                        {% include 'components/buttons/unassignAS.html.twig' %}
-
-                        {# Afficher un message si le système est assigné mais pas installé #}
-                        <div class="alert alert-warning mt-3" role="alert">
-                            Le système d'acquisition est assigné, mais il n'est pas encore installé par le technicien.
-                        </div>
-
-                    {% endif %}
-
-                {% else %}
-
-                    {# Affichez le formulaire de sélection du système d'acquisition #}
-                    <div class="row mt-3">
-                        <div class="col">
-                            <h4>Attribuer un système d'acquisition</h4>
-                            {# Affichez le formulaire de sélection du système d'acquisition #}
-                            {{ form_start(form) }}
-                            {{ form_widget(form.acquisitionSystem, {'attr': {'class': 'form-control'}}) }}
-                            <button type="submit" class="btn custom-btn-primary mt-2">Attribuer</button>
-                            {{ form_end(form) }}
-                        </div>
-                    </div>
-
-                {% endif %}
-
-            </div>
-
-            {% if acquisitionSystem is not null %}
-
-                {% if acquisitionSystem.isInstalled %}
-
-                    <form class="panel shadow mt-4" id="dataLimitForm" action="{{ path('app_admin_room', {'id': room.id}) }}" method="get">
-                        <label for="dataLimit">Plage de données visibles</label>
-                        <select class="form-control" id="dataLimit" name="dataLimit">
-                            <option value="288" {% if app.request.query.get('dataLimit') == '288' %}selected{% endif %}>Dernières 24 heures</option>
-                            <option value="864" {% if app.request.query.get('dataLimit') == '864' %}selected{% endif %}>3 Derniers jours</option>
-                            <option value="2016" {% if app.request.query.get('dataLimit') == '2016' %}selected{% endif %}>Dernière semaine</option>
-                        </select>
-                    </form>
-
-
-                    {# Block d'historiques des données et des graphiques avec changement de plage de données #}
-                    {% include 'components/admin/roomDataHistory.html.twig' %}
-
-                    {# Block des graphiques des données
-                    {% include 'components/admin/roomDataCharts.html.twig' %} #}
-
-                {% endif %}
-            
-            {% endif %}
+            {# Bouton supprimer Salle #}
+            {% include 'components/buttons/deleteRoom.html.twig' %}
 
         </div>
+
+        <script>
+            window.addEventListener('scroll', function() {
+                var titleBar = document.querySelector('.title-bar');
+                var navbarHeight = 80;
+
+                if (window.scrollY > navbarHeight) {
+                    titleBar.classList.add('fixed-title-bar');
+                } else {
+                    titleBar.classList.remove('fixed-title-bar');
+                }
+            });
+        </script>
+
     </div>
+
+    {# Afficher les messages Flash pendant 5 secondes #}
+    {% for messageType, flashMessages in app.session.flashbag.all() %}
+        {% for flashMessage in flashMessages %}
+            <div class="alert alert-{{ messageType }} flash-message shadow"
+                 style="width: fit-content; padding: 8px 16px; margin: 8px;">
+                {{ flashMessage }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    <div class="panel shadow">
+        Vue d'ensemble - {{ acquisitionSystem.name | default('Aucun système d\'acquisition associé') }}
+
+        {# Afficher le contenu uniquement s'il y a un système d'acquisition associé #}
+        {% if acquisitionSystem is not null %}
+
+            {% if acquisitionSystem.isInstalled %}
+
+                {# Bouton Désattribuer le système d'acquisition #}
+                {% include 'components/buttons/unassignAS.html.twig' %}
+
+                {% include 'components/currentRoomData.html.twig' %}
+
+            {% else %}
+
+                {# Bouton Désattribuer le système d'acquisition #}
+                {% include 'components/buttons/unassignAS.html.twig' %}
+
+                {# Afficher un message si le système est assigné mais pas installé #}
+                <div class="alert alert-warning mt-3" role="alert">
+                    Le système d'acquisition est assigné, mais il n'est pas encore installé par le technicien.
+                </div>
+
+            {% endif %}
+
+        {% else %}
+
+            {# Affichez le formulaire de sélection du système d'acquisition #}
+            <div class="row mt-3">
+                <div class="col">
+                    <h4>Attribuer un système d'acquisition</h4>
+                    {# Affichez le formulaire de sélection du système d'acquisition #}
+                    {{ form_start(form) }}
+                    {{ form_widget(form.acquisitionSystem, {'attr': {'class': 'form-control'}}) }}
+                    <button type="submit" class="btn custom-btn-primary mt-2"><i class="fa-solid fa-link"></i> Attribuer</button>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+
+        {% endif %}
+    </div>
+
+    <form class="panel shadow mt-4" id="dataLimitForm" action="{{ path('app_admin_room', {'id': room.id}) }}" method="get">
+        <label for="dataLimit">Plage de données visibles</label>
+        <select class="form-control" id="dataLimit" name="dataLimit">
+            <option value="12" {% if app.request.query.get('dataLimit') == '12' %}selected{% endif %}>Dernières 12 heures</option>
+            <option value="24" {% if app.request.query.get('dataLimit') == '24' %}selected{% endif %}>Dernières 24 heures</option>
+            <option value="288" {% if app.request.query.get('dataLimit') == '288' %}selected{% endif %}>Dernières 288 heures</option>
+        </select>
+    </form>
+
+    {# Block d'historique des données #}
+    {% include 'components/admin/roomDataHistory.html.twig' %}
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{ asset('js/flashMessageHandler.js') }}"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-
-    <script>
-        $(document).ready(function () {
-            // Récupérer la valeur de dataLimit depuis le stockage local
-            var savedDataLimit = localStorage.getItem('dataLimit');
-
-            // Définir la valeur par défaut de la liste déroulante
-            if (savedDataLimit) {
-                $('#dataLimit').val(savedDataLimit);
-            }
-
-            // Mettre à jour la valeur de la liste déroulante lorsqu'elle change
-            $('#dataLimit').on('change', function () {
-                // Soumettre automatiquement le formulaire lorsque la valeur change
-                $('#dataLimitForm').submit();
-            });
-        });
-    </script>
 
 {% endblock %}

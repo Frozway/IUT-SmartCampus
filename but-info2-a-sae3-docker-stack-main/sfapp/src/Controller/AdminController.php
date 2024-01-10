@@ -75,19 +75,30 @@ class AdminController extends AbstractController
 
         $dataLimit = $request->query->get('dataLimit', 288);
 
+        // récuperation du fichier database.json
+        $json = file_get_contents('json/database.json');
+        $json_data = json_decode($json, true);
+        try{
+            $dbname = $json_data[$room->getName()]['dbname'];
+        } catch (\Exception $e)
+        {
+            $dbname = null;
+        }
+
         try {
             // Effectuer une requête HTTP à votre API
             $apiResponse = $httpClient->request('GET', "https://sae34.k8s.iut-larochelle.fr/api/captures/last?limit={$dataLimit}", [
                 'headers' => [
                     'accept' => 'application/ld+json',
-                    'dbname' => 'sae34bdk1eq3',
+//                    'dbname' => 'sae34bdk1eq3',
+                    'dbname' => $dbname,
                     'username' => 'k1eq3',
                     'userpass' => 'wohtuh-nigzup-diwhE4',
                 ],
             ]);
             $apiData = $apiResponse->toArray();
         } catch (\Exception $e) {
-            $this->addFlash('error', 'Impossible de récupérer les données de l\'API.');
+            $this->addFlash('error', 'Impossible de récupérer les données de l\'API pour cette salle.');
             $apiData = [];
         }
 

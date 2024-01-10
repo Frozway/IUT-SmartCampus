@@ -28,7 +28,7 @@
                 <!-- Boucle pour afficher chaque système d'acquisition -->
                 {% for acquisitionSystem in acquisitionSystems %}
                     <a href="{{ path('app_admin_edit_acquisition_system', {id: acquisitionSystem.id}) }}">
-                        <li class="acquisition-system d-flex justify-content-between align-items-center">
+                        <li class="acquisition-system d-flex justify-content-between align-items-center mr-3">
                             <span>{{ acquisitionSystem.name }}</span>
 
                             {% if acquisitionSystem.getRoom() is null %}
@@ -63,7 +63,7 @@
                 <!-- Boucle pour afficher chaque système d'acquisition -->
                 {% for acquisitionSystem in acquisitionSystems %}
                     {% if acquisitionSystem.isInstalled %}
-                        <li class="acquisition-system d-flex justify-content-between align-items-center">
+                        <li class="acquisition-system d-flex justify-content-between align-items-center mr-3">
                             <span>{{ acquisitionSystem.name }}</span>
 
                             {% if acquisitionSystem.getRoom() is null %}

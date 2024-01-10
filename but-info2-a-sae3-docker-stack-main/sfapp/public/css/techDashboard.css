@@ -35,17 +35,10 @@ h2 {
 .alerte {
   color: white;
   background-color: #ff7675;
-  height: 60px;
   display: flex;
   width: fit-content;
   border-radius: 8px;
   overflow: hidden;
-}
-
-.alerte .icon-container {
-  background-color: #d63031;
-  width: 60px;
-  height: 60px;
 }
 
 .alerte .room-name {

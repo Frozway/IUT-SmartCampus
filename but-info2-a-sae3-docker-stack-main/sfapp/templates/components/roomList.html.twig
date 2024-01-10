@@ -2,8 +2,6 @@
 
 {% if is_granted('ROLE_ADMIN') %}
     <div class="col panel shadow lists" style="height: 68vh">
-{% elseif is_granted('ROLE_TECHNICIAN') %}
-    <div class="col panel shadow lists" style="height: 50vh">
 {% else %}
     {% if onRoomPage %}
         {% set currentRoomID = room.id %}
@@ -13,9 +11,11 @@
 
     <div class="d-flex justify-content-between align-items-center mb-3">
         <div class="fs-5">Salles</div>
-        <div>
-            <a href="{{ path('app_admin_add_room') }}" class="btn btn-custom-success"><i class="fa-solid fa-plus"></i> Ajouter</a>
-        </div>
+        {% if is_granted('ROLE_ADMIN') %}
+            <div>
+                <a href="{{ path('app_admin_add_room') }}" class="btn btn-custom-success"><i class="fa-solid fa-plus"></i> Ajouter</a>
+            </div>
+        {% endif %}
     </div>
 
     {{ form_start(form) }}

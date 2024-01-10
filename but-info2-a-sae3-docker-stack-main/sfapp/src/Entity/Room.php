@@ -17,7 +17,7 @@ class Room
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 10, unique : true)]
+    #[ORM\Column(length: 15, unique : true)]
     private ?string $name = null;
 
     #[ORM\Column]

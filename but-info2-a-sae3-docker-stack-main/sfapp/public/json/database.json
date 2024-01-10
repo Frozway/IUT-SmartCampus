@@ -1,0 +1,146 @@
+{
+  "D205":{
+    "team": "K1-1",
+    "room": "D205",
+    "name": "ESP-001",
+    "dbname": "sae34bdk1eq1",
+    "username": "k1eq1",
+    "tag": "1"
+  },
+  "D206": {
+    "team": "K1-2",
+    "room": "D206",
+    "name": "ESP-002",
+    "dbname": "sae34bdk1eq2",
+    "username": "k1eq2",
+    "tag": "2"
+  },
+  "D207": {
+    "team": "K1-3",
+    "room": "D207",
+    "name": "ESP-003",
+    "dbname": "sae34bdk1eq3",
+    "username": "k1eq3",
+    "tag": "3"
+  },
+  "D204": {
+    "team": "K2-1",
+    "room": "D204",
+    "name": "ESP-004",
+    "dbname": "sae34bdk2eq1",
+    "username": "k2eq1",
+    "tag": "4"
+  },
+  "D203": {
+    "team": "K2-2",
+    "room": "D203",
+    "name": "ESP-005",
+    "dbname": "sae34bdk2eq2",
+    "username": "k2eq2",
+    "tag": "5"
+  },
+  "D303": {
+    "team": "K2-3",
+    "room": "D303",
+    "name": "ESP-006",
+    "dbname": "sae34bdk2eq3",
+    "username": "k2eq3",
+    "tag": "6"
+  },
+  "D304": {
+    "team": "L1-1",
+    "room": "D304",
+    "name": "ESP-007",
+    "dbname": "sae34bdl1eq1",
+    "username": "l1eq1",
+    "tag": "7"
+  },
+  "C101": {
+    "team": "L1-2",
+    "room": "C101",
+    "name": "ESP-008",
+    "dbname": "sae34bdl1eq2",
+    "username": "l1eq2",
+    "tag": "8"
+  },
+  "D109": {
+    "team": "L1-3",
+    "room": "D109",
+    "name": "ESP-009",
+    "dbname": "sae34bdl1eq3",
+    "username": "l1eq3",
+    "tag": "9"
+  },
+  "Secrétariat": {
+    "team": "L2-1",
+    "room": "Secrétariat",
+    "name": "ESP-010",
+    "dbname": "sae34bdl2eq1",
+    "username": "l2eq1",
+    "tag": "10"
+  },
+  "D001": {
+    "team": "L2-2",
+    "room": "D001",
+    "name": "ESP-011",
+    "dbname": "sae34bdl2eq2",
+    "username": "l2eq2",
+    "tag": "11"
+  },
+  "D002": {
+    "team": "L2-3",
+    "room": "D002",
+    "name": "ESP-012",
+    "dbname": "sae34bdl2eq3",
+    "username": "l2eq3",
+    "tag": "12"
+  },
+  "D004": {
+    "team": "M1-1",
+    "room": "D004",
+    "name": "ESP-013",
+    "dbname": "sae34bdm1eq1",
+    "username": "m1eq1",
+    "tag": "13"
+  },
+  "C004": {
+    "team": "M1-2",
+    "room": "C004",
+    "name": "ESP-014",
+    "dbname": "sae34bdm1eq2",
+    "username": "m1eq2",
+    "tag": "14"
+  },
+  "C007": {
+    "team": "M1-3",
+    "room": "C007",
+    "name": "ESP-015",
+    "dbname": "sae34bdm1eq3",
+    "username": "m1eq3",
+    "tag": "15"
+  },
+  "D201": {
+    "team": "M2-1",
+    "room": "D201",
+    "name": "ESP-016",
+    "dbname": "sae34bdm2eq1",
+    "username": "m2eq1",
+    "tag": "16"
+  },
+  "D307": {
+    "team": "M2-2",
+    "room": "D307",
+    "name": "ESP-017",
+    "dbname": "sae34bdm2eq2",
+    "username": "m2eq2",
+    "tag": "17"
+  },
+  "C005": {
+    "team": "M2-3",
+    "room": "C005",
+    "name": "ESP-018",
+    "dbname": "sae34bdm2eq3",
+    "username": "m2eq3",
+    "tag": "18"
+  }
+}

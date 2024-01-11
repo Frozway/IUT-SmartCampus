@@ -1,16 +1,16 @@
 {% set lastTemp = null %}
-                {% set lastCo2 = null %}
-                {% set lastHum = null %}
+{% set lastCo2 = null %}
+{% set lastHum = null %}
 
-                {% for value in data %}
-                    {% if value.nom == "temp" and lastTemp == null%}
-                        {% set lastTemp = value %}
-                    {% elseif value.nom == "co2" and lastCo2 == null %}
-                        {% set lastCo2 = value %}
-                    {% elseif value.nom == "hum" and lastHum == null %}
-                        {% set lastHum = value %}
-                    {% endif %}
-                {% endfor %}
+{% for value in data %}
+    {% if value.nom == "temp" and lastTemp == null%}
+        {% set lastTemp = value %}
+    {% elseif value.nom == "co2" and lastCo2 == null %}
+        {% set lastCo2 = value %}
+    {% elseif value.nom == "hum" and lastHum == null %}
+        {% set lastHum = value %}
+    {% endif %}
+{% endfor %}
 
 <div class="mt-1">
     {# Afficher le message une seule fois en haut de la page #}

@@ -1,42 +1,32 @@
-.alerte {
+.alert {
   color: white;
-  display: flex;
-  width: fit-content;
   border-radius: 8px;
   overflow: hidden;
-  }
-
-.alerte-panel {
-  height: auto;
 }
 
-.alerte .icon-container {
-  width: 64px;
-}
-
-.alerte-orange {
+.alert-orange {
   background-color: #fdcb6e;
 }
 
-.alerte-red {
+.alert-red {
   background-color: #ff7675;
 }
 
-.alerte-orange .icon-container {
+.alert-orange .icon-container {
   background-color: #ffad33;
 }
 
-.alerte-red .icon-container {
+.alert-red .icon-container {
   background-color: #d63031;
 }
 
-.alerte .room-name {
+.alert .room-name {
   padding: 8px 12px;
   font-size: 16pt;
   font-weight: 600;
 }
 
-.alerte p {
+.alert p {
   margin: 0;
   line-height: 25px;
 }

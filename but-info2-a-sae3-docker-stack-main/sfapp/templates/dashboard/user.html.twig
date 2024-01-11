@@ -19,20 +19,12 @@
     
         {% include 'components/navbar.html.twig' %}
 
-        <div class="container-fluid">
+        <div class="d-flex flex-nowrap">
+            {% include 'components/roomList.html.twig' %}
 
-            <div class="row listes">
-
-                <!-- Liste des salles -->
-                {% include 'components/roomList.html.twig' %}
-
-                {% if onRoomPage %}
-                    {% include 'components/default/userRoomDetails.html.twig' %}
-
-                {% endif %}
-
-            </div>
-
+            {% if onRoomPage %}
+                {% include 'components/default/userRoomDetails.html.twig' %}
+            {% endif %}
         </div>
 
     </div>

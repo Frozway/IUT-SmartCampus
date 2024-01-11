@@ -44,10 +44,14 @@
     {% if lastTemp is not null %}
         <div class="value-container mt-2 p-0 border-0 rounded
                                 {% if lastTemp is null %}
-                                normal
-                                {% elseif lastTemp > 21 %}
                                 red
-                                {% elseif lastTemp < 17 %}
+                                {% elseif lastTemp > 24 and lastTemp < 28 %}
+                                orange
+                                {% elseif lastTemp >= 28 %}
+                                red
+                                {% elseif lastTemp > 16 and lastTemp < 19 %}
+                                orange
+                                {% elseif lastTemp <= 16 %}
                                 red
                                 {% else %}
                                 normal
@@ -60,10 +64,16 @@
             <div class="value d-flex-columns align-items-center">
                 <p class="my-0" style="font-size: 22pt">{{ lastTemp }}°C</p>
                 <p class="my-0">
-                    {% if lastTemp > 21 %}
-                        Elevé
-                    {% elseif lastTemp < 17 %}
-                        Bas
+                    {% if lastTemp is null %}
+                        N/A
+                    {% elseif lastTemp > 24 and lastTemp < 28 %}
+                        Élevé
+                    {% elseif lastTemp >= 28 %}
+                        Très Élevé
+                    {% elseif lastTemp > 16 and lastTemp < 19 %}
+                        Faible
+                    {% elseif lastTemp <= 16 %}
+                        Très Faible
                     {% else %}
                         Normal
                     {% endif %}
@@ -75,9 +85,11 @@
     {% if lastCo2 is not null %}
         <div class="value-container mt-2 p-0 border-0 rounded
                                 {% if lastCo2 is null %}
-                                normal
+                                red
                                 {% elseif lastCo2 >= 1500 %}
                                 red
+                                {% elseif lastCo2 > 1000 and lastCo2 < 1500 %}
+                                orange
                                 {% else %}
                                 normal
                                 {% endif %}
@@ -87,10 +99,14 @@
             </div>
 
             <div class="value d-flex-columns align-items-center">
-                <p class="my-0" style="font-size: 22pt">{{ lastCo2 }} ppm</p>
+                <p class="my-0" style="font-size: 20pt">{{ lastCo2 }} ppm</p>
                 <p class="my-0">
-                    {% if lastCo2 <  1500 %}
-                        Elevé
+                    {% if lastCo2 is null %}
+                        N/A
+                    {% elseif lastCo2 >=  1500 %}
+                        Très Élevé
+                    {% elseif lastCo2 > 1000 and lastCo2 < 1500 %}
+                        Élevé
                     {% else %}
                         Normal
                     {% endif %}
@@ -101,16 +117,20 @@
 
     {% if lastHum is not null %}
         <div class="value-container mt-2 p-0 border-0 rounded
-                                {% if lastHum is null %}
-                                normal
-                                {% elseif lastHum >= 70 %}
-                                red
-                                {% elseif lastHum >= 60 %}
-                                orange
-                                {% else %}
-                                normal
-                                {% endif %}
-                                ">
+                {% if lastHum is null %}
+                    red
+                {% elseif lastHum >= 70 %}
+                    red
+                {% elseif lastHum > 60 and lastHum < 70 %}
+                    orange
+                {% elseif lastHum > 30 and lastHum < 40 %}
+                    orange
+                {% elseif lastHum <= 30 %}
+                    red
+                {% else %}
+                    normal
+                {% endif %}
+                ">
             <div class="icon-container rounded-left">
                 <img src="{{ asset('images/icon_humidity.png') }}" alt="Logo Hum" class="img-fluid p-2">
             </div>
@@ -118,8 +138,16 @@
             <div class="value d-flex-columns align-items-center">
                 <p class="my-0" style="font-size: 22pt">{{ lastHum }}%</p>
                 <p class="my-0">
-                    {% if lastHum >= 70 %}
-                        Elevé
+                    {% if lastHum is null %}
+                        N/A
+                    {% elseif lastHum >= 70 %}
+                        Très Élevé
+                    {% elseif lastHum > 60 and lastHum < 70 %}
+                        Élevé
+                    {% elseif lastHum > 30 and lastHum < 40 %}
+                        Faible
+                    {% elseif lastHum <= 30 %}
+                        Très faible
                     {% else %}
                         Normal
                     {% endif %}

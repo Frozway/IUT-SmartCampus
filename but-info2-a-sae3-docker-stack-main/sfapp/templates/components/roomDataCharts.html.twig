@@ -1,0 +1,75 @@
+<div class="panel shadow mt-4">
+    <div class="mt-2">
+        <h2>Visualisation des données</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="chart-container" style="flex: 1">
+                    <canvas id="temperatureChart" style="width: 100%"></canvas>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="chart-container" style="flex: 1">
+                    <canvas id="co2Chart" style="width: 100%"></canvas>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="chart-container" style="flex: 1">
+                    <canvas id="humidityChart" style="width: 100%"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% set dataByDate = {} %}
+{% for value in data %}
+    {% set currentDate = value.dateCapture|date('Y-m-d H:i:s') %}
+    {% if attribute(dataByDate, currentDate) is not defined %}
+        {% set dataByDate = dataByDate|merge({(currentDate): {'temp': null, 'co2': null, 'hum': null, (value.nom): value.valeur}}) %}
+    {% else %}
+        {% set currentData = attribute(dataByDate, currentDate) %}
+        {% set currentData = currentData|merge({(value.nom): value.valeur}) %}
+        {% set dataByDate = dataByDate|merge({(currentDate): currentData}) %}
+    {% endif %}
+{% else %}
+    <div class="alert alert-info mt-4">Aucune donnée à afficher</div>
+{% endfor %}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var labels = [];
+        var temperatureData = [];
+        var co2Data = [];
+        var humidityData = [];
+        
+        // Si le nombre de données est inférieur à 864 (24h), on remplie une variable avec la date du jour
+        {% if data|length <= 864 %}
+            var dayDate = '{{ dataByDate|length > 0 ? dataByDate|first|first|date('Y-m-d') : null }}';
+        {% else %}
+            var dayDate = null;
+        {% endif %}
+
+        {% for currentDate, values in dataByDate %}
+            // Si le nombre de données est inférieur à 864 (24h), on ne prend que l'heure et les minutes
+            {% if data|length <= 864 %}
+                labels.push('{{ currentDate|date('H:i') }}');
+            {% else %}
+                labels.push('{{ currentDate|date('Y-m-d H:i') }}');
+            {% endif %}
+            temperatureData.push({{ values['temp'] is not null ? values['temp'] : 'null' }});
+            co2Data.push({{ values['co2'] is not null ? values['co2'] : 'null' }});
+            humidityData.push({{ values['hum'] is not null ? values['hum'] : 'null' }});
+        {% endfor %}
+
+        // Inverser l'ordre des données
+        labels.reverse();
+        temperatureData.reverse();
+        co2Data.reverse();
+        humidityData.reverse();
+
+        createCharts(labels, temperatureData, co2Data, humidityData, dayDate);
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ asset('js/roomDataCharts.js') }}"></script>

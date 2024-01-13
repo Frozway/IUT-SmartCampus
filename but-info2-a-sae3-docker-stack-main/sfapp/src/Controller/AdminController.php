@@ -73,15 +73,14 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('app_admin_room', ['id' => $id]);
         }
 
-        $dataLimit = $request->query->get('dataLimit', 288);
+        $dataLimit = $request->query->get('dataLimit', 864);
 
         // récuperation du fichier database.json
         $json = file_get_contents('json/database.json');
         $json_data = json_decode($json, true);
-        try{
+        try {
             $dbname = $json_data[$room->getName()]['dbname'];
-        } catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             $dbname = null;
         }
 

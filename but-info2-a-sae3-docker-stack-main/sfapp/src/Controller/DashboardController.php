@@ -2,29 +2,18 @@
 
 namespace App\Controller;
 
-use App\Entity\TechNotification;
 use App\Entity\Room;
-use App\Entity\AcquisitionSystem;
+use App\Entity\TechNotification;
 use App\Form\FilterRoomDashboardType;
 use App\Form\NotificationType;
-use Doctrine\ORM\EntityManager;
-use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use App\Controller\DateTime;
-use App\Entity\Department;
-use App\Form\AcquisitionSystemSelectionType;
-use App\Form\AcquisitionSystemType;
-use App\Form\RoomType;
-use App\Form\DepartmentType;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-
 
 class DashboardController extends AbstractController
 {
@@ -102,21 +91,29 @@ class DashboardController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $floor = $form->get('Floor')->getData();
-
             $assigned = $form->get('isAssigned')->getData();
-
             $searchR = strtoupper($form->get('SearchRoom')->getData());
-
             $searchAS = strtoupper($form->get('SearchAS')->getData());
+
+            $dataLimit = $request->query->get('dataLimit', 864);
+
+            // récuperation du fichier database.json
+            $json = file_get_contents('json/database.json');
+            $json_data = json_decode($json, true);
+            try {
+                $dbname = $json_data[$room->getName()]['dbname'];
+            } catch (\Exception $e) {
+                $dbname = null;
+            }
 
             try {
                 // Effectuer une requête HTTP à votre API
-                $apiResponse = $httpClient->request('GET', 'https://sae34.k8s.iut-larochelle.fr/api/captures', [
+                $apiResponse = $httpClient->request('GET', "https://sae34.k8s.iut-larochelle.fr/api/captures/last?limit={$dataLimit}", [
                     'headers' => [
                         'accept' => 'application/ld+json',
-                        'dbname' => 'sae34bdk1eq3',
+                        'dbname' => $dbname,
                         'username' => 'k1eq3',
-                        'userpass' => 'wohtuh-nigzup-diwhE4'
+                        'userpass' => 'wohtuh-nigzup-diwhE4',
                     ],
                 ]);
                 $apiData = $apiResponse->toArray();
@@ -126,10 +123,8 @@ class DashboardController extends AbstractController
             }
 
             usort($apiData, function ($a, $b) {
-                return strtotime($a['dateCapture']) - strtotime($b['dateCapture']);
+                return strtotime($b['dateCapture']) - strtotime($a['dateCapture']); // Les valeurs sont triées par ordre décroissant (la plus récente en premier)
             });
-
-            $apiData = array_reverse($apiData);
 
             return $this->render('dashboard/user.html.twig', [
                 'rooms' => $rooms,
@@ -143,27 +138,36 @@ class DashboardController extends AbstractController
             ]);
         }
 
+        $dataLimit = $request->query->get('dataLimit', 864);
+
+        // récuperation du fichier database.json
+        $json = file_get_contents('json/database.json');
+        $json_data = json_decode($json, true);
+        try {
+            $dbname = $json_data[$room->getName()]['dbname'];
+        } catch (\Exception $e) {
+            $dbname = null;
+        }
+
         try {
             // Effectuer une requête HTTP à votre API
-            $apiResponse = $httpClient->request('GET', 'https://sae34.k8s.iut-larochelle.fr/api/captures', [
+            $apiResponse = $httpClient->request('GET', "https://sae34.k8s.iut-larochelle.fr/api/captures/last?limit={$dataLimit}", [
                 'headers' => [
                     'accept' => 'application/ld+json',
-                    'dbname' => 'sae34bdk1eq3',
+                    'dbname' => $dbname,
                     'username' => 'k1eq3',
-                    'userpass' => 'wohtuh-nigzup-diwhE4'
+                    'userpass' => 'wohtuh-nigzup-diwhE4',
                 ],
             ]);
             $apiData = $apiResponse->toArray();
         } catch (\Exception $e) {
-            $this->addFlash('error', 'Impossible de récupérer les données de l\'API pour cette salle.');
+            $this->addFlash('error', 'Impossible de récupérer les données de l\'API.');
             $apiData = [];
         }
 
         usort($apiData, function ($a, $b) {
-            return strtotime($a['dateCapture']) - strtotime($b['dateCapture']);
+            return strtotime($b['dateCapture']) - strtotime($a['dateCapture']); // Les valeurs sont triées par ordre décroissant (la plus récente en premier)
         });
-
-        $apiData = array_reverse($apiData);
 
         return $this->render('dashboard/user.html.twig', [
             'room' => $room,
@@ -203,7 +207,7 @@ class DashboardController extends AbstractController
         return $this->render('user/submitTechNotification.html.twig', [
             'controller_name' => 'DashboardController',
             'error' => null,
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 
@@ -322,17 +326,13 @@ class DashboardController extends AbstractController
         usort($notifications, function ($a, $b) {
             if ($a->isIsRead() != $b->isIsRead()) {
                 return $a->isIsRead() - $b->isIsRead(); // La distinction entre lu et non lu est prioritaire
-            }
-            else
-            {
-                if ($a->getCreationDate() == $b->getCreationDate())
-                {
+            } else {
+                if ($a->getCreationDate() == $b->getCreationDate()) {
                     return 0;
-                }  
+                }
                 return $a->getCreationDate() < $b->getCreationDate() ? 1 : -1; // Tri du plus recent au plus ancien
             }
         });
-
 
         $alerts = array();
 
@@ -387,7 +387,7 @@ class DashboardController extends AbstractController
         $notificationsRepository = $entityManager->getRepository('App\Entity\TechNotification');
         $notification = $notificationsRepository->find($id);
 
-        $notification->setIsRead(true); 
+        $notification->setIsRead(true);
         $entityManager->flush();
 
         return $this->redirectToRoute('app_tech_dashboard');

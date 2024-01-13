@@ -4,7 +4,7 @@
 
 {% endblock %}
 
-<div class="navbar py-1 px-2 d-flex justify-content-start align-content-center>
+<div class="navbar py-1 px-2 d-flex justify-content-start align-content-center">
     {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TECHNICIAN') %}
         <a href="{{ path('app_user_dashboard') }}" style="color: white; font-size: 18pt">
             <img src="{{ asset('images/smartlogo/logo_1.png') }}" alt="Logo" height="42"/>

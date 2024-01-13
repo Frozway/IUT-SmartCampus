@@ -1,0 +1,131 @@
+.container{
+    position: relative;
+    width: 100px;
+    background: #fff;
+    padding: 28px 32px;
+    overflow: hidden;
+    transition: 0.6s ease-out;
+}
+
+.search-box{
+    width: 100%;
+    height: min-content;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: black 1px solid;
+    border-radius: 30px;
+    padding-left: 10px;
+}
+
+.search-box input{
+    border: none;
+    outline: none;
+    color: #06283D;
+    width: 80%;
+    font-size: 18px;
+    font-weight: 500;
+    padding-left: 32px;
+}
+
+.search-box input::placeholder{
+    font-size: 16px;
+    font-weight: 500;
+    color: #06283D;
+}
+
+.search-box button{
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    border : black 1px solid;
+    border-right: 0;
+    border-radius: 30px;
+    font-size: 22px;
+    transition: 0.4s ease;
+}
+
+.search-box button:hover{
+    color: #fff;
+    background: #06283D;
+}
+
+.search-box i{
+    position: absolute;
+    font-size: 28px;
+}
+
+.weather-box{
+    text-align: center;
+}
+
+.weather-box img{
+    width: 60%;
+    margin-top: 30px;
+}
+
+.weather-box .temperature{
+    position: relative;
+    color: black;
+    font-size: 4rem;
+    font-weight: 800;
+    margin-top: 30px;
+    margin-left: -16px;
+}
+
+.weather-box .temperature span{
+    position: absolute;
+    margin-left: 4px;
+    font-size: 1.5rem;
+}
+
+.weather-box .description{
+    color: black;
+    font-size: 22px;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.weather-box .location{
+    color: black;
+    font-size: 22px;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.not-found{
+    width: 100%;
+    text-align: center;
+    margin-top: 50px;
+    scale: 0;
+    opacity: 0;
+    display: none;
+}
+
+.not-found img{
+    width: 70%;
+}
+
+.not-found p{
+    color: #06283D;
+    font-size: 22px;
+    font-weight: 500;
+    margin-top: 12px;
+}
+
+.weather-box {
+    scale: 0;
+    opacity: 0;
+}
+
+.fadeIn{
+    animation: 0.5s fadeIn forwards;
+    animation-delay: 0.5s;
+}
+
+@keyframes fadeIn{
+    to {
+        scale: 1;
+        opacity: 1;
+    }
+}

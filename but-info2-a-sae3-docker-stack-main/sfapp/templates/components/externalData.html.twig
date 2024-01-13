@@ -1,0 +1,23 @@
+<link rel="stylesheet" href="{{ asset('css/externalData.css') }}">
+
+<div class="panel shadow flex-grow-1 container">
+    <div class="search-box">
+        <i class="fa-solid fa-location-dot"></i>
+        <input type="text" placeholder="Nom de votre ville">
+        <button class="fa-solid fa-magnifying-glass"></button>
+    </div>
+
+    <div class="not-found">
+        <img src="{{ asset('images/weather/weather-404.png') }}" alt="404 Weather"/>
+        <p>Oops! Invalid location :/</p>
+    </div>
+
+    <div class="weather-box">
+        <img src="">
+        <p class="temperature"></p>
+        <p class="description"></p>
+        <p class="location"></p>
+    </div>
+</div>
+
+<script src="{{ asset('js/externalData.js') }}"></script>

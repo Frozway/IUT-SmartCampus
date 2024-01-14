@@ -74,8 +74,11 @@
                 const alert = document.createElement('div');
                 alert.id = 'alert-' + salle;
                 alert.classList.add('alerte', 'mt-2', 'mx-1', 'p-0', 'border-0', alertColor);
+                alert.style.cursor = 'pointer';
                 alert.innerHTML = '<div class="icon-container p-2"><i class="fa-solid fa-triangle-exclamation fa-xl"></i></div><div class="room-name d-flex justify-content-center align-items-center"><p>' + salle + '</p></div>';
-                document.getElementById('alerts').appendChild(alert);
+                document.getElementById('alerts').appendChild(alert).addEventListener('click', function() {
+                    window.location.href = "{{ path('app_admin_room', {'id': 'roomId'}) }}".replace('roomId', data[salle].roomID);
+                });
                 document.getElementById('no-alert').classList.remove('d-flex');
                 document.getElementById('no-alert').style.display = 'none';
             }

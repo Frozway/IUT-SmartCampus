@@ -22,28 +22,30 @@ class FilterRoomDashboardType extends AbstractType
     {
         $builder
             ->add('Floor', IntegerType::class,
-            [
-                'label' => 'Etage',
-                'required'=>false,
-            ])
+                [
+                    'label' => 'Etage',
+                    'required' => false,
+                    'empty_data' => null,
+                ])
             ->add('isAssigned', CheckboxType::class,
                 [
                     'label' => 'Système d\'aquisition attribué',
-                    'required'=>false,
-
+                    'required' => false,
                 ])
             ->add('SearchAS', SearchType::class,
                 [
                     'label' => 'Nom du système d\'aquisition',
-                    'required'=>false,
+                    'required' => false,
                     'autocomplete' => true,
+                    'empty_data' => null,
 
                 ])
             ->add('SearchRoom', Searchtype::class,
                 [
                     'label' => 'Nom de la salle',
-                    'required'=>false,
+                    'required' => false,
                     'autocomplete' => true,
+                    'empty_data' => null,
 
                 ])
             ->add('Valid', Submittype::class,

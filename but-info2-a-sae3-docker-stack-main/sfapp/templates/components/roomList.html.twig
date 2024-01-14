@@ -21,10 +21,11 @@
     {{ form_start(form) }}
         <div class="d-flex mb-3">
             {{ form_widget(form.SearchRoom, {
+                'value': searchR,
                 'attr': {
                     'class': 'form-control rounded-lg',
                     'placeholder': 'Rechercher...',
-                    'style': 'background-color: #E0F2DE; border: none; '
+                    'style': 'background-color: #E0F2DE; border: none;'
                 }
             }) }}
             <button type="button" class="btn btn-custom-success ml-1" data-bs-toggle="modal" data-bs-target="#FilterModal"><i class="fa-solid fa-filter"></i></button>
@@ -38,21 +39,20 @@
 
                             <div class="my-4">
                                 <label for="floor" class="form-label">{{ form_label(form.Floor) }}</label>
-                                {{ form_widget(form.Floor, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_widget(form.Floor, {'value': floor, 'attr': {'class': 'form-control'}}) }}
                             </div>
 
                             <div class="form-check my-4">
                                 {{ form_widget(form.isAssigned, {'attr': {'class': 'form-check-input'}}) }}
-                                <input type="checkbox" name="is-assigned" value={{ field_value(form.isAssigned) }} class="form-check-input">
                                 <label for="is-assigned" class="form-check-label">Système d'acquisition attribué</label>
                             </div>
 
                             <div class="my-4">
                                 <label for="search" class="form-label">{{ form_label(form.SearchAS) }}</label>
-                                {{ form_widget(form.SearchAS, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_widget(form.SearchAS, {'value': searchAS, 'attr': {'class': 'form-control'}}) }}
                             </div>
                             {{ form_label(form.Valid) }}
-                            {{ form_widget(form.Valid, {'attr' : { 'class' : 'btn btn-custom-success'  }}) }}
+                            {{ form_widget(form.Valid, {'attr' : { 'class' : 'btn btn-custom-success' }}) }}
                         </div>
                     </div>
                 </div>

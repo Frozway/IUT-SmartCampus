@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class ApiController extends AbstractController
 {
@@ -98,5 +99,20 @@ class ApiController extends AbstractController
             }
         }
         return $this->json($values);
+    }
+
+    #[Route('/api/getWeather', name: 'api_get_weather')]
+    public function getWeather(RequestStack $requestStack, HttpClientInterface $httpClient): JsonResponse
+    {
+        $request = $requestStack->getCurrentRequest();
+        $city = $request->query->get('city');
+
+        $APIKey = 'bef0f873bd6633be3fbd81bedb9a02be';
+
+        $response = $httpClient->request('GET', "https://api.openweathermap.org/data/2.5/weather?q={$city}&units=metric&appid={$APIKey}&lang=fr");
+
+        $weatherData = $response->toArray();
+
+        return $this->json($weatherData);
     }
 }

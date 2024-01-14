@@ -4,16 +4,15 @@ const weatherBox = document.querySelector('.weather-box');
 const error404 = document.querySelector('.not-found');
 
 const performSearch = () => {
-    const APIKey = 'bef0f873bd6633be3fbd81bedb9a02be';
-    city = document.querySelector('.search-box input').value;
 
+    city = document.querySelector('.search-box input').value;
 
     //Si aucune ville n'est encore renseigné, on assigne par défaut la ville de La Rochelle
     if (city === '') {
         city = 'La Rochelle';
     }
 
-    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${APIKey}&lang=fr`)
+    fetch(`/api/getWeather?city=${city}`)
         .then(response => response.json())
         .then(json => {
 

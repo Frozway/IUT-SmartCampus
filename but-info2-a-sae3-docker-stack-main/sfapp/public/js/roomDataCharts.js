@@ -1,10 +1,10 @@
-function createCharts(labels, temperatureData, co2Data, humidityData) {
+function createCharts(labels, temperatureData, co2Data, humidityData, dayDate) {
     var temperatureChart = new Chart(document.getElementById('temperatureChart').getContext('2d'), {
         type: 'line',
         data: {
             labels: labels,
             datasets: [{
-                label: 'Température (°C)',
+                label: dayDate ? 'Température (°C)' + ' au ' + dayDate : 'Température (°C)',
                 data: temperatureData,
                 borderColor: 'rgba(255, 99, 132, 1)',
                 borderWidth: 1,
@@ -22,7 +22,7 @@ function createCharts(labels, temperatureData, co2Data, humidityData) {
         data: {
             labels: labels,
             datasets: [{
-                label: 'CO2 (ppm)',
+                label: dayDate ? 'CO2 (ppm)' + ' au ' + dayDate : 'CO2 (ppm)',
                 data: co2Data,
                 borderColor: 'rgba(75, 192, 192, 1)',
                 borderWidth: 1,
@@ -40,7 +40,7 @@ function createCharts(labels, temperatureData, co2Data, humidityData) {
         data: {
             labels: labels,
             datasets: [{
-                label: 'Humidité (%)',
+                label: dayDate ? 'Humidité (%)' + ' au ' + dayDate : 'Humidité (%)',
                 data: humidityData,
                 borderColor: 'rgba(153, 102, 255, 1)',
                 borderWidth: 1,

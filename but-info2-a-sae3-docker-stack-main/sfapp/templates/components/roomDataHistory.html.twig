@@ -1,28 +1,5 @@
 <div class="panel shadow mt-4">
     <div class="mt-2">
-        <h2>Visualisation des données</h2>
-        <div class="row">
-            <div class="col-md-4">
-                <div class="chart-container" style="flex: 1">
-                    <canvas id="temperatureChart" style="width: 100%"></canvas>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="chart-container" style="flex: 1">
-                    <canvas id="co2Chart" style="width: 100%"></canvas>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="chart-container" style="flex: 1">
-                    <canvas id="humidityChart" style="width: 100%"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="panel shadow mt-4">
-    <div class="mt-2">
         <h2>Toutes les données</h2>
         <table class="table table-stripe">
             <thead class="thead-dark">
@@ -46,9 +23,6 @@
                     {% endif %}
                 {% endfor %}
 
-            {# Get only the last 12 values #}
-            {% set last12Data = dataByDate|slice(0, 12) %}
-
                 {% for currentDate, values in dataByDate %}
                     <tr>
                         <td>{{ currentDate }}</td>
@@ -65,30 +39,3 @@
         </table>
     </div>
 </div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var labels = [];
-        var temperatureData = [];
-        var co2Data = [];
-        var humidityData = [];
-
-        {% for currentDate, values in dataByDate %}
-            labels.push('{{ currentDate|date('Y-m-d H:i') }}');
-            temperatureData.push({{ values['temp'] is not null ? values['temp'] : 'null' }});
-            co2Data.push({{ values['co2'] is not null ? values['co2'] : 'null' }});
-            humidityData.push({{ values['hum'] is not null ? values['hum'] : 'null' }});
-        {% endfor %}
-
-        // Inverser l'ordre des données
-        labels.reverse();
-        temperatureData.reverse();
-        co2Data.reverse();
-        humidityData.reverse();
-
-        createCharts(labels, temperatureData, co2Data, humidityData);
-    });
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="{{ asset('js/roomDataCharts.js') }}"></script>

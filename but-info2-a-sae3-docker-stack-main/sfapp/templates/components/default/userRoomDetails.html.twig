@@ -1,16 +1,25 @@
-<div class="col-8 panel shadow p-4">
+<div class="panel shadow flex-grow-1">
 
-    <h1 class="d-flex justify-content-between">
-        {{ room.name }} - Étage {{ room.floor }}
-        <a href="{{ path('app_user_dashboard') }}" class="btn btn-custom-secondary back mr-3"><i class="fa-solid fa-left-long"></i> Retour</a>
-    </h1>
+    <h2 class="my-3 mt-4 font-weight-bold text-uppercase">{{ room.name }} - Étage {{ room.floor }}</h2>
+    {# <a href="{{ path('app_user_dashboard }}" class="btn btn-custom-secondary back mr-3"><i class="fa-solid fa-left-long"></i> Retour</a> #}
 
     {# Afficher le contenu uniquement s'il y a un système d'acquisition associé #}
     {% if acquisitionSystem is not null %}
-
         {% if acquisitionSystem.isInstalled %}
-
+        
             {% include 'components/currentRoomData.html.twig' %}
+
+            <form class="panel shadow mt-4" id="dataLimitForm" action="{{ path('app_room', {'id': room.id}) }}" method="get">
+                <label for="dataLimit">Plage de données visibles</label>
+                <select class="form-control" id="dataLimit" name="dataLimit">
+                    <option value="864" {% if app.request.query.get('dataLimit') == '864' %}selected{% endif %}>Dernières 24 heures</option>
+                    <option value="2592" {% if app.request.query.get('dataLimit') == '2592' %}selected{% endif %}>Derniers 3 jours</option>
+                    <option value="6048" {% if app.request.query.get('dataLimit') == '6048' %}selected{% endif %}>Dernière semaine</option>
+                </select>
+            </form>
+
+            {# Block des graphiques de données #}
+            {% include 'components/roomDataCharts.html.twig' %}
 
         {% else %}
 
@@ -19,10 +28,34 @@
                 Les données seront prochainement disponible !
             </div>
 
-        {% endif %}
-
+        {% endif %} 
     {% endif %}
 
-    <h3 style="text-transform: uppercase; margin-top: 50px;"> vous constatez un problème ? </h3>
+    <div>
+        <p class="my-4 text-uppercase">vous constatez un problème ?</p>
+        <a href="{{ path('app_submit_tech_notification') }}" class="p-4 my-2 rounded create-alert">
+            <i class="fa-solid fa-triangle-exclamation fa-2xl"></i> ALERTER UN TECHNICIEN
+        </a> 
+    </div>
 
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        // Récupérer la valeur de dataLimit depuis le stockage local
+        var savedDataLimit = localStorage.getItem('dataLimit');
+
+        // Définir la valeur par défaut de la liste déroulante
+        if (savedDataLimit) {
+            $('#dataLimit').val(savedDataLimit);
+        }
+
+        // Mettre à jour la valeur de la liste déroulante lorsqu'elle change
+        $('#dataLimit').on('change', function () {
+            // Soumettre automatiquement le formulaire lorsque la valeur change
+            $('#dataLimitForm').submit();
+        });
+    });
+</script>

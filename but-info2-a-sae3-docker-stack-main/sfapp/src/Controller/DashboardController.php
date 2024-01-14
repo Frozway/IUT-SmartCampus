@@ -230,43 +230,6 @@ class DashboardController extends AbstractController
         $rooms = $roomRepository->findAll();
         $acquisitionSystems = $acquisitionSystemRepository->findAll();
 
-        $alerts = array();
-
-        foreach ($acquisitionSystems as $as) {
-            if ($as->getRoom()) {
-                if ($as->isIsInstalled()) {
-                    // The alert is created if the value is NEAR the limit
-
-                    // CO2 too high
-                    if ($as->getCo2() > 1300) {
-                        $alerts[] = array(
-                            'category' => ($as->getCo2() > 1500) ? 'red' : 'orange',
-                            'room' => $as->getRoom()->getName(),
-                        );
-                        continue;
-                    }
-
-                    // Temperature too low or too high
-                    if ($as->getTemperature() > 21 || $as->getTemperature() < 18) {
-                        $alerts[] = array(
-                            'category' => ($as->getTemperature() < 17) ? 'red' : 'orange',
-                            'room' => $as->getRoom()->getName(),
-                        );
-                        continue;
-                    }
-
-                    // Humidity AND temperature too high
-                    if ($as->getHumidity() > 60 && $as->getTemperature() > 20) {
-                        $alerts[] = array(
-                            'category' => ($as->getHumidity() > 70) ? 'red' : 'orange',
-                            'room' => $as->getRoom()->getName(),
-                        );
-                        continue;
-                    }
-                }
-            }
-        }
-
         $form = $this->createForm(FilterRoomDashboardType::class, $rooms);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -286,7 +249,6 @@ class DashboardController extends AbstractController
                 'searchR' => $searchR,
                 'searchAS' => $searchAS,
                 'form' => $form,
-                'alerts' => $alerts,
             ]);
         }
 
@@ -298,7 +260,6 @@ class DashboardController extends AbstractController
             'searchR' => null,
             'searchAS' => null,
             'form' => $form,
-            'alerts' => $alerts,
         ]);
     }
 

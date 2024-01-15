@@ -45,10 +45,15 @@
         var temperatureData = [];
         var co2Data = [];
         var humidityData = [];
-        
+
+
         // Si le nombre de données est inférieur à 864 (24h), on remplie une variable avec la date du jour
-        {% if data|length <= 864 %}
-            var dayDate = '{{ data[0].dateCapture|date('Y-m-d') }}';
+        {% if data|length > 0 %}
+            {% if data|length <= 864 %}
+                var dayDate = '{{ data[0].dateCapture|date('Y-m-d') }}';
+            {% else %}
+                var dayDate = '';
+            {% endif %}
         {% else %}
             var dayDate = '';
         {% endif %}
@@ -60,7 +65,7 @@
             {% else %}
                 labels.push('{{ currentDate|date('Y-m-d H:i') }}');
             {% endif %}
-            
+
             // Ajouter une vérification pour 'nan'
             var tempValue = {{ values['temp'] is not null and values['temp'] != 'nan' and values['temp'] != 'Error reading temperature!' and values['temp'] != '' ? values['temp'] : 'null' }};
             var co2Value = {{ values['co2'] is not null and values['co2'] != 'nan' and values['co2'] != 'Error reading CO2!' and values['co2'] != '' ? values['co2'] : 'null' }};

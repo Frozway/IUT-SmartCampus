@@ -39,6 +39,17 @@ class RoomRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
+    //Fonction qui retourne l'ID de la première salle
+    public function getFirstRoomId()
+    {
+        return $this->createQueryBuilder('r')
+            ->select('r.id')
+            ->orderBy('r.id', 'ASC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
 
 //    /**
 //     * @return Room[] Returns an array of Room objects

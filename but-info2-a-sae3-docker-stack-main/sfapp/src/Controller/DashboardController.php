@@ -114,12 +114,12 @@ class DashboardController extends AbstractController
 
         // Les valeurs sont triées par ordre chronologique inverse (la plus récente en premier)
         usort($apiData, function ($a, $b) {
-            return strtotime($b['dateCapture']) - strtotime($a['dateCapture']); 
+            return strtotime($b['dateCapture']) - strtotime($a['dateCapture']);
         });
 
         $form = $this->createForm(FilterRoomDashboardType::class, $rooms);
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {            
+        if ($form->isSubmitted() && $form->isValid()) {
             return $this->redirectToRoute('app_room', [
                 'id' => $id,
                 'floor' => $form->get('Floor')->getData(),
@@ -127,7 +127,7 @@ class DashboardController extends AbstractController
                 'name' => $form->get('SearchRoom')->getData(),
                 'as' => $form->get('SearchAS')->getData(),
             ]);
-        }     
+        }
 
         return $this->render('dashboard/user.html.twig', [
             'room' => $room,

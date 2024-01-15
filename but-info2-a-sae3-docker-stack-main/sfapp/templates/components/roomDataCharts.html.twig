@@ -62,9 +62,9 @@
             {% endif %}
             
             // Ajouter une vérification pour 'nan'
-            var tempValue = {{ values['temp'] is not null and values['temp'] != 'nan' and values['temp'] != 'Error reading temperature!' ? values['temp'] : 'null' }};
-            var co2Value = {{ values['co2'] is not null and values['co2'] != 'nan' and values['co2'] != 'Error reading CO2!' ? values['co2'] : 'null' }};
-            var humValue = {{ values['hum'] is not null and values['hum'] != 'nan' and values['hum'] != 'Error reading humidity!' ? values['hum'] : 'null' }};
+            var tempValue = {{ values['temp'] is not null and values['temp'] != 'nan' and values['temp'] != 'Error reading temperature!' and values['temp'] != '' ? values['temp'] : 'null' }};
+            var co2Value = {{ values['co2'] is not null and values['co2'] != 'nan' and values['co2'] != 'Error reading CO2!' and values['co2'] != '' ? values['co2'] : 'null' }};
+            var humValue = {{ values['hum'] is not null and values['hum'] != 'nan' and values['hum'] != 'Error reading humidity!' and values['hum'] != '' ? values['hum'] : 'null' }};
 
             temperatureData.push(tempValue);
             co2Data.push(co2Value);

@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -117,6 +118,26 @@ class DashboardController extends AbstractController
             return strtotime($b['dateCapture']) - strtotime($a['dateCapture']); 
         });
 
+        $outsideConditions = $httpClient->request('GET', 'http://10.113.5.236:8000/api/getWeather?city=nantes')->toArray();
+        // $outsideConditions = $httpClient->request('GET', $this->generateUrl('api_get_weather', [], UrlGeneratorInterface::ABSOLUTE_URL).'?city=nantes')->toArray();
+
+        $outsideTemp = $outsideConditions["main"]["temp"];
+        $insideTemp = $apiData[2]["valeur"];
+        $insideCo2 = $apiData[0]["valeur"];
+
+        $advice = null;
+
+        // La temperature est prioritaire sur la qualité de l'air
+        if ($insideTemp <= 18) {
+            $advice = 'Fermez les portes et fenêtres pour chauffer la pièce';
+        }
+        else if ($insideTemp >= 22 && $outsideTemp < $insideTemp) {
+            $advice = 'Ouvrez la fenêtre pour rafraîchir la pièce';
+        }
+        else if ($insideCo2 >= 1000) {
+            $advice = 'Ouvrez la fenêtre pour aérer la pièce';
+        }
+
         $form = $this->createForm(FilterRoomDashboardType::class, $rooms);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {            
@@ -139,6 +160,7 @@ class DashboardController extends AbstractController
             'form' => $form,
             'data' => $apiData,
             'acquisitionSystem' => $acquisitionSystem,
+            'advice' => $advice,
         ]);
     }
 

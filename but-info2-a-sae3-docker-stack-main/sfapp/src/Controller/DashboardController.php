@@ -160,7 +160,7 @@ class DashboardController extends AbstractController
             $entityManager->persist($notification);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_index');
+            return $this->redirectToRoute('app_user_dashboard');
 
         }
 

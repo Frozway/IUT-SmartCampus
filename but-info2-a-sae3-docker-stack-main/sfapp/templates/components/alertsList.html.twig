@@ -4,18 +4,16 @@
 
 {% endblock %}
 
-<div class="">
-    <div class="panel alert-panel shadow">
-        <span class="fs-5">Alertes</span>
-        <div id="loading" class="d-flex justify-content-center align-items-center" style="height: 100%">
-            <span class="visually-hidden mr-2">Chargement...</span>
-            <div class="spinner-border text-primary" role="status">
-            </div>
+<div class="panel alert-panel shadow">
+    <span class="fs-5">Alertes</span>
+    <div id="loading" class="d-flex justify-content-center align-items-center" style="height: 100%">
+        <span class="visually-hidden mr-2">Chargement...</span>
+        <div class="spinner-border text-primary" role="status">
         </div>
-        <div id="alerts" class="row px-2 mt-2" style="display: none">
-            <div id="no-alert" class="col-12 d-flex justify-content-center align-items-center">
-                <p class="text-center">Aucune alerte</p>
-            </div>
+    </div>
+    <div id="alerts" class="row px-2 mt-2" style="display: none">
+        <div id="no-alert" class="col-12 d-flex justify-content-center align-items-center">
+            <p class="text-center">Aucune alerte</p>
         </div>
     </div>
 </div>
@@ -52,28 +50,28 @@
             let alertColor = '';
 
             if (temp < 16 || temp > 28) {
-                alertColor = 'alerte-red';
+                alertColor = 'alert-red';
             } else if (temp < 19 || temp > 24) {
-                alertColor = alertColor === 'alerte-red' ? alertColor : 'alerte-orange';
+                alertColor = alertColor === 'alert-red' ? alertColor : 'alert-orange';
             }
 
             if (humidity < 30 || humidity > 70) {
-                alertColor = 'alerte-red';
+                alertColor = 'alert-red';
             } else if (humidity < 40 || humidity > 60) {
-                alertColor = alertColor === 'alerte-red' ? alertColor : 'alerte-orange';
+                alertColor = alertColor === 'alert-red' ? alertColor : 'alert-orange';
             }
 
             if (co2 > 1000 && co2 <= 1500) {
-                alertColor = alertColor === 'alerte-red' ? alertColor : 'alerte-orange';
+                alertColor = alertColor === 'alert-red' ? alertColor : 'alert-orange';
             } else if (co2 > 1500) {
-                alertColor = 'alerte-red';
+                alertColor = 'alert-red';
             }
 
             // Affichage de l'alerte si nécessaire
             if (alertColor !== '') {
                 const alert = document.createElement('div');
                 alert.id = 'alert-' + salle;
-                alert.classList.add('alerte', 'mt-2', 'mx-1', 'p-0', 'border-0', alertColor);
+                alert.classList.add('alert', 'mt-2', 'mx-1', 'p-0', 'border-0', alertColor, 'd-flex');
                 alert.style.cursor = 'pointer';
                 alert.innerHTML = '<div class="icon-container p-2"><i class="fa-solid fa-triangle-exclamation fa-xl"></i></div><div class="room-name d-flex justify-content-center align-items-center"><p>' + salle + '</p></div>';
                 document.getElementById('alerts').appendChild(alert).addEventListener('click', function() {

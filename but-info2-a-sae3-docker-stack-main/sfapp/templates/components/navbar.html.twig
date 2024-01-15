@@ -5,11 +5,19 @@
 {% endblock %}
 
 <div class="navbar py-1 px-2 d-flex justify-content-start align-content-center">
-    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TECHNICIAN') %}
-        <a href="{{ path('app_user_dashboard') }}" style="color: white; font-size: 18pt">
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('app_admin_dashboard') }}" style="color: white; font-size: 18pt">
             <img src="{{ asset('images/smartlogo/logo_1.png') }}" alt="Logo" height="42"/>
             <strong>SMART</strong><span>CAMPUS</span>
         </a>       
+        <a href="{{ path('app_logout') }}" class="ml-auto py-1 d-flex justify-content-center px-1">
+            <img src="{{ asset('svg/logout.svg') }}" class="logout" alt="Logout" height="24">
+        </a>
+    {% elseif is_granted('ROLE_TECHNICIAN') %}
+        <a href="{{ path('app_tech_dashboard') }}" style="color: white; font-size: 18pt">
+            <img src="{{ asset('images/smartlogo/logo_1.png') }}" alt="Logo" height="42"/>
+            <strong>SMART</strong><span>CAMPUS</span>
+        </a>
         <a href="{{ path('app_logout') }}" class="ml-auto py-1 d-flex justify-content-center px-1">
             <img src="{{ asset('svg/logout.svg') }}" class="logout" alt="Logout" height="24">
         </a>

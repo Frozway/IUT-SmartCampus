@@ -142,7 +142,7 @@ class DashboardController extends AbstractController
         ]);
     }
 
-    #[Route('/envoyer-alerte', name: 'app_submit_tech_notification')]
+    #[Route('/submit-notification', name: 'app_submit_tech_notification')]
     public function submintNotificationIndex(ManagerRegistry $doctrine, Request $request, EntityManagerInterface $entityManager): Response
     {
 

@@ -4,25 +4,30 @@
 
 {% block body %}
 <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
-{# <link rel="stylesheet" href="{{ asset('css/adminDashboard.css') }}"> #}
 
+{% include 'components/navbar.html.twig' %}
 
 {% if error %}
     <div class="alert alert-danger fixed-bottom my-0">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
 {% endif %}
 
-<div class="page-wrapper d-inline-flex">
+<div>
 
-    <div class="content">
-        <div class="panel">
-            <h2>Envoyer une alerte</h2>
-            {{ form_start(form) }}
-            {{ form_widget(form.room, {'attr': {'class': 'form-control my-1'}}) }}
-            {{ form_widget(form.text, {'attr': {'class': 'form-control my-1'}}) }}
-            <button type="submit" class="btn btn-primary form-control">Envoyer</button>
-            {{ form_end(form) }}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
 
-            {# {{form(form)}} #}
+            <div class="col-md-6 panel">
+                <h2>Envoyer une alerte</h2>
+                {{ form_start(form) }}
+                {{ form_widget(form.room, {'attr': {'class': 'form-control my-1'}}) }}
+                {{ form_widget(form.text, {'attr': {'class': 'form-control my-1'}}) }}
+                <button type="submit" class="btn btn-primary form-control"><i class="fa-regular fa-paper-plane"></i> Envoyer</button>
+                <a href="#" onclick="history.back();" class="btn btn-primary form-control btn-custom-danger mt-1"><i
+                            class="fa-solid fa-xmark"></i> Annuler</a>
+                {{ form_end(form) }}
+
+                {# {{form(form)}} #}
+            </div>
         </div>
     </div>  
 

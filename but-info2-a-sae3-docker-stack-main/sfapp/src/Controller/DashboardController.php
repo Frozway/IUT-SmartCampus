@@ -78,65 +78,11 @@ class DashboardController extends AbstractController
     public function roomIndex(?int $id, ManagerRegistry $doctrine, Request $request, HttpClientInterface $httpClient): Response
     {
         $entityManager = $doctrine->getManager();
-        $acquisitionSystemRepository = $entityManager->getRepository('App\Entity\AcquisitionSystem');
         $roomRepository = $entityManager->getRepository('App\Entity\Room');
 
         $room = $roomRepository->find($id);
-
         $rooms = $roomRepository->findAll();
-
         $acquisitionSystem = $room->getAcquisitionSystem();
-
-        $form = $this->createForm(FilterRoomDashboardType::class, $rooms);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $floor = $form->get('Floor')->getData();
-            $assigned = $form->get('isAssigned')->getData();
-            $searchR = strtoupper($form->get('SearchRoom')->getData());
-            $searchAS = strtoupper($form->get('SearchAS')->getData());
-
-            $dataLimit = $request->query->get('dataLimit', 864);
-
-            // récuperation du fichier database.json
-            $json = file_get_contents('json/database.json');
-            $json_data = json_decode($json, true);
-            try {
-                $dbname = $json_data[$room->getName()]['dbname'];
-            } catch (\Exception $e) {
-                $dbname = null;
-            }
-
-            try {
-                // Effectuer une requête HTTP à votre API
-                $apiResponse = $httpClient->request('GET', "https://sae34.k8s.iut-larochelle.fr/api/captures/last?limit={$dataLimit}", [
-                    'headers' => [
-                        'accept' => 'application/ld+json',
-                        'dbname' => $dbname,
-                        'username' => 'k1eq3',
-                        'userpass' => 'wohtuh-nigzup-diwhE4',
-                    ],
-                ]);
-                $apiData = $apiResponse->toArray();
-            } catch (\Exception $e) {
-                $this->addFlash('error', 'Impossible de récupérer les données de l\'API.');
-                $apiData = [];
-            }
-
-            usort($apiData, function ($a, $b) {
-                return strtotime($b['dateCapture']) - strtotime($a['dateCapture']); // Les valeurs sont triées par ordre décroissant (la plus récente en premier)
-            });
-
-            return $this->render('dashboard/user.html.twig', [
-                'rooms' => $rooms,
-                'floor' => $floor,
-                'assigned' => $assigned,
-                'searchR' => $searchR,
-                'searchAS' => $searchAS,
-                'form' => $form,
-                'data' => $apiData,
-                'acquisitionSystem' => $acquisitionSystem,
-            ]);
-        }
 
         $dataLimit = $request->query->get('dataLimit', 864);
 
@@ -159,23 +105,37 @@ class DashboardController extends AbstractController
                     'userpass' => 'wohtuh-nigzup-diwhE4',
                 ],
             ]);
+
             $apiData = $apiResponse->toArray();
         } catch (\Exception $e) {
             $this->addFlash('error', 'Impossible de récupérer les données de l\'API.');
             $apiData = [];
         }
 
+        // Les valeurs sont triées par ordre chronologique inverse (la plus récente en premier)
         usort($apiData, function ($a, $b) {
-            return strtotime($b['dateCapture']) - strtotime($a['dateCapture']); // Les valeurs sont triées par ordre décroissant (la plus récente en premier)
+            return strtotime($b['dateCapture']) - strtotime($a['dateCapture']); 
         });
+
+        $form = $this->createForm(FilterRoomDashboardType::class, $rooms);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {            
+            return $this->redirectToRoute('app_room', [
+                'id' => $id,
+                'floor' => $form->get('Floor')->getData(),
+                'assigned' => $form->get('isAssigned')->getData(),
+                'name' => $form->get('SearchRoom')->getData(),
+                'as' => $form->get('SearchAS')->getData(),
+            ]);
+        }     
 
         return $this->render('dashboard/user.html.twig', [
             'room' => $room,
             'rooms' => $rooms,
-            'floor' => null,
-            'assigned' => null,
-            'searchR' => null,
-            'searchAS' => null,
+            'floor' => $request->get('floor'),
+            'assigned' => $request->get('assigned'),
+            'searchR' => $request->get('name'),
+            'searchAS' => $request->get('as'),
             'form' => $form,
             'data' => $apiData,
             'acquisitionSystem' => $acquisitionSystem,
@@ -233,32 +193,21 @@ class DashboardController extends AbstractController
         $form = $this->createForm(FilterRoomDashboardType::class, $rooms);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $floor = $form->get('Floor')->getData();
-
-            $assigned = $form->get('isAssigned')->getData();
-
-            $searchR = strtoupper($form->get('SearchRoom')->getData());
-
-            $searchAS = strtoupper($form->get('SearchAS')->getData());
-
-            return $this->render('dashboard/admin.html.twig', [
-                'rooms' => $rooms,
-                'acquisitionSystems' => $acquisitionSystems,
-                'floor' => $floor,
-                'assigned' => $assigned,
-                'searchR' => $searchR,
-                'searchAS' => $searchAS,
-                'form' => $form,
+            return $this->redirectToRoute('app_admin_dashboard', [
+                'floor' => $form->get('Floor')->getData(),
+                'assigned' => $form->get('isAssigned')->getData() == '0' ? null : true,
+                'name' => $form->get('SearchRoom')->getData(),
+                'as' => $form->get('SearchAS')->getData(),
             ]);
         }
 
         return $this->render('dashboard/admin.html.twig', [
             'rooms' => $rooms,
             'acquisitionSystems' => $acquisitionSystems,
-            'floor' => null,
-            'assigned' => null,
-            'searchR' => null,
-            'searchAS' => null,
+            'floor' => $request->get('floor'),
+            'assigned' => $request->get('assigned'),
+            'searchR' => $request->get('name'),
+            'searchAS' => $request->get('as'),
             'form' => $form,
         ]);
     }

@@ -16,8 +16,8 @@ const performSearch = () => {
         .then(response => response.json())
         .then(json => {
 
-
-            if (json.cod === '404') {
+            // Si le json est vide
+            if (json.weather === undefined) {
                 console.log('error');
                 weatherBox.style.display = 'none';
                 error404.style.display = 'block';

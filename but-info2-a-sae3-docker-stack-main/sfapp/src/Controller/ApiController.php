@@ -111,8 +111,15 @@ class ApiController extends AbstractController
 
         $response = $httpClient->request('GET', "https://api.openweathermap.org/data/2.5/weather?q={$city}&units=metric&appid={$APIKey}&lang=fr");
 
-        $weatherData = $response->toArray();
+        // Si 404, on renvoi le json vide
+        if ($response->getStatusCode() === 404) {
+            return $this->json([]);
+        }
+        else {
+            $weatherData = $response->toArray();
 
-        return $this->json($weatherData);
+            return $this->json($weatherData);
+        }
+
     }
 }

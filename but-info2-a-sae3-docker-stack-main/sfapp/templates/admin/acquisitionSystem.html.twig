@@ -19,15 +19,7 @@
 
     {# Bouton Retour #}
 
-    {# Afficher les messages Flash pendant 5 secondes #}
-    {% for messageType, flashMessages in app.session.flashbag.all() %}
-        {% for flashMessage in flashMessages %}
-            <div class="alert alert-{{ messageType }} flash-message shadow"
-                 style="width: fit-content; padding: 8px 16px; margin: 8px;">
-                {{ flashMessage }}
-            </div>
-        {% endfor %}
-    {% endfor %}
+    {% include 'components/flashAlerts.html.twig' %}
 
     <div class="panel shadow">
 
@@ -82,8 +74,6 @@
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="{{ asset('js/flashMessageHandler.js') }}"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
 {% endblock %}

@@ -1,0 +1,14 @@
+<div class="flash-wrapper d-flex justify-content-center align-items-start position-fixed" style="width: 100vw; height: 100vh;">
+
+{# Afficher les messages Flash pendant 5 secondes #}
+{% for messageType, flashMessages in app.session.flashbag.all() %}
+    {% for flashMessage in flashMessages %}
+        <div class="alert alert-warning shadow p-2 m-2 shadow flash-message">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+{% endfor %}
+
+<script src="{{ asset('js/flashMessageHandler.js') }}"></script>
+
+</div>

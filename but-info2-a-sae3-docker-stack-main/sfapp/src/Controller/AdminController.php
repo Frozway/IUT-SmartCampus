@@ -483,4 +483,29 @@ class AdminController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route('/admin-dashboard/delete-department', name: 'app_admin_delete_department')
+     *
+     * Supprime le département et retourne sur le tableau de bord
+     *
+     * @param Request $request La requête HTTP
+     * @param EntityManagerInterface $entityManager L'entité de gestion
+     * @param int $id L'identifiant tu département supprimé
+     * @return Response
+     */
+    #[Route('/admin-dashboard/delete-department/{id}', name: 'app_admin_delete_department')]
+    #[IsGranted("ROLE_ADMIN")]
+    public function deleteDepartement(Request $request, EntityManagerInterface $entityManager, int $id, ValidatorInterface $validator): Response
+    {
+        $departmentsRepository = $entityManager->getRepository('App\Entity\Department');
+        $departement = $departmentsRepository->find($id);
+        
+        $entityManager->remove($departement);
+        $entityManager->flush();
+        
+        return $this->redirectToRoute('app_admin_dashboard');
+    }
+
 }
+
+

@@ -323,40 +323,6 @@ class DashboardController extends AbstractController
             }
         }
 
-
-        // foreach ($acquisitionSystems as $as) {
-        //     if ($as->getRoom()) {
-        //         if ($as->isIsInstalled()) {
-        //             // CO2 too high
-        //             if ($as->getCo2() > 1300) {
-        //                 $alerts[] = array(
-        //                     'category' => ($as->getCo2() > 1500) ? 'red' : 'orange',
-        //                     'room' => $as->getRoom()->getName(),
-        //                 );
-        //                 continue;
-        //             }
-
-        //             // Temperature to low or too high
-        //             if ($as->getTemperature() > 21 || $as->getTemperature() < 18) {
-        //                 $alerts[] = array(
-        //                     'category' => ($as->getTemperature() < 17) ? 'red' : 'orange',
-        //                     'room' => $as->getRoom()->getName(),
-        //                 );
-        //                 continue;
-        //             }
-
-        //             // Humidity AND temperature too high
-        //             if ($as->getHumidity() > 60 && $as->getTemperature() > 20) {
-        //                 $alerts[] = array(
-        //                     'category' => ($as->getHumidity() > 70) ? 'red' : 'orange',
-        //                     'room' => $as->getRoom()->getName(),
-        //                 );
-        //                 continue;
-        //             }
-        //         }
-        //     }
-        // }
-
         return $this->render('dashboard/tech.html.twig', [
             'rooms' => $rooms,
             'acquisitionSystems' => $acquisitionSystems,

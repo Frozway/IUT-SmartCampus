@@ -24,7 +24,7 @@ class AppFixtures extends Fixture
 
         $manager->flush();
 
-        // Room D205
+// Room D205
         $as1 = new AcquisitionSystem();
         $as1->setName('ESP-001');
         $as1->setState(0);
@@ -75,7 +75,7 @@ class AppFixtures extends Fixture
         $as3->setRoom($room3);
         $manager->persist($as3);
 
-        // Room D204
+// Room D204
         $as4 = new AcquisitionSystem();
         $as4->setName('ESP-004');
         $as4->setState(0);
@@ -186,7 +186,7 @@ class AppFixtures extends Fixture
 
         $room10 = new Room();
         $room10->setName('Secrétariat');
-        $room10->setFloor('2');
+        $room10->setFloor('1');
         $room10->setAcquisitionSystem($as10);
         $room10->setDepartment($department);
         $manager->persist($room10);
@@ -203,7 +203,7 @@ class AppFixtures extends Fixture
 
         $room11 = new Room();
         $room11->setName('D001');
-        $room11->setFloor('1');
+        $room11->setFloor('0');
         $room11->setAcquisitionSystem($as11);
         $room11->setDepartment($department);
         $manager->persist($room11);
@@ -220,7 +220,7 @@ class AppFixtures extends Fixture
 
         $room12 = new Room();
         $room12->setName('D002');
-        $room12->setFloor('1');
+        $room12->setFloor('0');
         $room12->setAcquisitionSystem($as12);
         $room12->setDepartment($department);
         $manager->persist($room12);
@@ -237,7 +237,7 @@ class AppFixtures extends Fixture
 
         $room13 = new Room();
         $room13->setName('D004');
-        $room13->setFloor('1');
+        $room13->setFloor('0');
         $room13->setAcquisitionSystem($as13);
         $room13->setDepartment($department);
         $manager->persist($room13);
@@ -254,7 +254,7 @@ class AppFixtures extends Fixture
 
         $room14 = new Room();
         $room14->setName('C004');
-        $room14->setFloor('1');
+        $room14->setFloor('0');
         $room14->setAcquisitionSystem($as14);
         $room14->setDepartment($department);
         $manager->persist($room14);
@@ -271,7 +271,7 @@ class AppFixtures extends Fixture
 
         $room15 = new Room();
         $room15->setName('C007');
-        $room15->setFloor('1');
+        $room15->setFloor('0');
         $room15->setAcquisitionSystem($as15);
         $room15->setDepartment($department);
         $manager->persist($room15);
@@ -322,7 +322,7 @@ class AppFixtures extends Fixture
 
         $room18 = new Room();
         $room18->setName('C005');
-        $room18->setFloor('1');
+        $room18->setFloor('0');
         $room18->setAcquisitionSystem($as18);
         $room18->setDepartment($department);
         $manager->persist($room18);

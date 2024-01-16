@@ -11,12 +11,12 @@
 
     <div class="title-bar d-flex align-items-center justify-content-center">
 
-        <span class="dashboard-title">Tableau de bord - Technicien </span>
+        <span class="dashboard-title">Tableau de bord - Technicien</span>
 
     </div>
 
     <!-- Alertes -->
-    {% include 'components/alertsList.html.twig' %}
+    {% include 'components/techAlertsList.html.twig' %}
 
     {# Afficher les messages Flash pendant 5 secondes #}
     {% for messageType, flashMessages in app.session.flashbag.all() %}

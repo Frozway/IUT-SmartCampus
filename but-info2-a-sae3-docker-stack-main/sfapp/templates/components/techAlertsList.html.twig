@@ -4,7 +4,7 @@
 
 {% endblock %}
 
-<div class="panel alert-panel shadow" id="ALERT-List">
+<div class="panel alert-panel shadow">
     <span class="fs-5">Alertes</span>
     <div id="loading" class="d-flex justify-content-center align-items-center" style="height: 100%">
         <span class="visually-hidden mr-2">Chargement...</span>
@@ -44,26 +44,20 @@
         for (const salle in data) {
             const temp = parseFloat(data[salle].temp.valeur);
             const humidity = parseFloat(data[salle].humidity.valeur);
-            const co2 = parseInt(data[salle].co2.valeur);
+            const co2 = parseInt(data[salle].co2.valeur);;
 
-            // Conditions pour les alertes
+             // Conditions pour les alertes
             let alertColor = '';
 
-            if (temp < 16 || temp > 28) {
+            if (temp < 0 || temp > 60) {
                 alertColor = 'alert-red';
-            } else if (temp < 19 || temp > 24) {
-                alertColor = alertColor === 'alert-red' ? alertColor : 'alert-orange';
             }
 
-            if (humidity < 30 || humidity > 70) {
+            if (humidity < 0 || humidity > 100) {
                 alertColor = 'alert-red';
-            } else if (humidity < 40 || humidity > 60) {
-                alertColor = alertColor === 'alert-red' ? alertColor : 'alert-orange';
             }
 
-            if (co2 > 1000 && co2 <= 1500) {
-                alertColor = alertColor === 'alert-red' ? alertColor : 'alert-orange';
-            } else if (co2 > 1500) {
+            if (co2 < 0 || co2 > 4000) {
                 alertColor = 'alert-red';
             }
 
@@ -74,9 +68,7 @@
                 alert.classList.add('alert', 'mt-2', 'mx-1', 'p-0', 'border-0', alertColor, 'd-flex');
                 alert.style.cursor = 'pointer';
                 alert.innerHTML = '<div class="icon-container p-2"><i class="fa-solid fa-triangle-exclamation fa-xl"></i></div><div class="room-name d-flex justify-content-center align-items-center"><p>' + salle + '</p></div>';
-                document.getElementById('alerts').appendChild(alert).addEventListener('click', function() {
-                    window.location.href = "{{ path('app_admin_room', {'id': 'roomId'}) }}".replace('roomId', data[salle].roomID);
-                });
+                document.getElementById('alerts').appendChild(alert);
                 document.getElementById('no-alert').classList.remove('d-flex');
                 document.getElementById('no-alert').style.display = 'none';
             }

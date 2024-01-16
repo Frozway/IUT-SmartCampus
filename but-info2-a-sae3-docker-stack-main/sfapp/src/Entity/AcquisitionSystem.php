@@ -21,15 +21,6 @@ class AcquisitionSystem
     #[ORM\OneToOne(inversedBy: 'acquisitionSystem', cascade: ['persist', 'remove'])]
     private ?Room $room = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $co2 = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?int $humidity = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?int $temperature = null;
-
     #[ORM\Column]
     private ?bool $isInstalled = null;
 
@@ -102,42 +93,6 @@ class AcquisitionSystem
     public function setRoom(?Room $room): static
     {
         $this->room = $room;
-
-        return $this;
-    }
-
-    public function getCo2(): ?int
-    {
-        return $this->co2;
-    }
-
-    public function setCo2(?int $co2): static
-    {
-        $this->co2 = $co2;
-
-        return $this;
-    }
-
-    public function getHumidity(): ?int
-    {
-        return $this->humidity;
-    }
-
-    public function setHumidity(int $humidity): static
-    {
-        $this->humidity = $humidity;
-
-        return $this;
-    }
-
-    public function getTemperature(): ?int
-    {
-        return $this->temperature;
-    }
-
-    public function setTemperature(?int $temperature): static
-    {
-        $this->temperature = $temperature;
 
         return $this;
     }

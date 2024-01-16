@@ -77,17 +77,8 @@
                         {% if (assigned == 1 and room.getAcquisitionSystem() != null) or assigned == 0%}
                             {% if (room.getAcquisitionSystem() is not empty and room.getAcquisitionSystem().getName() == searchAS) or searchAS == null or searchAS is empty%}
                                 {% if is_granted('ROLE_ADMIN') %}
-                                    <a href="{{ path('app_admin_room', {'id': room.id}) }}" class="text-decoration-none" id="Room">
-                                        <li class="d-flex justify-content-between align-items-center mr-3
-                                        {% if room.acquisitionSystem %}
-                                            {% if room.acquisitionSystem.isInstalled %}
-                                                {{ room.acquisitionSystem.temperature > 21 ? 'red-border' }}
-                                                {{ room.acquisitionSystem.temperature < 17 ? 'red-border' }}
-                                                {{ room.acquisitionSystem.co2 > 1500 ? 'red-border' }}
-                                                {{ room.acquisitionSystem.humidity > 70 ? 'red-border' }}
-                                            {% endif %}
-                                        {% endif %}
-                                        ">
+                                    <a href="{{ path('app_admin_room', {'id': room.id}) }}" class="text-decoration-none">
+                                        <li class="d-flex justify-content-between align-items-center mr-3">
                                 {% else %}
                                     <a href="{{ path('app_room', {'id': room.id}) }}" class="text-decoration-none" id="Room">
                                     {% if onRoomPage %}
@@ -100,7 +91,7 @@
                                         <li class="d-flex justify-content-between align-items-center mr-3">
                                     {% endif %}
                                 {% endif %}
-                                            <span  style="color:black;">
+                                            <span style="color:black;">
                                                 {{ room.name }}
                                             </span>
 

@@ -4,18 +4,16 @@
 
 {% endblock %}
 
-<div class="">
-    <div class="panel alert-panel shadow">
-        <span class="fs-5">Alertes</span>
-        <div id="loading" class="d-flex justify-content-center align-items-center" style="height: 100%">
-            <span class="visually-hidden mr-2">Chargement...</span>
-            <div class="spinner-border text-primary" role="status">
-            </div>
+<div class="panel alert-panel shadow" id="ALERT-List">
+    <span class="fs-5">Alertes</span>
+    <div id="loading" class="d-flex justify-content-center align-items-center" style="height: 100%">
+        <span class="visually-hidden mr-2">Chargement...</span>
+        <div class="spinner-border text-primary" role="status">
         </div>
-        <div id="alerts" class="row px-2 mt-2" style="display: none">
-            <div id="no-alert" class="col-12 d-flex justify-content-center align-items-center">
-                <p class="text-center">Aucune alerte</p>
-            </div>
+    </div>
+    <div id="alerts" class="row px-2 mt-2" style="display: none">
+        <div id="no-alert" class="col-12 d-flex justify-content-center align-items-center">
+            <p class="text-center">Aucune alerte</p>
         </div>
     </div>
 </div>

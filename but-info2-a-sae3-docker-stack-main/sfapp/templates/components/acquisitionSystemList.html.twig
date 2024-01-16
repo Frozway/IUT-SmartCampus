@@ -11,10 +11,10 @@
 {# Affichage pour le mode administrateur #}
 {% if is_granted('ROLE_ADMIN') %}
 
-    <div class="col panel shadow lists" style="height: 68vh">
+    <div class="col panel shadow lists" id="AS-Admin-List" style="height: 68vh">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <div class="fs-5" >{{ titre }}</div>
-            <div>
+            <div id="add-as-button">
                 <a href="{{ path('app_admin_add_acquisition_system', {'error': '0'}) }}" class="btn btn-custom-success">
                     <i class="fa-solid fa-plus"></i> 
                     Ajouter 
@@ -48,7 +48,7 @@
 {# Affichage pour le mode technicien #}
 {% elseif is_granted('ROLE_TECHNICIAN') %}
 
-    <div class="col panel shadow lists" id="AS-List"  style="height: 68vh">
+    <div class="col panel shadow lists" id="AS-Tech-List"  style="height: 68vh">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <div class="fs-5">{{ titre }}</div>
         </div>

@@ -31,6 +31,16 @@ class UserRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
+    //Fonction qui retourne l'utilisateur admin username
+    public function findAdminUser()
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.username = :val')
+            ->setParameter('val', 'admin')
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
 //    /**
 //     * @return User[] Returns an array of User objects
 //     */

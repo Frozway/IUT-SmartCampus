@@ -3,10 +3,6 @@
 namespace App\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class TechControllerTest extends WebTestCase
 {
@@ -108,8 +104,8 @@ class TechControllerTest extends WebTestCase
         $this->assertEquals(3, $crawler->filter('div.col.panel.shadow')->count());
 
         //Vérifier que la première colonne qui à id="ASList" est bien celle des systèmes d'aquisition installés
-        $this->assertSelectorExists('div#AS-List');
-        $this->assertSelectorTextContains('div#AS-List', "Systèmes d'aquisition installés");
+        $this->assertSelectorExists('div#AS-Tech-List');
+        $this->assertSelectorTextContains('div#AS-Tech-List', "Systèmes d'aquisition installés");
 
         //Vérifier que la deuxième colonne qui à id="OP-List" est bien celle des opérations à effectuer
         $this->assertSelectorExists('div#OP-List');

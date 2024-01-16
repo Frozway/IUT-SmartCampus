@@ -1,32 +1,32 @@
-.panel-alert.alert {
+.alert-panel .alert {
   color: white;
   border-radius: 8px;
   overflow: hidden;
 }
 
-.panel-alert.alert-orange {
+.alert-panel .alert-orange {
   background-color: #fdcb6e;
 }
 
-.panel-alert.alert-red {
+.alert-panel .alert-red {
   background-color: #ff7675;
 }
 
-.panel-alert.alert-orange .icon-container {
+.alert-panel .alert-orange .icon-container {
   background-color: #ffad33;
 }
 
-.panel-alert.alert-red .icon-container {
+.alert-panel .alert-red .icon-container {
   background-color: #d63031;
 }
 
-.panel-alert.alert .room-name {
+.alert-panel .alert .room-name {
   padding: 8px 12px;
   font-size: 16pt;
   font-weight: 600;
 }
 
-.panel-alert.alert p {
+.alert-panel .alert p {
   margin: 0;
   line-height: 25px;
 }

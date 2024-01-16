@@ -22,18 +22,17 @@
 <script>
     function getAlerts() {
         document.getElementById('loading').style.display = 'flex';
-        $.ajax({
-            url: "{{ path('api_get_last_values') }}",
-            type: "GET",
-            dataType: "json",
-            success: function (data) {
-                // si la requête est un succès, on met à jour les valeurs des salles
-                updateAlerts(data);
-            },
-            error: function (xhr, status, error) {
-                console.log(xhr.responseText);
+
+        fetch("{{ path('api_get_last_values') }}", {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json'
             }
-        });
+        }).then(data => {
+            data => data.json();
+        }).then(json => {
+            updateAlerts(json);
+        })
     }
 
     function updateAlerts(data) {

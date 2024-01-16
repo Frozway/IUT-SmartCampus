@@ -108,7 +108,7 @@ class AdminControllerTest extends WebTestCase
         $this->assertSelectorExists('div#AddRoomAdmin');
 
         // Cette liste des salles contient bien le texte Salles dans une div
-        $this->assertSelectorTextContains('div.col.panel.shadow.lists', 'Salles');
+        $this->assertSelectorTextContains('div#list-title', 'Salles');
 
         // Cette liste contient bien autant de li que de salle dans la base de données
         $this->assertEquals($numberOfRooms, $crawler->filter('li#admin')->count());

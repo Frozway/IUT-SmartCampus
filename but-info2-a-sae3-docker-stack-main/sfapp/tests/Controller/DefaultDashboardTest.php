@@ -70,7 +70,7 @@ class DefaultDashboardTest extends WebTestCase
         $this->assertSelectorNotExists('div#AddRoomAdmin button');
 
         // Cette liste des salles contient bien le texte Salles dans une div
-        $this->assertSelectorTextContains('div.col-2.panel.shadow.lists', 'Salles');
+        $this->assertSelectorTextContains('div#list-title', 'Salles');
 
         // Cette liste contient bien autant de li que de salle dans la base de données
         $this->assertEquals($numberOfRooms, $crawler->filter('li')->count());

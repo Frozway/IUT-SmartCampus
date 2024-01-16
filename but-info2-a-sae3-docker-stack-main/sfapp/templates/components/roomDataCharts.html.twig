@@ -46,9 +46,6 @@
         var co2Data = [];
         var humidityData = [];
 
-        // afficher les données récupérées dans le console
-        console.log({{ dataByDate|json_encode()|raw }});
-
         // Si le nombre de données est inférieur à 864 (24h), on remplit une variable avec la date du jour
         {% if data|length <= 864 %}
             var dayDate = '{{ data[0].dateCapture|date('Y-m-d') }}';

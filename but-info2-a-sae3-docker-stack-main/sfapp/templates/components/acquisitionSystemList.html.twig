@@ -2,10 +2,8 @@
 
 {% if is_granted('ROLE_ADMIN') %}
     {% set titre = "Systèmes d'aquisition" %}
-
 {% elseif is_granted('ROLE_TECHNICIAN') %}
     {% set titre = "Systèmes d'aquisition installés" %}
-
 {% endif %}   
     
 {# Affichage pour le mode administrateur #}

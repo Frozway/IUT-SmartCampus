@@ -6,6 +6,7 @@ use App\Entity\Room;
 use App\Entity\TechNotification;
 use App\Form\FilterRoomDashboardType;
 use App\Form\NotificationType;
+use App\Service\WeatherService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -118,10 +119,10 @@ class DashboardController extends AbstractController
             return strtotime($b['dateCapture']) - strtotime($a['dateCapture']); 
         });
 
-        $outsideConditions = $httpClient->request('GET', 'http://10.113.5.236:8000/api/getWeather?city=nantes')->toArray();
-        // $outsideConditions = $httpClient->request('GET', $this->generateUrl('api_get_weather', [], UrlGeneratorInterface::ABSOLUTE_URL).'?city=nantes')->toArray();
+        $weatherService = new WeatherService();
+        $outsideConditions = json_decode($weatherService->getWeather($httpClient, "la%20rochelle")->getContent());
 
-        $outsideTemp = $outsideConditions["main"]["temp"];
+        $outsideTemp = $outsideConditions->main->temp;
         $insideTemp = $apiData[2]["valeur"];
         $insideCo2 = $apiData[0]["valeur"];
 
@@ -160,7 +161,7 @@ class DashboardController extends AbstractController
             'form' => $form,
             'data' => $apiData,
             'acquisitionSystem' => $acquisitionSystem,
-            'advice' => $advice,
+            'advice' => $outsideConditions,
         ]);
     }
 

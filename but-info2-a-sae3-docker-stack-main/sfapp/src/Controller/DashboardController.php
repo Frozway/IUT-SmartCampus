@@ -8,6 +8,7 @@ use App\Form\FilterRoomDashboardType;
 use App\Form\NotificationType;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use SebastianBergmann\CodeUnit\FunctionUnit;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -145,7 +146,6 @@ class DashboardController extends AbstractController
     #[Route('/submit-notification', name: 'app_submit_tech_notification')]
     public function submintNotificationIndex(ManagerRegistry $doctrine, Request $request, EntityManagerInterface $entityManager): Response
     {
-
         $notification = new TechNotification();
 
         $roomRepository = $entityManager->getRepository('App\Entity\Room');
@@ -169,6 +169,18 @@ class DashboardController extends AbstractController
             'error' => null,
             'form' => $form->createView(),
         ]);
+    }
+
+    #[Route('/delete-notification/{id}', name: 'app_delete_notification')]
+    public function deleteTechNotification(int $id, ManagerRegistry $doctrine, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $notificationRepository = $entityManager->getRepository('App\Entity\TechNotification');
+        $notification = $notificationRepository->find($id);
+
+        $entityManager->remove($notification);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_tech_dashboard');
     }
 
     /**

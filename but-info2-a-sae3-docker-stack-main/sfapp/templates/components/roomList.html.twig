@@ -10,9 +10,9 @@
 {% endif %}
 
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <div class="fs-5">Salles</div>
+        <div class="fs-5" id="list-title">Salles</div>
         {% if is_granted('ROLE_ADMIN') %}
-            <div>
+            <div id="AddRoomAdmin">
                 <a href="{{ path('app_admin_add_room') }}" class="btn btn-custom-success"><i class="fa-solid fa-plus"></i> Ajouter</a>
             </div>
         {% endif %}

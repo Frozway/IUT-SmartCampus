@@ -30,6 +30,16 @@ class RoomRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    //Fonction qui retourne le nombre de salles
+    public function countRooms()
+    {
+        return $this->createQueryBuilder('r')
+            ->select('count(r.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+
 
 //    /**
 //     * @return Room[] Returns an array of Room objects

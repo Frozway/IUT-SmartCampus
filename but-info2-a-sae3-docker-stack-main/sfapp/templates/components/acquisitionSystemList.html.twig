@@ -13,8 +13,8 @@
 
     <div class="col panel shadow lists" style="height: 68vh" id="AS-Admin-List">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <div class="fs-5">{{ titre }}</div>
-            <div>
+            <div class="fs-5" id="AS-Title">{{ titre }}</div>
+            <div id="add-as-button">
                 <a href="{{ path('app_admin_add_acquisition_system', {'error': '0'}) }}" class="btn btn-custom-success">
                     <i class="fa-solid fa-plus"></i> 
                     Ajouter 
@@ -50,7 +50,7 @@
 
     <div class="col panel shadow lists" style="height: 68vh" id="AS-Tech-List">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <div class="fs-5">{{ titre }}</div>
+            <div class="fs-5" id="AS-Title">{{ titre }}</div>
         </div>
 
         {% if acquisitionSystems|filter(a => a.isInstalled)|length == 0 %}

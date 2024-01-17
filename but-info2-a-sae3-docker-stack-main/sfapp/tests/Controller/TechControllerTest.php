@@ -81,7 +81,7 @@ class TechControllerTest extends WebTestCase
         // ************************* TEST **************************** \\
 
         //Seule la liste des AS du technicien contient le titre de "Systèmes d'acquisition installés"
-        $this->assertSelectorTextContains('div.fs-5', "Systèmes d'acquisition installés");
+        $this->assertSelectorTextContains('div#AS-Title', "Systèmes d'acquisition installés");
     }
 
     public function testGlobalTechDashboard(): void

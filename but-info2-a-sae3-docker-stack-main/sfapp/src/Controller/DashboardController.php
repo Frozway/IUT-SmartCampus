@@ -17,6 +17,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class DashboardController extends AbstractController
 {
+
     /**
      * Affiche le tableau de bord de l'utilisateur.
      *
@@ -26,6 +27,17 @@ class DashboardController extends AbstractController
     #[Route('/', name: 'app_user_dashboard')]
     public function userDashboardIndex(ManagerRegistry $doctrine, Request $request): Response
     {
+        // Vérifier si l'utilisateur est resté connecté
+        // Si oui, le rediriger vers son tableau de bord respectif
+        if ($this->getUser() && in_array("ROLE_ADMIN", $this->getUser()->getRoles())) {
+            return $this->redirectToRoute('app_admin_dashboard')->send();
+        }
+        elseif ($this->getUser() && in_array("ROLE_TECHNICIAN", $this->getUser()->getRoles())) {
+            return $this->redirectToRoute('app_tech_dashboard')->send();
+        }
+
+        // Si l'utilisateur n'est pas connecté, afficher le tableau de bord de l'utilisateur non connecté
+
         $entityManager = $doctrine->getManager();
 
         $roomRepository = $entityManager->getRepository('App\Entity\Room');

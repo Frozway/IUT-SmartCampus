@@ -220,7 +220,7 @@ class DashboardController extends AbstractController
      */
     #[Route('/tech-dashboard', name: 'app_tech_dashboard')]
     #[IsGranted("ROLE_TECHNICIAN")]
-    public function techDashboardIndex(ManagerRegistry $doctrine, Request $request): Response
+    public function techDashboardIndex(ManagerRegistry $doctrine, Request $request, HttpClientInterface $httpClient): Response
     {
         $entityManager = $doctrine->getManager();
 
@@ -246,37 +246,56 @@ class DashboardController extends AbstractController
 
         $alerts = array();
 
-        foreach ($acquisitionSystems as $as) {
-            if ($as->getRoom()) {
-                if ($as->isIsInstalled()) {
-                    // The alert is created if the value is NEAR the limit
+        foreach ($rooms as $room) {
+            // récuperation du fichier database.json
+            $json = file_get_contents('json/database.json');
+            $json_data = json_decode($json, true);
+            try {
+                $dbname = $json_data[$room->getName()]['dbname'];
+            } catch (\Exception $e) {
+                $dbname = null;
+            }
 
-                    // CO2 too high
-                    if ($as->getCo2() > 1300) {
-                        $alerts[] = array(
-                            'category' => ($as->getCo2() > 1500) ? 'red' : 'orange',
-                            'room' => $as->getRoom()->getName(),
-                        );
-                        continue;
-                    }
+            try {
+                // Effectuer une requête HTTP à votre API
+                $apiResponse = $httpClient->request('GET', "https://sae34.k8s.iut-larochelle.fr/api/captures/last", [
+                    'headers' => [
+                        'accept' => 'application/ld+json',
+                        'dbname' => $dbname,
+                        'username' => 'k1eq3',
+                        'userpass' => 'wohtuh-nigzup-diwhE4',
+                    ],
+                ]);
 
-                    // Temperature to low or too high
-                    if ($as->getTemperature() > 21 || $as->getTemperature() < 18) {
-                        $alerts[] = array(
-                            'category' => ($as->getTemperature() < 17) ? 'red' : 'orange',
-                            'room' => $as->getRoom()->getName(),
-                        );
-                        continue;
-                    }
+                $apiData = $apiResponse->toArray();
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Impossible de récupérer les données de l\'API.');
+                $apiData = [];
+            }
 
-                    // Humidity AND temperature too high
-                    if ($as->getHumidity() > 60 && $as->getTemperature() > 20) {
-                        $alerts[] = array(
-                            'category' => ($as->getHumidity() > 70) ? 'red' : 'orange',
-                            'room' => $as->getRoom()->getName(),
-                        );
-                        continue;
-                    }
+            foreach ($apiData as $value) {
+                // Co2
+                if ($value["valeur"] > 2000 || $value["valeur"] < 400) {
+                    $alerts[] = array(
+                        'room' => $room->getName(),
+                    );
+                    continue;
+                }
+
+                // Humidity
+                if ($value["valeur"] > 90 || $value["valeur"] < 20) {
+                    $alerts[] = array(
+                        'room' => $room->getName(),
+                    );
+                    continue;
+                }
+
+                // Temperature
+                if ($value["valeur"] > 40 || $value["valeur"] < 0) {
+                    $alerts[] = array(
+                        'room' => $room->getName(),
+                    );
+                    continue;
                 }
             }
         }

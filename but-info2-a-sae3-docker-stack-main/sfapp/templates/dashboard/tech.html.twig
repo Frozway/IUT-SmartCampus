@@ -11,7 +11,7 @@
 
     <div class="title-bar d-flex align-items-center justify-content-center">
 
-        <span class="dashboard-title">Tableau de bord</span>
+        <span class="dashboard-title">Tableau de bord - Technicien</span>
 
     </div>
 
@@ -22,7 +22,7 @@
     {% for messageType, flashMessages in app.session.flashbag.all() %}
         {% for flashMessage in flashMessages %}
             <div class="alert alert-{{ messageType }} flash-message shadow"
-                 style="width: fit-content; padding: 8px 16px; margin: 8px;">
+                 style="width: fit-content; padding: 8px 16px; margin: 8px; color: black;">
                 {{ flashMessage }}
             </div>
         {% endfor %}

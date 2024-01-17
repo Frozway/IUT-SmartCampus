@@ -24,8 +24,14 @@
 
             {% if onRoomPage %}
                 {% include 'components/default/userRoomDetails.html.twig' %}
-                {% include 'components/externalData.html.twig' %}
+            {% else %}
+                <div class="d-flex col-8 panel shadow justify-content-center align-items-center">
+                    <h1 class="font-weight-bold">Veuillez cliquer sur une salle pour plus de détails !</h1>
+                </div>
             {% endif %}
+
+            {% include 'components/externalData.html.twig' %}
+
         </div>
 
     </div>

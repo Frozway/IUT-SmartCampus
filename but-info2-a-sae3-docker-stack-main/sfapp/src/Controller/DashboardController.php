@@ -6,14 +6,12 @@ use App\Entity\Room;
 use App\Entity\TechNotification;
 use App\Form\FilterRoomDashboardType;
 use App\Form\NotificationType;
-use App\Service\WeatherService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -119,26 +117,6 @@ class DashboardController extends AbstractController
             return strtotime($b['dateCapture']) - strtotime($a['dateCapture']); 
         });
 
-        $weatherService = new WeatherService();
-        $outsideConditions = json_decode($weatherService->getWeather($httpClient, "la%20rochelle")->getContent());
-
-        $outsideTemp = $outsideConditions->main->temp;
-        $insideTemp = $apiData[2]["valeur"];
-        $insideCo2 = $apiData[0]["valeur"];
-
-        $advice = null;
-
-        // La temperature est prioritaire sur la qualité de l'air
-        if ($insideTemp <= 18) {
-            $advice = 'Fermez les portes et fenêtres pour chauffer la pièce';
-        }
-        else if ($insideTemp >= 22 && $outsideTemp < $insideTemp) {
-            $advice = 'Ouvrez la fenêtre pour rafraîchir la pièce';
-        }
-        else if ($insideCo2 >= 1000) {
-            $advice = 'Ouvrez la fenêtre pour aérer la pièce';
-        }
-
         $form = $this->createForm(FilterRoomDashboardType::class, $rooms);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {            
@@ -161,7 +139,6 @@ class DashboardController extends AbstractController
             'form' => $form,
             'data' => $apiData,
             'acquisitionSystem' => $acquisitionSystem,
-            'advice' => $outsideConditions,
         ]);
     }
 

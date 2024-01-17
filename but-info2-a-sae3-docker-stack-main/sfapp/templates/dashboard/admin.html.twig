@@ -3,41 +3,43 @@
 {% block title %}Admin Dashboard{% endblock %}
 
 {% block body %}
-<link rel="stylesheet" href="{{ asset('css/styles.css') }}">
-<link rel="stylesheet" href="{{ asset('css/adminDashboard.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/adminDashboard.css') }}">
 
-<div class="d-flex flex-column" style="height: 100vh">
     {% include 'components/navbar.html.twig' %}
 
     <div class="title-bar d-flex align-items-center justify-content-center">
 
-        <span class="dashboard-title">Tableau de bord</span>
+        <span class="dashboard-title">Tableau de bord - Chargé de Mission</span>
 
     </div>
-    
+
     <!-- Alertes -->
     {% include 'components/alertsList.html.twig' %}
 
     {# Afficher les messages Flash pendant 5 secondes #}
-    {# {% for messageType, flashMessages in app.session.flashbag.all() %}
+    {% for messageType, flashMessages in app.session.flashbag.all() %}
         {% for flashMessage in flashMessages %}
             <div class="alert alert-{{ messageType }} flash-message shadow" style="width: fit-content; padding: 8px 16px; margin: 8px;">
                 {{ flashMessage }}
             </div>
         {% endfor %}
-    {% endfor %} #}
+    {% endfor %}
 
-    <div class="d-flex flex-grow-1 overflow-auto">
-        <!-- Liste des salles -->
-        {% include 'components/roomList.html.twig' %}
+    <div class="container-fluid m-0">
+        <div class="row row-cols-2">
 
-        <!-- Liste des systèmes d'acquisition -->
-        {% include 'components/acquisitionSystemList.html.twig'%}
+            <!-- Liste des salles -->
+            {% include 'components/roomList.html.twig' %}
+
+            <!-- Liste des systèmes d'acquisition -->
+            {% include 'components/acquisitionSystemList.html.twig'%}
+
+        </div>
     </div>
-</div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="{{ asset('js/flashMessageHandler.js') }}"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ asset('js/flashMessageHandler.js') }}"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
 {% endblock %}

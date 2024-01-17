@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -120,6 +121,50 @@ class ApiController extends AbstractController
 
             return $this->json($weatherData);
         }
+    }
 
+    #[Route('/api/diagnostic', name: 'api_diagnostic')]
+    public function diagnostic(RequestStack $requestStack, HttpClientInterface $httpClient, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $request = $requestStack->getCurrentRequest();
+        $dateDebut = $request->request->get('dateDebut');
+        $dateDebut = date('Y-m-d', strtotime($dateDebut));
+        $dateFin = $request->request->get('dateFin');
+        $dateFin = date('Y-m-d', strtotime($dateFin));
+        $typeDiagnostic = $request->request->get('typeDiagnostic');
+        $room = $request->request->get('room');
+        $type = $request->request->get('type');
+
+        $roomRepository = $entityManager->getRepository('App\Entity\Room');
+
+        $json = file_get_contents('json/database.json');
+        $json_data = json_decode($json, true);
+
+        $values = [];
+
+        try {
+
+            $response = $httpClient->request('GET', "https://sae34.k8s.iut-larochelle.fr/api/captures/interval", [
+                'headers' => [
+                    'accept' => 'application/ld+json',
+                    'dbname' => $json_data[$room]['dbname'],
+                    'username' => 'k1eq3',
+                    'userpass' => 'wohtuh-nigzup-diwhE4',
+                ],
+                'query' => [
+                    'date1' => $dateDebut,
+                    'date2' => $dateFin,
+                    'nom' => $type,
+                ],
+            ]);
+
+            $data = $response->toArray();
+
+            $values[$room] = $data;
+        } catch (\Exception $e) {
+            $values[$room] = [];
+        }
+
+        return $this->json($values);
     }
 }

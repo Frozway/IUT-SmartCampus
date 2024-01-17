@@ -15,11 +15,11 @@
     <link rel="stylesheet" href="{{ asset('css/userDashboard.css') }}">
     <link rel="stylesheet" href="{{ asset('css/roomData.css') }}">
     
-    <div class="d-flex flex-column" style="height: 100vh">
+    <div>
     
         {% include 'components/navbar.html.twig' %}
 
-        <div class="d-flex flex-grow-1 overflow-auto">
+        <div class="d-flex flex-nowrap">
             {% include 'components/roomList.html.twig' %}
 
             {% if onRoomPage %}

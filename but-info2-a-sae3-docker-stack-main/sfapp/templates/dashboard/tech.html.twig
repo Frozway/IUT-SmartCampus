@@ -3,7 +3,6 @@
 {% block title %}Tech Dashboard{% endblock %}
 
 {% block body %}
-<div class="d-flex flex-column" style="height: 100vh">
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <link rel="stylesheet" href="{{ asset('css/techDashboard.css') }}">
 
@@ -12,37 +11,42 @@
 
     <div class="title-bar d-flex align-items-center justify-content-center">
 
-        <span class="dashboard-title">Tableau de bord</span>
+        <span class="dashboard-title">Tableau de bord - Technicien</span>
 
     </div>
 
     <!-- Alertes -->
-    {% include 'components/techAlertsList.html.twig' %}
+    {% include 'components/alertsList.html.twig' %}
 
     {# Afficher les messages Flash pendant 5 secondes #}
-    {# {% for messageType, flashMessages in app.session.flashbag.all() %}
+    {% for messageType, flashMessages in app.session.flashbag.all() %}
         {% for flashMessage in flashMessages %}
             <div class="alert alert-{{ messageType }} flash-message shadow"
-                 style="width: fit-content; padding: 8px 16px; margin: 8px;">
+                 style="width: fit-content; padding: 8px 16px; margin: 8px; color: black;">
                 {{ flashMessage }}
             </div>
         {% endfor %}
-    {% endfor %} #}
+    {% endfor %}
 
-    <div class="d-flex flex-grow-1 overflow-hidden">
-        <!-- Liste des systèmes d'acquisition -->
-        {% include 'components/acquisitionSystemList.html.twig' %}
+    {# Systèmes D'acquisitions #}
+    <div class="container-fluid m-0">
+        <div class="row">
 
-        <!-- Liste des opérations -->
-        {% include 'components/tech/operationList.html.twig' %}
+            <!-- Liste des systèmes d'acquisition -->
+            {% include 'components/acquisitionSystemList.html.twig' %}
 
-        {# Notifications #}
-        {% include 'components/tech/notificationsList.html.twig'%}
+            <!-- Liste des opérations -->
+            {% include 'components/tech/operationList.html.twig' %}
+
+            {# Notifications #}
+            {% include 'components/tech/notificationsList.html.twig'%}
+
+        </div>
     </div>
-</div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="{{ asset('js/flashMessageHandler.js') }}"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ asset('js/flashMessageHandler.js') }}"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
 {% endblock %}

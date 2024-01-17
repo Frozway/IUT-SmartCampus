@@ -91,7 +91,7 @@ body {
 
 /* header */
 
-.title-bar{
+.title-bar {
   background-color: white;
   font-size: 15pt;
   text-align: center;
@@ -110,11 +110,11 @@ body {
   z-index: 1000; /* Adjust the z-index as needed */
 }
 
-  /* responsive for roomData page */
+/* responsive for roomData page */
 
 @media (max-width: 1400px) {
   .text-button {
-      display: none !important;
+    display: none !important;
   }
 }
 

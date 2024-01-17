@@ -9,6 +9,7 @@ use App\Form\AcquisitionSystemSelectionType;
 use App\Form\AcquisitionSystemType;
 use App\Form\DepartmentType;
 use App\Form\RoomType;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -484,28 +485,16 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route('/admin-dashboard/delete-department', name: 'app_admin_delete_department')
-     *
-     * Supprime le département et retourne sur le tableau de bord
-     *
-     * @param Request $request La requête HTTP
-     * @param EntityManagerInterface $entityManager L'entité de gestion
-     * @param int $id L'identifiant tu département supprimé
-     * @return Response
+     * Outil de diagnositc
      */
-    #[Route('/admin-dashboard/delete-department/{id}', name: 'app_admin_delete_department')]
+    #[Route('/admin-dashboard/diagnostic', name: 'app_admin_diagnostic')]
     #[IsGranted("ROLE_ADMIN")]
-    public function deleteDepartement(Request $request, EntityManagerInterface $entityManager, int $id, ValidatorInterface $validator): Response
+    public function diagnosticTool(EntityManagerInterface $entityManager)
     {
-        $departmentsRepository = $entityManager->getRepository('App\Entity\Department');
-        $departement = $departmentsRepository->find($id);
-        
-        $entityManager->remove($departement);
-        $entityManager->flush();
-        
-        return $this->redirectToRoute('app_admin_dashboard');
+        $roomRepository = $entityManager->getRepository('App\Entity\Room');
+        $rooms = $roomRepository->findAll();
+        return $this->render('admin/diagnostic.html.twig', [
+            'rooms' => $rooms,
+        ]);
     }
-
 }
-
-

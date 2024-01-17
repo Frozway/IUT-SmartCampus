@@ -2,14 +2,16 @@
 
 {% if is_granted('ROLE_ADMIN') %}
     {% set titre = "Systèmes d'aquisition" %}
+
 {% elseif is_granted('ROLE_TECHNICIAN') %}
     {% set titre = "Systèmes d'aquisition installés" %}
+
 {% endif %}   
     
 {# Affichage pour le mode administrateur #}
 {% if is_granted('ROLE_ADMIN') %}
 
-    <div class="flex-grow-1 panel shadow lists">
+    <div class="col panel shadow lists" style="height: 68vh">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <div class="fs-5">{{ titre }}</div>
             <div>
@@ -46,7 +48,7 @@
 {# Affichage pour le mode technicien #}
 {% elseif is_granted('ROLE_TECHNICIAN') %}
 
-    <div class="flex-grow-1 panel shadow lists" style="flex-basis: 0">
+    <div class="col panel shadow lists" style="height: 68vh">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <div class="fs-5">{{ titre }}</div>
         </div>

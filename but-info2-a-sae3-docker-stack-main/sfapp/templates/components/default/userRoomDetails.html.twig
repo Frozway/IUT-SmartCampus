@@ -1,4 +1,4 @@
-<div class="col-8 panel shadow" style="overflow: scroll">
+<div class="col-8 panel shadow">
 
     <h2 class="my-3 mt-4 font-weight-bold text-uppercase">{{ room.name }} - Étage {{ room.floor }}</h2>
     {# <a href="{{ path('app_user_dashboard }}" class="btn btn-custom-secondary back mr-3"><i class="fa-solid fa-left-long"></i> Retour</a> #}
@@ -8,9 +8,6 @@
         {% if acquisitionSystem.isInstalled %}
         
             {% include 'components/currentRoomData.html.twig' %}
-            {# {% if advice|default(false) %}
-                <div class="alert alert-primary mt-2"><i class="fa-solid fa-circle-info"></i> {{ advice }}</div>
-            {% endif %} #}
 
             <form class="panel shadow mt-4" id="dataLimitForm" action="{{ path('app_room', {'id': room.id}) }}" method="get">
                 <label for="dataLimit">Plage de données visibles</label>

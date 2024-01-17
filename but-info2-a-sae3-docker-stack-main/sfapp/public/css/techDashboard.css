@@ -55,3 +55,14 @@ h2 {
 .acquisition-system:hover button {
   opacity: 1;
 }
+
+.hidden-button {
+  opacity: 0;
+  transition: .15s;
+}
+
+.notification:hover .hidden-button {
+  opacity: 1;
+  transition: .15s;
+}
+

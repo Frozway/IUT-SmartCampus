@@ -33,7 +33,7 @@
 
     <div>
         <p class="my-4 text-uppercase">vous constatez un problème ?</p>
-        <a href="{{ path('app_submit_tech_notification') }}" class="p-4 my-2 rounded create-alert">
+        <a href="{{ path('app_submit_tech_notification', {roomId: room.id}) }}" class="p-4 my-2 rounded create-alert">
             <i class="fa-solid fa-triangle-exclamation fa-2xl"></i> ALERTER UN TECHNICIEN
         </a> 
     </div>

@@ -11,9 +11,9 @@
 
     {# HEADER #}
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <div class="fs-5" id="list-title" >Salles</div>
+        <div class="fs-5">Salles</div>
         {% if is_granted('ROLE_ADMIN') %}
-            <div id="AddRoomAdmin">
+            <div>
                 <a href="{{ path('app_admin_add_room') }}" class="btn btn-custom-success"><i class="fa-solid fa-plus"></i> Ajouter</a>
             </div>
         {% endif %}
@@ -65,32 +65,20 @@
     <div class="flex-grow-1" style="overflow: scroll">
 
         {# Filtre modal et form #}
-        <ul class="mt-3" id="RoomList">
+        <ul class="mt-3>
             <!-- Boucle pour afficher chaque salle -->
             {% for room in rooms %}
             {# Filters #}
                 {% if room.name|slice(0,searchR|length) == searchR or searchR == null or searchR is empty%}
-                    {% if room.floor == floor or floor == null or floor is empty%}
-                        {% if (assigned == 1 and room.getAcquisitionSystem() != null) or assigned == 0%}
-                            {% if (room.getAcquisitionSystem() is not empty and room.getAcquisitionSystem().getName() == searchAS) or searchAS == null or searchAS is empty%}
-                                {% if is_granted('ROLE_ADMIN') %}
-                                    <a href="{{ path('app_admin_room', {'id': room.id}) }}" class="text-decoration-none" id="Room">
-                                        <li class="d-flex justify-content-between align-items-center mr-3" id="admin">
-                                {% else %}
-                                    <a href="{{ path('app_room', {'id': room.id}) }}" class="text-decoration-none" id="Room">
-                                    {% if onRoomPage %}
-                                    <li class="d-flex justify-content-between align-items-center mr-3
-                                        {% if room.id == currentRoomID %}
-                                            highlighted
-                                        {% endif %}
-                                    ">
-                                    {% else %}
-                                        <li class="d-flex justify-content-between align-items-center mr-3">
-                                    {% endif %}
-                                {% endif %}
-                                            <span style="color:black;">
-                                                {{ room.name }}
-                                            </span>
+                {% if room.floor == floor or floor == null or floor is empty%}
+                {% if (assigned == 1 and room.getAcquisitionSystem() != null) or assigned == 0%}
+                {% if (room.getAcquisitionSystem() is not empty and room.getAcquisitionSystem().getName() == searchAS) or searchAS == null or searchAS is empty%}
+                    {# Redirect on the right page according to user's role #}
+                    <a href="{{ (is_granted("ROLE_ADMIN")) ? path('app_admin_room', {'id': room.id}) : path('app_room', {'id': room.id}) }}" class="text-decoration-none">
+                        <li class="d-flex justify-content-between align-items-center mr-3">
+                            <span style="color:black;">
+                                {{ room.name }}
+                            </span>
 
                             <span>
                             {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TECHNICIAN') %}

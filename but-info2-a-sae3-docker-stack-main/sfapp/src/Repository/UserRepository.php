@@ -21,26 +21,6 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
-    //Fonction qui retourne l'utilisateur tech username
-    public function findTechUser()
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.username = :val')
-            ->setParameter('val', 'tech')
-            ->getQuery()
-            ->getOneOrNullResult();
-    }
-
-    //Fonction qui retourne l'utilisateur admin username
-    public function findAdminUser()
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.username = :val')
-            ->setParameter('val', 'admin')
-            ->getQuery()
-            ->getOneOrNullResult();
-    }
-
 //    /**
 //     * @return User[] Returns an array of User objects
 //     */

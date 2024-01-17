@@ -9,6 +9,7 @@ use App\Form\AcquisitionSystemSelectionType;
 use App\Form\AcquisitionSystemType;
 use App\Form\DepartmentType;
 use App\Form\RoomType;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -483,4 +484,17 @@ class AdminController extends AbstractController
         ]);
     }
 
+    /**
+     * Outil de diagnositc
+     */
+    #[Route('/admin-dashboard/diagnostic', name: 'app_admin_diagnostic')]
+    #[IsGranted("ROLE_ADMIN")]
+    public function diagnosticTool(EntityManagerInterface $entityManager)
+    {
+        $roomRepository = $entityManager->getRepository('App\Entity\Room');
+        $rooms = $roomRepository->findAll();
+        return $this->render('admin/diagnostic.html.twig', [
+            'rooms' => $rooms,
+        ]);
+    }
 }

@@ -1,0 +1,146 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Outil de diagnostic{% endblock %}
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+{% endblock %}
+
+{% block body %}
+
+    {% include 'components/navbar.html.twig' %}
+
+    <div class="panel">
+        <span class="fs-5">Outil de diagnostic</span>
+        <div class="d-flex justify-content-between form-inline w-100 p-3">
+            <input type="date" id="dateDebut" name="dateDebut" class="form-control" placeholder="Date de début">
+            <input type="date" id="dateFin" name="dateFin" class="form-control" placeholder="Date de fin">
+            <select id="rooms" name="room" class="form-control">
+                {% for room in rooms %}
+                <option value="{{ room.name }}">{{ room.name }}</option>
+                {% endfor %}
+            </select>
+            <select id="type" name="type" class="form-control">
+                <option value="temp">Température</option>
+                <option value="hum">Humidité</option>
+                <option value="co2">CO2</option>
+            </select>
+            <button id="btnDiagnostic" class="btn btn-primary">Lancer le diagnostic</button>
+        </div>
+        <div id="loading" class="justify-content-center align-items-center" style="height: 100%; display: none">
+            <span class="visually-hidden mr-2">Chargement...</span>
+            <div class="spinner-border text-primary" role="status">
+            </div>
+        </div>
+        <div id="no-value" class="d-flex justify-content-center align-items-center">
+            <span>Veuillez lancer un diagnostic</span>
+        </div>
+        <div id="chart" class="justify-content-center align-items-center" style="height: 100%">
+            <canvas id="myChart"></canvas>
+        </div>
+
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ asset('js/flashMessageHandler.js') }}"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        var abcd = [];
+        let myChart = undefined;
+        // lorsque le type de diagnostic est changé afficher la liste des capteurs ou pas
+        $('#typeDiagnostic').change(function () {
+            if ($('#typeDiagnostic').val() === 'ensemble') {
+                $('#rooms').hide();
+            } else {
+                $('#rooms').show();
+            }
+        });
+
+        window.addEventListener('DOMContentLoaded', (event) => {
+            $('#chart').hide();
+            let today = new Date();
+            $('#dateFin').val(today.toISOString().slice(0, 10));
+            // retirer un jour à date de début
+            today.setDate(today.getDate() - 1);
+            $('#dateDebut').val(today.toISOString().slice(0, 10));
+        });
+
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        document.getElementById('btnDiagnostic').addEventListener('click', () => {
+            $('#no-value').removeClass('d-flex');
+            $('#no-value').hide();
+            $('#loading').show();
+            $('#loading').addClass('d-flex');
+            let dateDebut = $('#dateDebut').val();
+            let dateFin = $('#dateFin').val();
+            let room = $('#rooms').val();
+            let type = $('#type').val();
+            $.ajax({
+                url: '/api/diagnostic',
+                type: 'POST',
+                data: {
+                    dateDebut: dateDebut,
+                    dateFin: dateFin,
+                    room: room,
+                    type: type
+                },
+                success: function (data) {
+                    // affichage du graphique
+                    $('#loading').hide();
+                    $('#loading').removeClass('d-flex');
+                    $('#chart').show();
+
+                    var uniqueDates = new Set();
+                    var values = [];
+
+                    for (const [key, value] of Object.entries(data)) {
+                        for (const [key2, value2] of Object.entries(value)) {
+                            uniqueDates.add(value2.dateCapture);
+                            values.push(value2.valeur);
+                        }
+                    }
+
+                    let labels = [...uniqueDates].sort();
+
+                    const ctx = document.getElementById('myChart').getContext('2d');
+
+                    if (myChart !== undefined) {
+                        myChart.destroy();
+                    }
+
+                    myChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: (type == 'temp' ? 'Température (°C)' : type == 'hum' ? 'Humidité (%)' : 'CO2 (ppm)') + ' ' + room,
+                                data: values,
+                                backgroundColor: getRandomColor(),
+                                borderColor: getRandomColor(),
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    min: Math.min(...values) - 5,
+                                }
+                            }
+                        }
+                    });
+
+                }
+            });
+        });
+    </script>
+{% endblock %}

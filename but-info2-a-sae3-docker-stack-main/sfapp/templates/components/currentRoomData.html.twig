@@ -3,7 +3,7 @@
 {% set lastHum = null %}
 
 {% for value in data %}
-    {% if value.nom == "temp" and lastTemp == null%}
+    {% if value.nom == "temp" and lastTemp == null %}
         {% set lastTemp = value %}
     {% elseif value.nom == "co2" and lastCo2 == null %}
         {% set lastCo2 = value %}
@@ -26,32 +26,18 @@
 </div>
 
 <div class="row mt-1 d-flex justify-content-start">
-    {% set lastTemp = null %}
-    {% set lastCo2 = null %}
-    {% set lastHum = null %}
-
-    {% for value in data %}
-        {% if value.nom == "temp" and lastTemp == null%}
-            {% set lastTemp = value.valeur %}
-        {% elseif value.nom == "co2" and lastCo2 == null %}
-            {% set lastCo2 = value.valeur %}
-        {% elseif value.nom == "hum" and lastHum == null %}
-            {% set lastHum = value.valeur %}
-        {% endif %}
-    {% endfor %}
-
     {# Afficher les dernières valeurs de température, CO2 et humidité #}
-    {% if lastTemp is not null %}
+    {% if lastTemp.valeur is not null %}
         <div class="value-container mt-2 p-0 border-0 rounded
-            {% if lastTemp is null or lastTemp < -20 or lastTemp > 50%}
+            {% if lastTemp.valeur is null or lastTemp.valeur < -20 or lastTemp.valeur > 50 %}
             red
-            {% elseif lastTemp > 21 and lastTemp < 24 %}
+            {% elseif lastTemp.valeur > 21 and lastTemp.valeur < 24 %}
             orange
-            {% elseif lastTemp >= 24 %}
+            {% elseif lastTemp.valeur >= 24 %}
             red
-            {% elseif lastTemp > 16 and lastTemp < 17 %}
+            {% elseif lastTemp.valeur > 16 and lastTemp.valeur < 17 %}
             orange
-            {% elseif lastTemp <= 16 %}
+            {% elseif lastTemp.valeur <= 16 %}
             red
             {% else %}
             normal
@@ -62,17 +48,17 @@
             </div>
 
             <div class="value d-flex-columns align-items-center">
-                <p class="my-0" style="font-size: 22pt">{{ lastTemp }}°C</p>
+                <p class="my-0" style="font-size: 22pt">{{ lastTemp.valeur }}°C</p>
                 <p class="my-0">
-                    {% if lastTemp is null %}
+                    {% if lastTemp.valeur is null or lastTemp.valeur < -20 or lastTemp.valeur > 50 %}
                         N/A
-                    {% elseif lastTemp > 21 and lastTemp < 24 %}
+                    {% elseif lastTemp.valeur > 21 and lastTemp.valeur < 24 %}
                         Élevé
-                    {% elseif lastTemp >= 24 %}
+                    {% elseif lastTemp.valeur >= 24 %}
                         Très Élevé
-                    {% elseif lastTemp > 16 and lastTemp < 17 %}
+                    {% elseif lastTemp.valeur > 16 and lastTemp.valeur < 17 %}
                         Faible
-                    {% elseif lastTemp <= 16 %}
+                    {% elseif lastTemp.valeur <= 16 %}
                         Très Faible
                     {% else %}
                         Normal
@@ -82,13 +68,13 @@
         </div>
     {% endif %}
 
-    {% if lastCo2 is not null %}
+    {% if lastCo2.valeur is not null %}
         <div class="value-container mt-2 p-0 border-0 rounded
-            {% if lastCo2 is null or lastCo2 < 0 or lastCo2 > 4000%}
+            {% if lastCo2.valeur is null or lastCo2.valeur < 0 or lastCo2.valeur > 4000 %}
             red
-            {% elseif lastCo2 >= 1500 %}
+            {% elseif lastCo2.valeur >= 1500 %}
             red
-            {% elseif lastCo2 > 1000 and lastCo2 < 1500 %}
+            {% elseif lastCo2.valeur > 1000 and lastCo2.valeur < 1500 %}
             orange
             {% else %}
             normal
@@ -99,13 +85,13 @@
             </div>
 
             <div class="value d-flex-columns align-items-center">
-                <p class="my-0" style="font-size: 20pt">{{ lastCo2 }} ppm</p>
+                <p class="my-0" style="font-size: 20pt">{{ lastCo2.valeur }} ppm</p>
                 <p class="my-0">
-                    {% if lastCo2 is null or lastCo2 < 0 or lastCo2 > 4000%}
+                    {% if lastCo2.valeur is null or lastCo2.valeur < 0 or lastCo2.valeur > 4000 %}
                         N/A
-                    {% elseif lastCo2 >=  1500 %}
+                    {% elseif lastCo2.valeur >=  1500 %}
                         Très Élevé
-                    {% elseif lastCo2 > 1000 and lastCo2 < 1500 %}
+                    {% elseif lastCo2.valeur > 1000 and lastCo2.valeur < 1500 %}
                         Élevé
                     {% else %}
                         Normal
@@ -115,17 +101,17 @@
         </div>
     {% endif %}
 
-    {% if lastHum is not null %}
+    {% if lastHum.valeur is not null %}
         <div class="value-container mt-2 p-0 border-0 rounded
-            {% if lastHum is null  or lastHum < 0 or lastHum > 100%}
+            {% if lastHum.valeur is null  or lastHum.valeur < 0 or lastHum.valeur > 100 %}
                 red
-            {% elseif lastHum >= 70 %}
+            {% elseif lastHum.valeur >= 70 %}
                 red
-            {% elseif lastHum > 60 and lastHum < 70 %}
+            {% elseif lastHum.valeur > 60 and lastHum.valeur < 70 %}
                 orange
-            {% elseif lastHum > 30 and lastHum < 40 %}
+            {% elseif lastHum.valeur > 30 and lastHum.valeur < 40 %}
                 orange
-            {% elseif lastHum <= 30 %}
+            {% elseif lastHum.valeur <= 30 %}
                 red
             {% else %}
                 normal
@@ -136,17 +122,17 @@
             </div>
 
             <div class="value d-flex-columns align-items-center">
-                <p class="my-0" style="font-size: 22pt">{{ lastHum }}%</p>
+                <p class="my-0" style="font-size: 22pt">{{ lastHum.valeur }}%</p>
                 <p class="my-0">
-                    {% if lastHum is null  or lastHum < 0 or lastHum > 100%}
+                    {% if lastHum.valeur is null  or lastHum.valeur < 0 or lastHum.valeur > 100 %}
                         N/A
-                    {% elseif lastHum >= 70 %}
+                    {% elseif lastHum.valeur >= 70 %}
                         Très Élevé
-                    {% elseif lastHum > 60 and lastHum < 70 %}
+                    {% elseif lastHum.valeur > 60 and lastHum.valeur < 70 %}
                         Élevé
-                    {% elseif lastHum > 30 and lastHum < 40 %}
+                    {% elseif lastHum.valeur > 30 and lastHum.valeur < 40 %}
                         Faible
-                    {% elseif lastHum <= 30 %}
+                    {% elseif lastHum.valeur <= 30 %}
                         Très faible
                     {% else %}
                         Normal

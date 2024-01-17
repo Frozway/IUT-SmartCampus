@@ -29,12 +29,12 @@ class FilterRoomDashboardType extends AbstractType
                 ])
             ->add('isAssigned', CheckboxType::class,
                 [
-                    'label' => 'Système d\'aquisition attribué',
+                    'label' => 'Système d\'acquisition attribué',
                     'required' => false,
                 ])
             ->add('SearchAS', SearchType::class,
                 [
-                    'label' => 'Nom du système d\'aquisition',
+                    'label' => 'Nom du système d\'acquisition',
                     'required' => false,
                     'autocomplete' => true,
                     'empty_data' => null,

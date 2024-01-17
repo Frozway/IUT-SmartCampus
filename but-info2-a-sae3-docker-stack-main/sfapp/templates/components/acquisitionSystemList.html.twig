@@ -1,10 +1,10 @@
 {% set titre = "" %}
 
 {% if is_granted('ROLE_ADMIN') %}
-    {% set titre = "Systèmes d'aquisition" %}
+    {% set titre = "Systèmes d'acquisition" %}
 
 {% elseif is_granted('ROLE_TECHNICIAN') %}
-    {% set titre = "Systèmes d'aquisition installés" %}
+    {% set titre = "Systèmes d'acquisition installés" %}
 
 {% endif %}   
     

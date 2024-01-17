@@ -7,7 +7,6 @@
             {% for notification in notifications %}
 
                 {# Affiche le texte de la notification limité à 100 characteres #}
-                {# <li data-bs-toggle="modal" data-bs-target="#test{{loop.index}}" style="border-color: rgba(0, 184, 148, {{ notification.isRead ? '0' : '1' }}); color: black;" class="notification"> #}
                 <li style="border-color: rgba(0, 184, 148, {{ notification.isRead ? '0' : '1' }}); color: black;" class="notification d-flex p-0">
                     <div class="flex-grow-1 px-3 py-2 d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#notif-{{loop.index}}">
                         <span>{{ notification.text | length > 100 ? notification.text|slice(0, 100) ~ '...' : notification.text }}</span>

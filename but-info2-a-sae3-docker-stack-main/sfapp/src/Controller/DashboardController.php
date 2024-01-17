@@ -244,66 +244,10 @@ class DashboardController extends AbstractController
             }
         });
 
-        $alerts = array();
-
-        foreach ($rooms as $room) {
-            // récuperation du fichier database.json
-            $json = file_get_contents('json/database.json');
-            $json_data = json_decode($json, true);
-            try {
-                $dbname = $json_data[$room->getName()]['dbname'];
-            } catch (\Exception $e) {
-                $dbname = null;
-            }
-
-            try {
-                // Effectuer une requête HTTP à votre API
-                $apiResponse = $httpClient->request('GET', "https://sae34.k8s.iut-larochelle.fr/api/captures/last", [
-                    'headers' => [
-                        'accept' => 'application/ld+json',
-                        'dbname' => $dbname,
-                        'username' => 'k1eq3',
-                        'userpass' => 'wohtuh-nigzup-diwhE4',
-                    ],
-                ]);
-
-                $apiData = $apiResponse->toArray();
-            } catch (\Exception $e) {
-                $this->addFlash('error', 'Impossible de récupérer les données de l\'API.');
-                $apiData = [];
-            }
-
-            foreach ($apiData as $value) {
-                // Co2
-                if ($value["valeur"] > 2000 || $value["valeur"] < 400) {
-                    $alerts[] = array(
-                        'room' => $room->getName(),
-                    );
-                    continue;
-                }
-
-                // Humidity
-                if ($value["valeur"] > 90 || $value["valeur"] < 20) {
-                    $alerts[] = array(
-                        'room' => $room->getName(),
-                    );
-                    continue;
-                }
-
-                // Temperature
-                if ($value["valeur"] > 40 || $value["valeur"] < 0) {
-                    $alerts[] = array(
-                        'room' => $room->getName(),
-                    );
-                    continue;
-                }
-            }
-        }
 
         return $this->render('dashboard/tech.html.twig', [
             'rooms' => $rooms,
             'acquisitionSystems' => $acquisitionSystems,
-            'alerts' => $alerts,
             'notifications' => $notifications,
         ]);
     }

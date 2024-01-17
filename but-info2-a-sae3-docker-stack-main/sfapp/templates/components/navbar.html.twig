@@ -4,13 +4,16 @@
 
 {% endblock %}
 
-<div class="navbar py-1 px-2 d-flex justify-content-start align-content-center">
+<div class="navbar py-1 px-2">
     {% if is_granted('ROLE_ADMIN') %}
         <a href="{{ path('app_admin_dashboard') }}" style="color: white; font-size: 18pt">
             <img src="{{ asset('images/smartlogo/logo_1.png') }}" alt="Logo" height="42"/>
             <strong>SMART</strong><span>CAMPUS</span>
-        </a>       
-        <a href="{{ path('app_logout') }}" class="ml-auto py-1 d-flex justify-content-center px-1">
+        </a>
+        <a href="{{ path('app_admin_diagnostic')}}" class="ml-auto py-1 d-flex justify-content-center px-1">
+            <img src="{{ asset('svg/diagnostic.svg') }}" class="diagnostic" alt="diagnostic" height="24">
+        </a>
+        <a href="{{ path('app_logout') }}" class="ml-4 py-1 d-flex justify-content-center px-1">
             <img src="{{ asset('svg/logout.svg') }}" class="logout" alt="Logout" height="24">
         </a>
     {% elseif is_granted('ROLE_TECHNICIAN') %}

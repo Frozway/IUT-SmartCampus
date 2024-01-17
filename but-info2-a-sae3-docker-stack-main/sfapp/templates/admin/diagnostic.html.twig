@@ -86,7 +86,6 @@
                     type: type
                 },
                 success: function (data) {
-                    // affichage du graphique
                     $('#loading').hide();
                     $('#loading').removeClass('d-flex');
                     $('#chart').show();
@@ -110,32 +109,6 @@
                     if (myChart !== undefined) {
                         myChart.destroy();
                     }
-
-                    // Chart.register({
-                    //     // Ajout du plugin personnalisé pour la zone rouge
-                    //     id: 'drawAberrantZone',
-                    //     afterDatasetsDraw: (chart, args, options) => {
-                    //         const ctx = chart.ctx;
-                    //         const yAxis = chart.scales['y'];
-                    //         const datasets = chart.data.datasets[0].data;
-                    //
-                    //         const alertColor = 'rgba(255, 0, 0, 0.2)'; // Rouge avec une opacité de 20%
-                    //
-                    //         for (let i = 0; i < datasets.length; i++) {
-                    //             const value = datasets[i];
-                    //             if ((type === 'temp' && (value < 16 || value > 24)) ||
-                    //                 (type === 'hum' && (value < 30 || value > 70)) ||
-                    //                 (type === 'co2' && (value > 1000 && value <= 1500 || value > 1500))) {
-                    //                 const start = yAxis.getPixelForValue(yAxis.min);
-                    //                 const end = yAxis.getPixelForValue(yAxis.max);
-                    //                 ctx.fillStyle = alertColor;
-                    //                 ctx.fillRect(chart.scales['x'].getPixelForValue(labels[i]), start, chart.scales['x'].getPixelForValue(labels[i + 1]) - chart.scales['x'].getPixelForValue(labels[i]), end - start);
-                    //             }
-                    //             // Ajoutez d'autres conditions pour les autres valeurs aberrantes
-                    //         }
-                    //     }
-                    // });
-
 
                     Chart.register({
                         id: 'drawAberrantZone',

@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <link rel="stylesheet" href="{{ asset('css/adminDashboard.css') }}">
 
-
     {% include 'components/navbar.html.twig' %}
 
     <div class="container mt-5">
@@ -23,7 +22,8 @@
                 {{ form_start(form) }}
 
                 <div class="form-group">
-                    {{ form_row(form.name, {'attr': {'class': 'form-control'}, 'label': 'Nom du Département'}) }}
+                    {{ form_label(form.name, 'Nom du Département') }}
+                    {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
                 </div>
 
                 {{ form_rest(form) }}

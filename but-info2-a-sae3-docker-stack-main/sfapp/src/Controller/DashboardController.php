@@ -143,13 +143,15 @@ class DashboardController extends AbstractController
         ]);
     }
 
-    #[Route('/submit-notification', name: 'app_submit_tech_notification')]
-    public function submintNotificationIndex(ManagerRegistry $doctrine, Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/submit-notification/{roomId}', name: 'app_submit_tech_notification')]
+    public function submintNotificationIndex(int $roomId, ManagerRegistry $doctrine, Request $request, EntityManagerInterface $entityManager): Response
     {
         $notification = new TechNotification();
-
+        
         $roomRepository = $entityManager->getRepository('App\Entity\Room');
         $rooms = $roomRepository->findAll();
+
+        $notification->setRoom($roomRepository->find($roomId));
 
         $form = $this->createForm(NotificationType::class, $notification, ['rooms' => $rooms]);
 
@@ -160,8 +162,7 @@ class DashboardController extends AbstractController
             $entityManager->persist($notification);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_user_dashboard');
-
+            return $this->redirectToRoute('app_room', ['id' => $roomId]);
         }
 
         return $this->render('user/submitTechNotification.html.twig', [

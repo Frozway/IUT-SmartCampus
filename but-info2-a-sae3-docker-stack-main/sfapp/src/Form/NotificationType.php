@@ -16,16 +16,7 @@ class NotificationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder
-            ->add('room', EntityType::class, [
-                'label' => 'Salle',
-                'class' => Room::class,
-                'choice_label' => 'name',
-                'choices' => $options['rooms']
-            ])
-            ->add('text', TextareaType::class, ['label' => 'Message'])
-            // ->add('submit', SubmitType::class, ['label' => 'Envoyer'])
-        ;
+        $builder->add('text', TextareaType::class, ['label' => 'Message']);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

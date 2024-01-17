@@ -473,7 +473,7 @@ class AdminController extends AbstractController
 
             $this->addFlash('success', 'Le département a été ajouté avec succès.');
 
-            return $this->redirectToRoute('app_admin_add_room');
+            return $this->redirectToRoute('app_admin_dashboard');
         }
 
         $errors = $validator->validate($department);

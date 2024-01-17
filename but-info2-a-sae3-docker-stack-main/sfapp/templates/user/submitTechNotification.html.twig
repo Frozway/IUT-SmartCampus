@@ -19,14 +19,11 @@
             <div class="col-md-6 panel">
                 <h2>Envoyer une alerte</h2>
                 {{ form_start(form) }}
-                {{ form_widget(form.room, {'attr': {'class': 'form-control my-1'}}) }}
                 {{ form_widget(form.text, {'attr': {'class': 'form-control my-1'}}) }}
                 <button type="submit" class="btn btn-primary form-control"><i class="fa-regular fa-paper-plane"></i> Envoyer</button>
                 <a href="#" onclick="history.back();" class="btn btn-primary form-control btn-custom-danger mt-1"><i
                             class="fa-solid fa-xmark"></i> Annuler</a>
                 {{ form_end(form) }}
-
-                {# {{form(form)}} #}
             </div>
         </div>
     </div>  

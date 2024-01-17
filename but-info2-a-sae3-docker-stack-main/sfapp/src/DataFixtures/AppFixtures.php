@@ -3,11 +3,10 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Room;
 use App\Entity\AcquisitionSystem;
-use App\Entity\User;
 use App\Entity\Department;
-use App\Entity\TechNotification;
+use App\Entity\Room;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -15,14 +14,15 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager)
     {
-        // Création des départements
-        $department = new Department();
-        $department->setName('Informatique');
+// Création des départements
+        $departmentNames = ['Réseaux et Télécommunications', 'Génie Biologique', 'Génie Civile', 'Techniques de commercialisation', 'Informatique'];
 
-        // Assuming $department is the Department entity
-        $manager->persist($department);
+        foreach ($departmentNames as $departmentName) {
+            $department = new Department();
+            $department->setName($departmentName);
+            $manager->persist($department);
+        }
 
-        $manager->flush();
 
 // Room D205
         $as1 = new AcquisitionSystem();
@@ -35,7 +35,7 @@ class AppFixtures extends Fixture
         $room1->setName('D205');
         $room1->setFloor('2');
         $room1->setAcquisitionSystem($as1);
-        $room1->setDepartment($department); // Make sure to set $department before using it
+        $room1->setDepartment($department);
         $manager->persist($room1);
 
         $as1->setRoom($room1);
@@ -330,11 +330,7 @@ class AppFixtures extends Fixture
         $as18->setRoom($room18);
         $manager->persist($as18);
 
-// Finally, flush all changes
-        $manager->flush();
-
-
-        // Création des utilisateurs
+// Création des utilisateurs
         $admin = new User();
         $admin->setUsername('admin');
         $admin->setPassword('admin');
@@ -347,6 +343,8 @@ class AppFixtures extends Fixture
         $technician->setRoles(['ROLE_TECHNICIAN']);
         $manager->persist($technician);
 
+// Enfin, on applique toutes les modifications apportées à la base de données
         $manager->flush();
+
     }
 }

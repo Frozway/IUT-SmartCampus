@@ -1,6 +1,11 @@
 <div class="col-8 panel shadow"S>
 
-    <h2 class="my-3 mt-4 font-weight-bold text-uppercase">{{ room.name }} - Étage {{ room.floor }}</h2>
+    <h2 class="my-3 mt-4 font-weight-bold text-uppercase">{{ room.name }} - Étage {{ room.floor }} {% if room.department is not null %}
+            - Département {{ room.department.name }}
+        {% endif %}</h2>
+
+
+                </span>
 
     {# Afficher le contenu uniquement s'il y a un système d'acquisition associé #}
     {% if acquisitionSystem is not null %}

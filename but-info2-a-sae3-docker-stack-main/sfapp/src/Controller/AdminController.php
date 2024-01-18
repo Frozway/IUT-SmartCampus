@@ -452,7 +452,7 @@ class AdminController extends AbstractController
     /**
      * @Route('/admin-dashboard/edit-departments', name: 'app_admin_edit_departments')
      *
-     * Affiche le formulaire d'ajout d'un departement et l'ajoute à la base de données.
+     * Affiche le formulaire d'ajout et de suppression d'un departement et fait les modifications dans la bd.
      *
      * @param Request $request La requête HTTP
      * @param EntityManagerInterface $entityManager L'entité de gestion

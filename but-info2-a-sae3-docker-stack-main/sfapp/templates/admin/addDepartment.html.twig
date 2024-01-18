@@ -23,7 +23,8 @@
                 {{ form_start(formCreate) }}
 
                 <div class="form-group">
-                    {{ form_row(formCreate.name, {'attr': {'class': 'form-control'}, 'label': 'Nom du Département'}) }}
+                    {{ form_label(formCreate.name, 'Nom du Département') }}
+                    {{ form_widget(formCreate.name, {'attr': {'class': 'form-control'}}) }}
                 </div>
 
                 {{ form_rest(formCreate) }}
@@ -46,7 +47,8 @@
                 {{ form_start(formDelete) }}
 
                 <div class="form-group">
-                    {{ form_row(formDelete.department, {'attr': {'class': 'form-control'}, 'label': 'Nom du Département'}) }}
+                    {{ form_label(formDelete.department, 'Nom du Département') }}
+                    {{ form_widget(formDelete.department, {'attr': {'class': 'form-control'}}) }}
                 </div>
 
                 {{ form_rest(formDelete) }}

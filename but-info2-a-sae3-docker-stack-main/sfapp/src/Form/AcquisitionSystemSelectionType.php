@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\AcquisitionSystem;
+use App\Entity\Department;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -46,7 +47,7 @@ class AcquisitionSystemSelectionType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => null,
+            'data_class' => Department::class,
             'unassigned_acquisition_systems' => [], // Valeur par défaut pour la liste des systèmes d'acquisition non assignés
         ]);
     }

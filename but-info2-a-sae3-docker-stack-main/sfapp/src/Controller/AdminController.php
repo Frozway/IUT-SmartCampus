@@ -8,6 +8,7 @@ use App\Entity\Room;
 use App\Form\AcquisitionSystemSelectionType;
 use App\Form\AcquisitionSystemType;
 use App\Form\DepartmentType;
+use App\Form\DeleteDepartmentType;
 use App\Form\RoomType;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -449,7 +450,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route('/admin-dashboard/add-department', name: 'app_admin_add_department')
+     * @Route('/admin-dashboard/edit-departments', name: 'app_admin_edit_departments')
      *
      * Affiche le formulaire d'ajout d'un departement et l'ajoute à la base de données.
      *
@@ -457,17 +458,20 @@ class AdminController extends AbstractController
      * @param EntityManagerInterface $entityManager L'entité de gestion
      * @return Response
      */
-    #[Route('/admin-dashboard/add-department', name: 'app_admin_add_department')]
+    #[Route('/admin-dashboard/edit-departments', name: 'app_admin_edit_departments')]
     #[IsGranted("ROLE_ADMIN")]
-    public function addDepartment(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator): Response
+    public function editDepartments(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator): Response
     {
+        $departmentsRepository = $entityManager->getRepository('App\Entity\Department');
+        $departmentsList = $departmentsRepository->findAll();
+
         $department = new Department();
 
-        $form = $this->createForm(DepartmentType::class, $department);
+        $formCreate = $this->createForm(DepartmentType::class, $department);
+        $formDelete = $this->createForm(DeleteDepartmentType::class, null, ['choices' => $departmentsList]);
 
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        $formCreate->handleRequest($request);
+        if ($formCreate->isSubmitted() && $formCreate->isValid()) {
             $entityManager->persist($department);
             $entityManager->flush();
 
@@ -476,10 +480,21 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('app_admin_dashboard');
         }
 
+        $formDelete->handleRequest($request);
+        if ($formDelete->isSubmitted() && $formDelete->isValid()) {
+            $deletedDepartment = $formDelete['department']->getData();
+
+            $entityManager->remove($deletedDepartment);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_admin_dashboard');
+        }
+
         $errors = $validator->validate($department);
 
         return $this->render('admin/addDepartment.html.twig', [
-            'form' => $form->createView(),
+            'formCreate' => $formCreate->createView(),
+            'formDelete' => $formDelete->createView(),
             'errors' => $errors,
         ]);
     }

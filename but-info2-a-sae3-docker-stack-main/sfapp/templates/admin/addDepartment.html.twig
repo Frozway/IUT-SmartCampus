@@ -20,21 +20,48 @@
                     <div class="alert alert-danger">{{ error.message }}</div>
                 {% endfor %}
 
-                {{ form_start(form) }}
+                {{ form_start(formCreate) }}
 
                 <div class="form-group">
-                    {{ form_row(form.name, {'attr': {'class': 'form-control'}, 'label': 'Nom du Département'}) }}
+                    {{ form_row(formCreate.name, {'attr': {'class': 'form-control'}, 'label': 'Nom du Département'}) }}
                 </div>
 
-                {{ form_rest(form) }}
+                {{ form_rest(formCreate) }}
 
-                <button type="submit" class="btn custom-btn custom-btn-primary btn-block mt-3"><i
-                            class="fa-solid fa-floppy-disk"></i> Enregistrer
+                <button type="submit" class="btn custom-btn custom-btn-primary btn-block mt-3">
+                    <i class="fa-solid fa-floppy-disk"></i> Enregistrer
                 </button>
-                <a href="#" onclick="history.back();" class="btn custom-btn btn-custom-danger btn-block mt-2"><i
-                            class="fa-solid fa-xmark"></i> Annuler</a>
 
-                {{ form_end(form) }}
+                {{ form_end(formCreate) }}
+            </div>
+
+            <div class="col-lg-6 panel shadow">
+                <h1 class="text-center mb-4">Supprimer un Département</h1>
+
+                {# Affichage des erreurs du formulaire #}
+                {% for error in errors %}
+                    <div class="alert alert-danger">{{ error.message }}</div>
+                {% endfor %}
+
+                {{ form_start(formDelete) }}
+
+                <div class="form-group">
+                    {{ form_row(formDelete.department, {'attr': {'class': 'form-control'}, 'label': 'Nom du Département'}) }}
+                </div>
+
+                {{ form_rest(formDelete) }}
+
+                <button type="submit" class="btn custom-btn custom-btn-danger btn-block mt-3">
+                    <i class="fa-solid fa-trash"></i> Supprimer
+                </button>
+
+                {{ form_end(formDelete) }}
+            </div>
+
+            <div class="col-lg-6 panel shadow">
+                <a href="#" onclick="history.back();" class="btn custom-btn btn-custom-danger btn-block mt-2">
+                    <i class="fa-solid fa-xmark"></i> Annuler
+                </a>
             </div>
         </div>
     </div>

@@ -79,7 +79,17 @@ body {
 
 .custom-btn-primary:hover {
   background-color: #74b9ff;
+  color: #fff
+}
+
+.custom-btn-danger {
+  background-color: #d63031;
   color: #fff;
+}
+
+.custom-btn-danger:hover {
+  background-color: #f23f3f;
+  color: #fff
 }
 
 .rounded-panel {

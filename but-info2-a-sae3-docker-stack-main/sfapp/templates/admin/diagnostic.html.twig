@@ -34,7 +34,7 @@
         <div id="no-value" class="d-flex justify-content-center align-items-center">
             <span>Veuillez lancer un diagnostic</span>
         </div>
-        <div id="chart" class="justify-content-center align-items-center" style="height: 100%">
+        <div id="chart" class="justify-content-center align-items-center" style="height: 80vh">
             <canvas id="myChart"></canvas>
         </div>
 
@@ -47,16 +47,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
-        var abcd = [];
         let myChart = undefined;
-        // lorsque le type de diagnostic est changé afficher la liste des capteurs ou pas
-        $('#typeDiagnostic').change(function () {
-            if ($('#typeDiagnostic').val() === 'ensemble') {
-                $('#rooms').hide();
-            } else {
-                $('#rooms').show();
-            }
-        });
 
         window.addEventListener('DOMContentLoaded', (event) => {
             $('#chart').hide();
@@ -95,7 +86,6 @@
                     type: type
                 },
                 success: function (data) {
-                    // affichage du graphique
                     $('#loading').hide();
                     $('#loading').removeClass('d-flex');
                     $('#chart').show();
@@ -105,8 +95,10 @@
 
                     for (const [key, value] of Object.entries(data)) {
                         for (const [key2, value2] of Object.entries(value)) {
-                            uniqueDates.add(value2.dateCapture);
-                            values.push(value2.valeur);
+                            if (value2.valeur != null && value2.valeur != '' && value2.valeur != 'null' && value2.valeur != 'undefined' && value2.valeur != 'NaN' && value2.valeur != 'nan' && value2.valeur != 'Error reading temperature!' && value2.valeur != 'Error reading CO2!' && value2.valeur != 'Error reading humidity!') {
+                                uniqueDates.add(value2.dateCapture);
+                                values.push(value2.valeur);
+                            }
                         }
                     }
 
@@ -117,6 +109,57 @@
                     if (myChart !== undefined) {
                         myChart.destroy();
                     }
+
+                    Chart.register({
+                        id: 'drawAberrantZone',
+                        beforeDraw: (chart, args, options) => {
+                            const ctx = chart.ctx;
+                            ctx.clearRect(0, 0, chart.width, chart.height);
+                        },
+                        afterDraw: (chart, args, options) => {
+                            const ctx = chart.ctx;
+                            const yAxis = chart.scales['y'];
+                            const datasets = chart.data.datasets[0].data;
+
+                            const alertColor = 'rgba(255, 0, 0, 0.2)'; // Rouge avec une opacité de 20%
+
+                            ctx.fillStyle = alertColor;
+                            if (chart.config.options.type === 'temp') {
+                                const maxTemp = Math.max(...datasets);
+                                if (maxTemp > 24) {
+                                    const startRed = yAxis.getPixelForValue(24);
+                                    const endRed = yAxis.getPixelForValue(yAxis.max);
+                                    ctx.fillRect(chart.scales['x'].left, startRed, chart.scales['x'].width, endRed - startRed);
+                                }
+                                const minTemp = Math.min(...datasets);
+                                if (minTemp < 16) {
+                                    const startRed = yAxis.getPixelForValue(yAxis.min);
+                                    const endRed = yAxis.getPixelForValue(16);
+                                    ctx.fillRect(chart.scales['x'].left, startRed, chart.scales['x'].width, endRed - startRed);
+                                }
+                            } else if (chart.config.options.type === 'hum') {
+                                const maxHum = Math.max(...datasets);
+                                if (maxHum > 70) {
+                                    const startRed = yAxis.getPixelForValue(70);
+                                    const endRed = yAxis.getPixelForValue(yAxis.max);
+                                    ctx.fillRect(chart.scales['x'].left, startRed, chart.scales['x'].width, endRed - startRed);
+                                }
+                                const minHum = Math.min(...datasets);
+                                if (minHum < 30) {
+                                    const startRed = yAxis.getPixelForValue(yAxis.min);
+                                    const endRed = yAxis.getPixelForValue(30);
+                                    ctx.fillRect(chart.scales['x'].left, startRed, chart.scales['x'].width, endRed - startRed);
+                                }
+                            } else if (chart.config.options.type === 'co2') {
+                                const maxCO2 = Math.max(...datasets);
+                                if (maxCO2 > 1500) {
+                                    const startRed = yAxis.getPixelForValue(1500);
+                                    const endRed = yAxis.getPixelForValue(yAxis.max);
+                                    ctx.fillRect(chart.scales['x'].left, startRed, chart.scales['x'].width, endRed - startRed);
+                                }
+                            }
+                        }
+                    });
 
                     myChart = new Chart(ctx, {
                         type: 'line',
@@ -131,13 +174,12 @@
                             }]
                         },
                         options: {
-                            scales: {
-                                y: {
-                                    min: Math.min(...values) - 5,
-                                }
-                            }
+                            maintainAspectRatio: false,
+                            type: type,
                         }
                     });
+
+                    myChart.update();
 
                 }
             });

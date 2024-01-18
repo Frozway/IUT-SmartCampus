@@ -49,23 +49,37 @@
             // Conditions pour les alertes
             let alertColor = '';
 
-            if (temp < 16 || temp > 24) {
+            {% if is_granted('ROLE_ADMIN') %}
+            if (temp <= 16 || temp >= 24) {
                 alertColor = 'alert-red';
             } else if (temp < 17 || temp > 21) {
                 alertColor = alertColor === 'alert-red' ? alertColor : 'alert-orange';
             }
 
-            if (humidity < 30 || humidity > 70) {
+            if (humidity <= 30 || humidity >= 70) {
                 alertColor = 'alert-red';
             } else if (humidity < 40 || humidity > 60) {
                 alertColor = alertColor === 'alert-red' ? alertColor : 'alert-orange';
             }
 
-            if (co2 > 1000 && co2 <= 1500) {
+            if (co2 > 1000 && co2 < 1500) {
                 alertColor = alertColor === 'alert-red' ? alertColor : 'alert-orange';
-            } else if (co2 > 1500) {
+            } else if (co2 >= 1500) {
                 alertColor = 'alert-red';
             }
+            {% else %}
+            if (temp < -20 || temp > 50) {
+                alertColor = 'alert-red';
+            }
+
+            if (humidity < 0 || humidity > 100) {
+                alertColor = 'alert-red';
+            }
+
+            if (co2 < 0 || co2 > 4000) {
+                alertColor = 'alert-red';
+            }
+            {% endif %}
 
             // Affichage de l'alerte si nécessaire
             if (alertColor !== '') {

@@ -1,7 +1,7 @@
 {% set onRoomPage = app.request.attributes.get('_route') == 'app_room' %}
 
 {% if is_granted('ROLE_ADMIN') %}
-    <div class="col panel shadow lists" style="height: 68vh">
+    <div class="col panel shadow lists" style="height: 65vh">
 {% else %}
     {% if onRoomPage %}
         {% set currentRoomID = room.id %}

@@ -18,7 +18,6 @@ const performSearch = () => {
 
             // Si le json est vide
             if (json.weather === undefined) {
-                console.log('error');
                 weatherBox.style.display = 'none';
                 error404.style.display = 'block';
                 error404.classList.add('fadeIn');

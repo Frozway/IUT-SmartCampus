@@ -28,6 +28,11 @@
 
             {# Block des graphiques de données #}
             {% include 'components/roomDataCharts.html.twig' %}
+        {% else %}
+            {# Afficher un message si le système est assigné mais pas installé #}
+            <div class="alert alert-warning mt-3" role="alert">
+                Les données seront prochainement disponible !
+            </div>
         {% endif %}
 
     {% else %}

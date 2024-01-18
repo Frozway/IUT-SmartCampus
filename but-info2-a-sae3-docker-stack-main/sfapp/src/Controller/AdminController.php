@@ -463,6 +463,7 @@ class AdminController extends AbstractController
     public function editDepartments(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator): Response
     {
         $departmentsRepository = $entityManager->getRepository('App\Entity\Department');
+        $roomsRepository = $entityManager->getRepository('App\Entity\Room');
         $departmentsList = $departmentsRepository->findAll();
 
         $department = new Department();
@@ -483,6 +484,11 @@ class AdminController extends AbstractController
         $formDelete->handleRequest($request);
         if ($formDelete->isSubmitted() && $formDelete->isValid()) {
             $deletedDepartment = $formDelete['department']->getData();
+
+            $rooms = $roomsRepository->findBy(['department' => $deletedDepartment]);
+            foreach ($rooms as $room) {
+                $room->setDepartment(null);
+            }
 
             $entityManager->remove($deletedDepartment);
             $entityManager->flush();

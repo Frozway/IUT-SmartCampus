@@ -7,6 +7,10 @@
         {% if acquisitionSystem.isInstalled %}
         
             {% include 'components/currentRoomData.html.twig' %}
+            {% if advice|default(false) %}
+                <div class="alert alert-primary mt-2"><i class="fa-solid fa-circle-info"></i> {{ advice }}</div>
+            {% endif %}
+
 
             <form class="panel shadow mt-4" id="dataLimitForm" action="{{ path('app_room', {'id': room.id}) }}" method="get">
                 <label for="dataLimit">Plage de données visibles</label>

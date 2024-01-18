@@ -6,6 +6,7 @@ use App\Entity\Room;
 use App\Entity\TechNotification;
 use App\Form\FilterRoomDashboardType;
 use App\Form\NotificationType;
+use App\Service\WeatherService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use SebastianBergmann\CodeUnit\FunctionUnit;
@@ -142,6 +143,26 @@ class DashboardController extends AbstractController
             ]);
         }     
 
+        $weatherService = new WeatherService();
+        $outsideConditions = json_decode($weatherService->getWeather($httpClient, "la%20rochelle")->getContent());
+
+        $outsideTemp = $outsideConditions->main->temp;
+        $insideTemp = $apiData[2]["valeur"];
+        $insideCo2 = $apiData[0]["valeur"];
+
+        $advice = null;
+
+        // La temperature est prioritaire sur la qualité de l'air
+        if ($insideTemp <= 17) {
+            $advice = 'Fermez les portes et fenêtres pour chauffer la pièce';
+        }
+        else if ($insideTemp >= 21 && $outsideTemp < $insideTemp) {
+            $advice = 'Ouvrez la fenêtre pour rafraîchir la pièce';
+        }
+        else if ($insideCo2 >= 1000) {
+            $advice = 'Ouvrez la fenêtre pour aérer la pièce';
+        }
+
         return $this->render('dashboard/user.html.twig', [
             'room' => $room,
             'rooms' => $rooms,
@@ -152,6 +173,7 @@ class DashboardController extends AbstractController
             'form' => $form,
             'data' => $apiData,
             'acquisitionSystem' => $acquisitionSystem,
+            'advice' => $advice,
         ]);
     }
 
